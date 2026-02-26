@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""Single-folder MVP launcher for Senzing end-to-end execution.
-
-This script keeps all runtime artifacts under ./mvp to minimize folder spread.
-"""
+"""Single-folder MVP launcher for Senzing end-to-end execution."""
 
 from __future__ import annotations
 
@@ -17,8 +14,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "input_file",
         nargs="?",
-        default="input/sample_senzing_ready.jsonl",
-        help="Input JSONL path (default: mvp/input/sample_senzing_ready.jsonl)",
+        default="sample_senzing_ready.jsonl",
+        help="Input JSONL path (default: mvp/sample_senzing_ready.jsonl)",
+    )
+    parser.add_argument(
+        "--output-root",
+        default="/mnt/senzing_runs",
+        help="Run artifacts root folder (default: /mnt/senzing_runs)",
+    )
+    parser.add_argument(
+        "--project-parent-dir",
+        default="/mnt",
+        help="Parent directory for isolated Senzing projects (default: /mnt)",
     )
     parser.add_argument(
         "--skip-snapshot",
@@ -50,7 +57,7 @@ def main() -> int:
 
     mvp_dir = Path(__file__).resolve().parent
     repo_root = mvp_dir.parent
-    core_script = mvp_dir / "bin" / "run_senzing_end_to_end.py"
+    core_script = mvp_dir / "run_senzing_end_to_end.py"
     if not core_script.exists():
         # Fallback for development mode.
         core_script = repo_root / "senzing" / "all_in_one" / "run_senzing_end_to_end.py"
@@ -68,19 +75,14 @@ def main() -> int:
         print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
         return 2
 
-    runs_dir = mvp_dir / "runs"
-    projects_dir = mvp_dir / "projects"
-    runs_dir.mkdir(parents=True, exist_ok=True)
-    projects_dir.mkdir(parents=True, exist_ok=True)
-
     cmd = [
         sys.executable,
         str(core_script),
         str(input_path),
         "--project-parent-dir",
-        str(projects_dir),
+        str(Path(args.project_parent_dir).expanduser()),
         "--output-root",
-        str(runs_dir),
+        str(Path(args.output_root).expanduser()),
         "--run-name-prefix",
         "run",
         "--project-name-prefix",
