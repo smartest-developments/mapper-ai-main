@@ -73,10 +73,24 @@ python3 senzing/workflows/testing/run_management_tests.py \
   /path/to/senzing_run_folder
 ```
 
-4. Run one unified pipeline (generate sample -> map -> e2e -> management outputs):
+4. Run one unified pipeline (map -> e2e -> management outputs):
+
+```bash
+python3 senzing/tools/run_sample_to_management.py --input-json /path/to/input.json
+```
+
+If you do not pass `--input-json`, it auto-generates a realistic sample:
 
 ```bash
 python3 senzing/tools/run_sample_to_management.py --records 500
+```
+
+If the input root is an object containing the array (example key: `records`):
+
+```bash
+python3 senzing/tools/run_sample_to_management.py \
+  --input-json /path/to/input.json \
+  --input-array-key records
 ```
 
 5. Generate realistic source sample and map it to Senzing JSONL (500k default):

@@ -42,14 +42,15 @@ This is the primary index to retrieve old executions.
 Run the full pipeline in one command:
 
 ```bash
-python3 senzing/tools/run_sample_to_management.py --records 500
+python3 senzing/tools/run_sample_to_management.py --input-json /path/to/input.json
 ```
 
 Default behavior:
 
-- generates a realistic sample
-- maps it to Senzing JSONL
+- maps source JSON input to Senzing JSONL
 - runs full E2E in Docker
 - generates management reports
 - updates `output/run_registry.csv`
 - removes loader temp shuffle files (`*_sz_shuff_*`) unless `--keep-loader-temp-files` is set
+
+If `--input-json` is omitted, it generates a realistic sample first (`--records` controls size).

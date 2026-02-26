@@ -47,7 +47,13 @@ Each subfolder has its own README with details.
 
 ## Unified Command
 
-To run generation + mapping + E2E + management outputs in one step:
+To run mapping + E2E + management outputs in one step from a real source JSON:
+
+```bash
+python3 senzing/tools/run_sample_to_management.py --input-json /path/to/input.json
+```
+
+If no `--input-json` is provided, the command generates a realistic sample first:
 
 ```bash
 python3 senzing/tools/run_sample_to_management.py --records 500

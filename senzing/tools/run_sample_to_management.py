@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Run one end-to-end management pipeline from sample generation to reports.
+"""Run one end-to-end management pipeline from input preparation to reports.
 
 Flow:
-1) Generate realistic source sample + mapped JSONL.
+1) Build mapped JSONL (from generated sample or user-provided JSON input).
 2) Run Senzing E2E in Docker.
 3) Print key management artifact paths.
 """
@@ -10,6 +10,7 @@ Flow:
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import subprocess
 import sys
@@ -18,11 +19,28 @@ from typing import Any
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run sample generation and Senzing management reports in one command.")
-    parser.add_argument("--records", type=int, default=500, help="Number of generated records (default: 500)")
+    parser = argparse.ArgumentParser(description="Run mapping + Senzing management reports in one command.")
+    parser.add_argument(
+        "--input-json",
+        default=None,
+        help="Optional source JSON file to map to Senzing JSONL (if omitted, a realistic sample is generated)",
+    )
+    parser.add_argument(
+        "--input-array-key",
+        default=None,
+        help="Optional key when --input-json root is an object containing the records array",
+    )
+    parser.add_argument("--records", type=int, default=500, help="Generated records (used only when --input-json is omitted)")
     parser.add_argument("--person-ratio", type=float, default=0.70, help="Share of PERSON records (default: 0.70)")
     parser.add_argument("--ipg-rate", type=float, default=0.35, help="Share of records with IPG ID (default: 0.35)")
     parser.add_argument("--seed", type=int, default=20260226, help="Random seed (default: 20260226)")
+    parser.add_argument("--data-source", default="PARTNERS", help="Senzing DATA_SOURCE for mapped output (default: PARTNERS)")
+    parser.add_argument("--tax-id-type", default="TIN", help="TAX_ID_TYPE for mapped output (default: TIN)")
+    parser.add_argument(
+        "--include-unmapped-source-fields",
+        action="store_true",
+        help="Include non-mapped source fields as SRC_* in mapped payload",
+    )
     parser.add_argument("--sample-dir", default="sample", help="Sample directory (default: sample)")
     parser.add_argument("--output-dir", default="output", help="Output directory (default: output)")
     parser.add_argument("--runs-root", default=".senzing_runs_test", help="E2E run root (default: .senzing_runs_test)")
@@ -94,6 +112,12 @@ def run_subprocess(command: list[str], cwd: Path) -> None:
     subprocess.run(command, cwd=str(cwd), check=True)
 
 
+def build_mapping_summary_path(output_dir: Path) -> Path:
+    """Create timestamped summary file path for input-json mapping mode."""
+    timestamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+    return output_dir / f"mapping_summary_from_input_{timestamp}.json"
+
+
 def main() -> int:
     args = parse_args()
     repo_root = Path(__file__).resolve().parents[2]
@@ -107,30 +131,74 @@ def main() -> int:
     projects_root.mkdir(parents=True, exist_ok=True)
 
     generation_script = repo_root / "senzing" / "tools" / "generate_realistic_partner_dataset.py"
+    mapper_script = repo_root / "senzing" / "tools" / "partner_json_to_senzing.py"
     e2e_wrapper = repo_root / "senzing" / "workflows" / "e2e_runner" / "run_senzing_e2e.py"
 
-    summaries_before = set(output_dir.glob("generation_summary_*.json"))
-    generate_cmd = [
-        sys.executable,
-        str(generation_script),
-        "--records",
-        str(args.records),
-        "--person-ratio",
-        str(args.person_ratio),
-        "--ipg-rate",
-        str(args.ipg_rate),
-        "--seed",
-        str(args.seed),
-        "--sample-dir",
-        str(Path(args.sample_dir)),
-        "--output-dir",
-        str(Path(args.output_dir)),
-    ]
-    run_subprocess(generate_cmd, repo_root)
+    if args.input_json:
+        input_json = Path(args.input_json).resolve()
+        if not input_json.exists():
+            print(f"ERROR: input JSON not found: {input_json}", file=sys.stderr)
+            return 2
 
-    generation_summary_path = find_new_generation_summary(output_dir, summaries_before)
-    generation_summary = json.loads(generation_summary_path.read_text(encoding="utf-8"))
-    mapped_output_jsonl = Path(str(generation_summary.get("mapped_output_jsonl") or "")).resolve()
+        summary_path = build_mapping_summary_path(output_dir)
+        suffix = summary_path.stem.replace("mapping_summary_from_input_", "")
+        mapped_output_jsonl = (output_dir / f"partner_output_senzing_from_input_{suffix}.jsonl").resolve()
+        field_map_json = (output_dir / f"field_map_from_input_{suffix}.json").resolve()
+
+        mapper_cmd = [
+            sys.executable,
+            str(mapper_script),
+            str(input_json),
+            str(mapped_output_jsonl),
+            "--data-source",
+            str(args.data_source),
+            "--tax-id-type",
+            str(args.tax_id_type),
+            "--write-field-map",
+            str(field_map_json),
+        ]
+        if args.input_array_key:
+            mapper_cmd.extend(["--array-key", str(args.input_array_key)])
+        if args.include_unmapped_source_fields:
+            mapper_cmd.append("--include-unmapped-source-fields")
+        run_subprocess(mapper_cmd, repo_root)
+
+        mapping_summary = {
+            "mode": "input_json",
+            "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+            "input_json": str(input_json),
+            "mapped_output_jsonl": str(mapped_output_jsonl),
+            "field_map_json": str(field_map_json),
+            "data_source": args.data_source,
+            "tax_id_type": args.tax_id_type,
+            "input_array_key": args.input_array_key,
+            "include_unmapped_source_fields": bool(args.include_unmapped_source_fields),
+        }
+        summary_path.write_text(json.dumps(mapping_summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    else:
+        summaries_before = set(output_dir.glob("generation_summary_*.json"))
+        generate_cmd = [
+            sys.executable,
+            str(generation_script),
+            "--records",
+            str(args.records),
+            "--person-ratio",
+            str(args.person_ratio),
+            "--ipg-rate",
+            str(args.ipg_rate),
+            "--seed",
+            str(args.seed),
+            "--sample-dir",
+            str(Path(args.sample_dir)),
+            "--output-dir",
+            str(Path(args.output_dir)),
+        ]
+        run_subprocess(generate_cmd, repo_root)
+
+        summary_path = find_new_generation_summary(output_dir, summaries_before)
+        generation_summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        mapped_output_jsonl = Path(str(generation_summary.get("mapped_output_jsonl") or "")).resolve()
+
     if not mapped_output_jsonl.exists():
         print(f"ERROR: mapped_output_jsonl not found: {mapped_output_jsonl}", file=sys.stderr)
         return 2
@@ -183,7 +251,7 @@ def main() -> int:
 
     print("")
     print("Unified pipeline completed.")
-    print(f"Generation summary: {generation_summary_path}")
+    print(f"Input summary: {summary_path}")
     print(f"Run summary: {run_summary_path}")
     print(f"Management summary (md): {artifacts.get('management_summary_md')}")
     print(f"Ground truth quality (md): {artifacts.get('ground_truth_match_quality_md')}")
