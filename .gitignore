@@ -7,6 +7,8 @@
 .history
 
 .mypy_cache
+__pycache__/
+*.py[cod]
 
 # Large test data files (exceed GitHub 100MB limit)
 tests/**
