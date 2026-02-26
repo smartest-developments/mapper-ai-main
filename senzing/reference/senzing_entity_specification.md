@@ -39,7 +39,7 @@ Entity resolution works best when you have a name and as many other features as 
 | DUNS_NUMBER | Company identifier | Medium | — |
 | LEI_NUMBER | Legal Entity Identifier | Medium | — |
 | NPI_NUMBER | US healthcare provider ID | Medium | — |
-| ACCOUNT | Account or card number | Medium | Look for bank or other account numbers that can aid resolution, especially across data sources. |
+| ACCOUNT | Account or card number | Medium | Look for account identifiers that can aid resolution, especially across data sources. |
 | OTHER_ID | Other/uncategorized identifier | Medium | For identifier types that can't be mapped to one of Senzing's specific identifier features. Use sparingly; if an identifier is used frequently, create a dedicated feature for it. |
 | GENDER | Person gender | Low-Medium | — |
 | EMPLOYER | Name of a person's employer | Medium-Low | Can aid resolution on smaller companies; subject to generic thresholds; form of group association. |
@@ -393,7 +393,7 @@ These attributes tie records in Senzing back to your source system. Place them a
 
 | Attribute | Required | Example | Guidance |
 | --- | --- | --- | --- |
-| DATA_SOURCE | Required | CUSTOMERS | Short, stable code naming the source (e.g., CUSTOMERS). If you have multiple similar sources, use distinct codes (e.g., BANKING_CUSTOMERS, MORTGAGE_CUSTOMERS). Prefer uppercase, no spaces. Used for retrieval and reporting — keep it consistent. |
+| DATA_SOURCE | Required | CUSTOMERS | Short, stable code naming the source (e.g., CUSTOMERS). If you have multiple similar sources, use distinct codes (e.g., SOURCE_CUSTOMERS_A, SOURCE_CUSTOMERS_B). Prefer uppercase, no spaces. Used for retrieval and reporting — keep it consistent. |
 | RECORD_ID | Strongly Recommended | 1001 | Must be unique within DATA_SOURCE; used to add/replace records. If the source lacks a primary key, construct a deterministic ID (e.g., hash of normalized identifying attributes). If omitted, Senzing generates a hash of features, making updates impractical. Do not duplicate RECORD_ID as a feature — retrieval uses DATA_SOURCE + RECORD_ID. |
 
 Example
@@ -719,7 +719,7 @@ Importance: Medium
 
 | Attribute        | Example                | Guidance |
 | ---              | ---                    | --- |
-| ACCOUNT_NUMBER   | 1234-1234-1234-1234    | Account number (e.g., bank, card). |
+| ACCOUNT_NUMBER   | 1234-1234-1234-1234    | Account number (e.g., service account, card). |
 | ACCOUNT_DOMAIN   | VISA                   | Domain/system for the account number. |
 
 Example
