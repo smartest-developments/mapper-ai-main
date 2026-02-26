@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+import ctypes
 import csv
 import datetime as dt
 import json
@@ -62,39 +63,103 @@ def read_records(input_path: Path) -> list[dict[str, Any]]:
     return records
 
 
-def run_shell_step(step_name: str, shell_command: str, log_path: Path) -> dict[str, Any]:
+def run_shell_step(
+    step_name: str,
+    shell_command: str,
+    log_path: Path,
+    timeout_seconds: int | None = None,
+) -> dict[str, Any]:
     """Run one shell command and store stdout/stderr into log file."""
     start = time.time()
-    result = subprocess.run(
-        ["bash", "-lc", shell_command],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
+    timed_out = False
+    try:
+        result = subprocess.run(
+            ["bash", "-lc", shell_command],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+            timeout=timeout_seconds,
+        )
+        exit_code = result.returncode
+        stdout_text = result.stdout or ""
+        stderr_text = result.stderr or ""
+    except subprocess.TimeoutExpired as err:
+        timed_out = True
+        exit_code = 124
+        if isinstance(err.stdout, bytes):
+            stdout_text = err.stdout.decode("utf-8", errors="replace")
+        else:
+            stdout_text = err.stdout or ""
+        if isinstance(err.stderr, bytes):
+            stderr_text = err.stderr.decode("utf-8", errors="replace")
+        else:
+            stderr_text = err.stderr or ""
+        timeout_msg = f"Command timed out after {timeout_seconds} seconds."
+        stderr_text = f"{stderr_text}\n{timeout_msg}" if stderr_text else timeout_msg
+
     elapsed = round(time.time() - start, 3)
 
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("w", encoding="utf-8") as outfile:
         outfile.write(f"STEP: {step_name}\n")
         outfile.write(f"COMMAND: {shell_command}\n")
-        outfile.write(f"EXIT_CODE: {result.returncode}\n")
+        outfile.write(f"EXIT_CODE: {exit_code}\n")
+        outfile.write(f"TIMED_OUT: {timed_out}\n")
+        outfile.write(f"TIMEOUT_SECONDS: {timeout_seconds if timeout_seconds is not None else 'none'}\n")
         outfile.write(f"DURATION_SECONDS: {elapsed}\n")
         outfile.write("\n--- STDOUT ---\n")
-        outfile.write(result.stdout or "")
+        outfile.write(stdout_text)
         outfile.write("\n--- STDERR ---\n")
-        outfile.write(result.stderr or "")
+        outfile.write(stderr_text)
 
     return {
         "step": step_name,
-        "ok": result.returncode == 0,
-        "exit_code": result.returncode,
+        "ok": exit_code == 0,
+        "exit_code": exit_code,
+        "timed_out": timed_out,
         "duration_seconds": elapsed,
         "log_file": str(log_path),
-        "stdout_tail": (result.stdout or "")[-1200:],
-        "stderr_tail": (result.stderr or "")[-1200:],
+        "stdout_tail": stdout_text[-1200:],
+        "stderr_tail": stderr_text[-1200:],
     }
+
+
+def build_load_command(
+    project_setup_env: Path,
+    input_jsonl: Path,
+    num_threads: int,
+    no_shuffle: bool = False,
+) -> str:
+    """Build sz_file_loader shell command."""
+    cmd = (
+        f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
+        f"sz_file_loader -f {shlex.quote(str(input_jsonl))}"
+    )
+    if num_threads > 0:
+        cmd += f" -nt {num_threads}"
+    if no_shuffle:
+        cmd += " --no-shuffle"
+    return cmd
+
+
+def build_snapshot_command(
+    project_setup_env: Path,
+    snapshot_prefix: Path,
+    thread_count: int,
+    force_sdk: bool = False,
+) -> str:
+    """Build sz_snapshot shell command."""
+    cmd = (
+        f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
+        f"sz_snapshot -o {shlex.quote(str(snapshot_prefix))} -Q"
+    )
+    if thread_count > 0:
+        cmd += f" -t {thread_count}"
+    if force_sdk:
+        cmd += " -F"
+    return cmd
 
 
 def load_setup_env(project_setup_env: Path) -> dict[str, str]:
@@ -133,11 +198,85 @@ def build_engine_config_json(project_dir: Path) -> str:
     return json.dumps(payload)
 
 
-def init_g2_engine(project_dir: Path, project_setup_env: Path) -> tuple[Any | None, dict[str, Any]]:
-    """Initialize G2Engine for SDK-based explain calls."""
+def preload_senzing_library(project_dir: Path) -> dict[str, Any]:
+    """Preload native SDK libraries so in-process SDK init works in Docker/Linux."""
     details: dict[str, Any] = {
         "ok": False,
+        "strategy": None,
+        "initial_error": None,
+        "final_error": None,
+        "libs_seen": 0,
+        "libs_loaded": 0,
+        "libs_pending": 0,
+    }
+
+    lib_dir = project_dir / "lib"
+    if not lib_dir.exists():
+        details["final_error"] = f"Library directory not found: {lib_dir}"
+        return details
+
+    all_libs = sorted([p for p in lib_dir.iterdir() if p.is_file() and p.suffix in (".so", ".dylib")])
+    details["libs_seen"] = len(all_libs)
+    if not all_libs:
+        details["final_error"] = f"No shared libraries found under: {lib_dir}"
+        return details
+
+    primary = next((p for p in all_libs if p.name in {"libSz.so", "libSz.dylib"}), all_libs[0])
+    rtld_global = getattr(ctypes, "RTLD_GLOBAL", 0)
+
+    def load_library(path: Path) -> None:
+        if rtld_global:
+            ctypes.CDLL(str(path), mode=rtld_global)
+        else:
+            ctypes.CDLL(str(path))
+
+    # Fast path: if main library resolves immediately, no bulk preload needed.
+    try:
+        load_library(primary)
+        details["ok"] = True
+        details["strategy"] = "primary_only"
+        details["libs_loaded"] = 1
+        return details
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        details["initial_error"] = str(err)
+
+    # Fallback: preload all libs with retries to satisfy cross-library dependencies.
+    pending = list(all_libs)
+    loaded: set[str] = set()
+    for _ in range(6):
+        next_pending: list[Path] = []
+        progressed = 0
+        for lib_path in pending:
+            try:
+                load_library(lib_path)
+                loaded.add(str(lib_path))
+                progressed += 1
+            except Exception:  # pylint: disable=broad-exception-caught
+                next_pending.append(lib_path)
+        pending = next_pending
+        if not pending or progressed == 0:
+            break
+
+    details["libs_loaded"] = len(loaded)
+    details["libs_pending"] = len(pending)
+
+    try:
+        load_library(primary)
+        details["ok"] = True
+        details["strategy"] = "bulk_preload"
+        return details
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        details["final_error"] = str(err)
+        return details
+
+
+def init_g2_engine(project_dir: Path, project_setup_env: Path) -> tuple[Any | None, Any | None, dict[str, Any]]:
+    """Initialize SDK engine for explain calls (supports legacy and modern SDK APIs)."""
+    details: dict[str, Any] = {
+        "ok": False,
+        "sdk_api": None,
         "config_source": None,
+        "library_preload": None,
         "error": None,
     }
 
@@ -148,12 +287,8 @@ def init_g2_engine(project_dir: Path, project_setup_env: Path) -> tuple[Any | No
         for part in py_path.split(":"):
             if part and part not in sys.path:
                 sys.path.insert(0, part)
-
-    try:
-        from senzing import G2Engine  # type: ignore
-    except Exception as err:  # pylint: disable=broad-exception-caught
-        details["error"] = f"Unable to import senzing SDK: {err}"
-        return None, details
+    preload_details = preload_senzing_library(project_dir)
+    details["library_preload"] = preload_details
 
     config_json = os.environ.get("SENZING_ENGINE_CONFIGURATION_JSON", "").strip()
     if config_json:
@@ -162,14 +297,34 @@ def init_g2_engine(project_dir: Path, project_setup_env: Path) -> tuple[Any | No
         config_json = build_engine_config_json(project_dir)
         details["config_source"] = "generated_from_project_paths"
 
+    # Legacy API path (G2Engine).
     try:
+        from senzing import G2Engine  # type: ignore
+
         g2 = G2Engine()
         g2.init("mapper_e2e", config_json)
+        details["sdk_api"] = "G2Engine"
         details["ok"] = True
-        return g2, details
+        return g2, g2, details
     except Exception as err:  # pylint: disable=broad-exception-caught
-        details["error"] = f"G2Engine init failed: {err}"
-        return None, details
+        details["legacy_error"] = f"G2Engine init failed: {err}"
+
+    # Modern API path (SzEngine via SzAbstractFactoryCore).
+    try:
+        from senzing_core import SzAbstractFactoryCore  # type: ignore
+
+        factory = SzAbstractFactoryCore("mapper_e2e", config_json)
+        engine = factory.create_engine()
+        details["sdk_api"] = "SzEngine"
+        details["ok"] = True
+        return engine, factory, details
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        preload_error = preload_details.get("final_error") if isinstance(preload_details, dict) else None
+        details["error"] = (
+            f"Unable to initialize SDK (G2Engine/SzEngine): {err}"
+            + (f" | preload: {preload_error}" if preload_error else "")
+        )
+        return None, None, details
 
 
 def try_sdk_call(method: Any, args: list[str]) -> tuple[bool, bytearray | None, str | None]:
@@ -202,6 +357,27 @@ def run_sdk_why_entity(g2: Any, data_source: str, record_id: str) -> dict[str, A
                 "output_text": output_text,
                 "output_json": try_parse_json(output_text),
                 "error": None,
+            }
+
+    for method_name in ("why_record_in_entity",):
+        if not hasattr(g2, method_name):
+            continue
+        try:
+            output_text = str(getattr(g2, method_name)(data_source, record_id)).strip()
+            return {
+                "ok": True,
+                "method": method_name,
+                "output_text": output_text,
+                "output_json": try_parse_json(output_text),
+                "error": None,
+            }
+        except Exception as err:  # pylint: disable=broad-exception-caught
+            return {
+                "ok": False,
+                "method": method_name,
+                "output_text": "",
+                "output_json": None,
+                "error": str(err),
             }
     return {
         "ok": False,
@@ -241,6 +417,25 @@ def run_sdk_why_records(
             "output_json": None,
             "error": error or "whyRecords failed.",
         }
+
+    if hasattr(g2, "why_records"):
+        try:
+            output_text = str(g2.why_records(data_source_1, record_id_1, data_source_2, record_id_2)).strip()
+            return {
+                "ok": True,
+                "method": "why_records",
+                "output_text": output_text,
+                "output_json": try_parse_json(output_text),
+                "error": None,
+            }
+        except Exception as err:  # pylint: disable=broad-exception-caught
+            return {
+                "ok": False,
+                "method": "why_records",
+                "output_text": "",
+                "output_json": None,
+                "error": str(err),
+            }
 
     return {
         "ok": False,
@@ -380,6 +575,41 @@ def parse_args() -> argparse.Namespace:
         "--export-output-name",
         default="entity_export.csv",
         help="Export filename inside run directory (default: entity_export.csv)",
+    )
+    parser.add_argument(
+        "--step-timeout-seconds",
+        type=int,
+        default=1800,
+        help="Timeout for load/snapshot/export/configure shell steps (default: 1800)",
+    )
+    parser.add_argument(
+        "--load-threads",
+        type=int,
+        default=4,
+        help="Worker threads for sz_file_loader primary attempt (default: 4)",
+    )
+    parser.add_argument(
+        "--load-fallback-threads",
+        type=int,
+        default=1,
+        help="Worker threads for sz_file_loader fallback attempt (default: 1)",
+    )
+    parser.add_argument(
+        "--snapshot-threads",
+        type=int,
+        default=4,
+        help="Worker threads for sz_snapshot primary attempt (default: 4)",
+    )
+    parser.add_argument(
+        "--snapshot-fallback-threads",
+        type=int,
+        default=1,
+        help="Worker threads for sz_snapshot fallback attempt (default: 1)",
+    )
+    parser.add_argument(
+        "--disable-stability-retries",
+        action="store_true",
+        help="Disable automatic fallback retry for load/snapshot.",
     )
     return parser.parse_args()
 
@@ -779,6 +1009,16 @@ def make_comparison_outputs(
 def main() -> int:
     """Entry point."""
     args = parse_args()
+    if args.step_timeout_seconds <= 0:
+        print("ERROR: --step-timeout-seconds must be > 0", file=sys.stderr)
+        return 2
+    if args.load_threads <= 0 or args.load_fallback_threads <= 0:
+        print("ERROR: --load-threads and --load-fallback-threads must be > 0", file=sys.stderr)
+        return 2
+    if args.snapshot_threads <= 0 or args.snapshot_fallback_threads <= 0:
+        print("ERROR: --snapshot-threads and --snapshot-fallback-threads must be > 0", file=sys.stderr)
+        return 2
+
     input_path = Path(args.input_file).expanduser().resolve()
     if not input_path.exists():
         print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
@@ -834,6 +1074,7 @@ def main() -> int:
 
     config_scripts_dir.mkdir(parents=True, exist_ok=True)
     steps: list[dict[str, Any]] = []
+    runtime_warnings: list[str] = []
 
     step = create_project(project_dir, base_setup_env, logs_dir / "00_create_project.log")
     steps.append(step)
@@ -843,6 +1084,7 @@ def main() -> int:
             "error": "create_project failed",
             "run_directory": str(run_dir),
             "project_dir": str(project_dir),
+            "runtime_warnings": runtime_warnings,
             "steps": steps,
         }
         summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -860,6 +1102,7 @@ def main() -> int:
             f"configure_data_source_{data_source}",
             command,
             logs_dir / f"01_configure_{index:02d}_{data_source}.log",
+            timeout_seconds=args.step_timeout_seconds,
         )
         steps.append(step)
         if not step["ok"]:
@@ -872,24 +1115,60 @@ def main() -> int:
                     "error": f"configure_data_source failed for {data_source}",
                     "run_directory": str(run_dir),
                     "project_dir": str(project_dir),
+                    "runtime_warnings": runtime_warnings,
                     "steps": steps,
                 }
                 summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
                 print(f"FAILED at configure_data_source_{data_source}", file=sys.stderr)
                 return 1
 
-    load_cmd = (
-        f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
-        f"sz_file_loader -f {shlex.quote(str(normalized_jsonl))}"
-    )
-    step = run_shell_step("load_records", load_cmd, logs_dir / "02_load.log")
-    steps.append(step)
-    if not step["ok"]:
+    load_attempts: list[tuple[str, str, Path]] = [
+        (
+            "primary",
+            build_load_command(project_setup_env, normalized_jsonl, args.load_threads, no_shuffle=False),
+            logs_dir / "02_load.log",
+        )
+    ]
+    if not args.disable_stability_retries:
+        load_attempts.append(
+            (
+                "fallback_single_thread",
+                build_load_command(
+                    project_setup_env,
+                    normalized_jsonl,
+                    args.load_fallback_threads,
+                    no_shuffle=True,
+                ),
+                logs_dir / "02_load_retry_1.log",
+            )
+        )
+
+    load_ok = False
+    for attempt_index, (attempt_mode, load_cmd, load_log_path) in enumerate(load_attempts):
+        step_name = "load_records" if attempt_index == 0 else f"load_records_retry_{attempt_index}"
+        step = run_shell_step(
+            step_name,
+            load_cmd,
+            load_log_path,
+            timeout_seconds=args.step_timeout_seconds,
+        )
+        step["attempt_mode"] = attempt_mode
+        steps.append(step)
+        if step["ok"]:
+            if attempt_index > 0:
+                runtime_warnings.append(
+                    f"load_records primary attempt failed; fallback '{attempt_mode}' succeeded."
+                )
+            load_ok = True
+            break
+
+    if not load_ok:
         summary = {
             "overall_ok": False,
-            "error": "load_records failed",
+            "error": "load_records failed after retries",
             "run_directory": str(run_dir),
             "project_dir": str(project_dir),
+            "runtime_warnings": runtime_warnings,
             "steps": steps,
         }
         summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -897,18 +1176,53 @@ def main() -> int:
         return 1
 
     if not args.skip_snapshot:
-        snapshot_cmd = (
-            f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
-            f"sz_snapshot -o {shlex.quote(str(snapshot_prefix))} -Q"
-        )
-        step = run_shell_step("snapshot", snapshot_cmd, logs_dir / "03_snapshot.log")
-        steps.append(step)
-        if not step["ok"]:
+        snapshot_attempts: list[tuple[str, str, Path]] = [
+            (
+                "primary",
+                build_snapshot_command(project_setup_env, snapshot_prefix, args.snapshot_threads, force_sdk=False),
+                logs_dir / "03_snapshot.log",
+            )
+        ]
+        if not args.disable_stability_retries:
+            snapshot_attempts.append(
+                (
+                    "fallback_single_thread_force_sdk",
+                    build_snapshot_command(
+                        project_setup_env,
+                        snapshot_prefix,
+                        args.snapshot_fallback_threads,
+                        force_sdk=True,
+                    ),
+                    logs_dir / "03_snapshot_retry_1.log",
+                )
+            )
+
+        snapshot_ok = False
+        for attempt_index, (attempt_mode, snapshot_cmd, snapshot_log_path) in enumerate(snapshot_attempts):
+            step_name = "snapshot" if attempt_index == 0 else f"snapshot_retry_{attempt_index}"
+            step = run_shell_step(
+                step_name,
+                snapshot_cmd,
+                snapshot_log_path,
+                timeout_seconds=args.step_timeout_seconds,
+            )
+            step["attempt_mode"] = attempt_mode
+            steps.append(step)
+            if step["ok"]:
+                if attempt_index > 0:
+                    runtime_warnings.append(
+                        f"snapshot primary attempt failed; fallback '{attempt_mode}' succeeded."
+                    )
+                snapshot_ok = True
+                break
+
+        if not snapshot_ok:
             summary = {
                 "overall_ok": False,
-                "error": "snapshot failed",
+                "error": "snapshot failed after retries",
                 "run_directory": str(run_dir),
                 "project_dir": str(project_dir),
+                "runtime_warnings": runtime_warnings,
                 "steps": steps,
             }
             summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -924,7 +1238,12 @@ def main() -> int:
             f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
             f"sz_export -o {shlex.quote(str(export_file))}"
         )
-        step = run_shell_step("export", export_cmd, logs_dir / "04_export.log")
+        step = run_shell_step(
+            "export",
+            export_cmd,
+            logs_dir / "04_export.log",
+            timeout_seconds=args.step_timeout_seconds,
+        )
         steps.append(step)
         if not step["ok"]:
             summary = {
@@ -932,6 +1251,7 @@ def main() -> int:
                 "error": "export failed",
                 "run_directory": str(run_dir),
                 "project_dir": str(project_dir),
+                "runtime_warnings": runtime_warnings,
                 "steps": steps,
             }
             summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -997,10 +1317,11 @@ def main() -> int:
                 )
                 matched_pairs = matched_pairs[: args.max_explain_pairs]
 
-            g2, engine_details = init_g2_engine(project_dir, project_setup_env)
+            g2, engine_cleanup_target, engine_details = init_g2_engine(project_dir, project_setup_env)
             explain_summary["engine_mode"] = "python_sdk"
             explain_summary["engine_init_ok"] = bool(g2)
             explain_summary["engine_config_source"] = engine_details.get("config_source")
+            explain_summary["engine_sdk_api"] = engine_details.get("sdk_api")
             if not g2:
                 explain_summary["status"] = "skipped_sdk_init_failed"
                 explain_summary["warnings"].append(
@@ -1103,8 +1424,8 @@ def main() -> int:
                             )
                 finally:
                     try:
-                        if hasattr(g2, "destroy"):
-                            g2.destroy()
+                        if engine_cleanup_target is not None and hasattr(engine_cleanup_target, "destroy"):
+                            engine_cleanup_target.destroy()
                     except Exception:
                         pass
 
@@ -1137,6 +1458,15 @@ def main() -> int:
         "run_directory": str(run_dir),
         "records_input": len(records),
         "data_sources": data_sources,
+        "runtime_options": {
+            "step_timeout_seconds": args.step_timeout_seconds,
+            "load_threads": args.load_threads,
+            "load_fallback_threads": args.load_fallback_threads,
+            "snapshot_threads": args.snapshot_threads,
+            "snapshot_fallback_threads": args.snapshot_fallback_threads,
+            "stability_retries_enabled": not args.disable_stability_retries,
+        },
+        "runtime_warnings": runtime_warnings,
         "artifacts": {
             "normalized_jsonl": str(normalized_jsonl),
             "config_scripts_dir": str(config_scripts_dir),

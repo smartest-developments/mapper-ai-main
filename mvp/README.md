@@ -22,6 +22,32 @@ Or with explicit input file:
 python3 mvp/run_e2e_mvp.py mvp/sample_senzing_ready.jsonl
 ```
 
+## Run In Docker (Debian + Senzing v4)
+
+From repository root:
+
+```bash
+docker run --rm --platform linux/amd64 \
+  -v "$PWD":/workspace \
+  -w /workspace \
+  mapper-senzing-poc:4.2.1 \
+  bash -lc 'python3 senzing/all_in_one/run_senzing_end_to_end.py \
+    mvp/sample_senzing_ready.jsonl \
+    --output-root /workspace/.senzing_runs_test \
+    --project-parent-dir /workspace/.senzing_projects_test \
+    --run-name-prefix run_docker_e2e \
+    --load-threads 4 \
+    --load-fallback-threads 1 \
+    --snapshot-threads 4 \
+    --snapshot-fallback-threads 1 \
+    --step-timeout-seconds 1800'
+```
+
+This command keeps all artifacts in the local repository under:
+
+- `.senzing_runs_test/`
+- `.senzing_projects_test/`
+
 ## Outputs
 
 By default, outputs are written outside `mvp/`:
