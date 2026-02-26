@@ -44,3 +44,11 @@ python3 senzing/workflows/testing/run_management_tests.py \
 ```
 
 Each subfolder has its own README with details.
+
+## Unified Command
+
+To run generation + mapping + E2E + management outputs in one step:
+
+```bash
+python3 senzing/tools/run_sample_to_management.py --records 500
+```

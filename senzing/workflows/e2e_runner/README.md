@@ -51,6 +51,9 @@ python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
   --max-explain-pairs 0
 ```
 
+By default, temporary loader shuffle files (`*_sz_shuff_*`) are removed after load.
+Use `--keep-loader-temp-files` if you want to keep them for troubleshooting.
+
 ## Main Artifacts
 
 Inside the generated run folder:
@@ -64,3 +67,11 @@ Inside the generated run folder:
 - `comparison/ground_truth_match_quality.md`
 - `comparison/ground_truth_match_quality.json`
 - `run_summary.json`
+
+## Run Registry
+
+Each successful run appends one row to:
+
+- `output/run_registry.csv`
+
+This index links run folder, input JSONL, generation summary, and management report files.

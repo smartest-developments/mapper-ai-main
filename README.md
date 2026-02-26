@@ -21,6 +21,7 @@ senzing/
 │   ├── sz_json_analyzer.py
 │   ├── partner_json_to_senzing.py
 │   ├── generate_realistic_partner_dataset.py
+│   ├── run_sample_to_management.py
 │   └── run_partner_mapping_pipeline.py
 └── workflows/
     ├── mapper/
@@ -33,7 +34,8 @@ sample/
 output/
 ├── partner_output_senzing_<records>_<timestamp>.jsonl
 ├── field_map_<records>_<timestamp>.json
-└── generation_summary_<records>_<timestamp>.json
+├── generation_summary_<records>_<timestamp>.json
+└── run_registry.csv
 ```
 
 ## Main Workflows
@@ -71,7 +73,13 @@ python3 senzing/workflows/testing/run_management_tests.py \
   /path/to/senzing_run_folder
 ```
 
-4. Generate realistic source sample and map it to Senzing JSONL (500k default):
+4. Run one unified pipeline (generate sample -> map -> e2e -> management outputs):
+
+```bash
+python3 senzing/tools/run_sample_to_management.py --records 500
+```
+
+5. Generate realistic source sample and map it to Senzing JSONL (500k default):
 
 ```bash
 python3 senzing/tools/generate_realistic_partner_dataset.py --records 500000
@@ -81,6 +89,12 @@ This command writes:
 - source-style input JSON to `sample/`
 - mapped Senzing JSONL + field map + summary to `output/`
 - timestamped filenames for every run
+
+Each E2E run also appends one row to `output/run_registry.csv` with:
+- run folder
+- exact input JSONL used
+- linked generation summary/base input (when available)
+- key management output file paths
 
 Generation defaults:
 - `70%` PERSON, `30%` ORGANIZATION
@@ -93,6 +107,7 @@ Generation defaults:
 
 - `senzing/senzing_tools_reference.md`
 - `docs/partner_json_to_senzing.md`
+- `docs/management_reporting.md`
 - `senzing/workflows/README.md`
 
 ## Environment Setup

@@ -721,6 +721,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Disable automatic fallback retry for load/snapshot.",
     )
+    parser.add_argument(
+        "--keep-loader-temp-files",
+        action="store_true",
+        help="Keep temporary shuffled files created by sz_file_loader",
+    )
     return parser.parse_args()
 
 
@@ -910,6 +915,21 @@ def parse_record_key(data_source: Any, record_id: Any) -> tuple[str, str] | None
     if not ds or not rid:
         return None
     return ds, rid
+
+
+def cleanup_loader_shuffle_files(load_input_jsonl: Path) -> list[str]:
+    """Remove temporary shuffled files created by sz_file_loader."""
+    removed: list[str] = []
+    pattern = f"{load_input_jsonl.name}_sz_shuff_*"
+    for file_path in sorted(load_input_jsonl.parent.glob(pattern)):
+        if not file_path.is_file():
+            continue
+        try:
+            file_path.unlink()
+            removed.append(str(file_path))
+        except OSError:
+            continue
+    return removed
 
 
 def format_percent(value: float | None) -> str:
@@ -1134,6 +1154,126 @@ def write_ground_truth_match_quality_reports(
 
     quality_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return quality_json, quality_md
+
+
+def resolve_generation_summary_for_input(
+    repo_root: Path,
+    input_jsonl_path: Path,
+) -> dict[str, str | None]:
+    """Resolve generation summary metadata matching the run input JSONL."""
+    output_dir = repo_root / "output"
+    if not output_dir.exists():
+        return {
+            "generation_summary_json": None,
+            "base_input_json": None,
+            "mapped_output_jsonl": None,
+        }
+
+    input_path_text = str(input_jsonl_path)
+    input_name = input_jsonl_path.name
+
+    for summary_path in sorted(output_dir.glob("generation_summary_*.json"), reverse=True):
+        try:
+            payload = json.loads(summary_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        mapped_output = str(payload.get("mapped_output_jsonl") or "").strip()
+        if not mapped_output:
+            continue
+        mapped_name = Path(mapped_output).name
+        if mapped_output == input_path_text or mapped_name == input_name:
+            return {
+                "generation_summary_json": str(summary_path.resolve()),
+                "base_input_json": str(payload.get("base_input_json") or "") or None,
+                "mapped_output_jsonl": mapped_output or None,
+            }
+
+    return {
+        "generation_summary_json": None,
+        "base_input_json": None,
+        "mapped_output_jsonl": None,
+    }
+
+
+def append_run_registry_entry(
+    repo_root: Path,
+    summary: dict[str, Any],
+    load_input_jsonl: Path,
+) -> Path | None:
+    """Append one execution row to output/run_registry.csv."""
+    registry_dir = repo_root / "output"
+    if not registry_dir.exists():
+        return None
+
+    registry_path = registry_dir / "run_registry.csv"
+    artifacts = summary.get("artifacts", {}) if isinstance(summary.get("artifacts"), dict) else {}
+    generation_meta = {
+        "generation_summary_json": None,
+        "base_input_json": None,
+        "mapped_output_jsonl": None,
+    }
+    candidate_inputs: list[Path] = []
+    input_file_text = str(summary.get("input_file") or "").strip()
+    if input_file_text:
+        candidate_inputs.append(Path(input_file_text))
+    candidate_inputs.append(load_input_jsonl)
+    for candidate in candidate_inputs:
+        try:
+            current_meta = resolve_generation_summary_for_input(repo_root, candidate)
+        except Exception:  # pylint: disable=broad-exception-caught
+            continue
+        if current_meta.get("generation_summary_json"):
+            generation_meta = current_meta
+            break
+    run_dir = str(summary.get("run_directory") or "")
+
+    row = {
+        "generated_at": str(summary.get("generated_at") or ""),
+        "run_directory": run_dir,
+        "run_name": Path(run_dir).name if run_dir else "",
+        "overall_ok": str(summary.get("overall_ok") or False),
+        "records_input": str(summary.get("records_input") or ""),
+        "data_sources": ",".join(summary.get("data_sources", [])),
+        "input_file": str(summary.get("input_file") or ""),
+        "load_input_jsonl": str(artifacts.get("load_input_jsonl") or ""),
+        "project_dir": str(summary.get("project_dir") or ""),
+        "fast_mode": str((summary.get("runtime_options") or {}).get("fast_mode") if isinstance(summary.get("runtime_options"), dict) else ""),
+        "comparison_dir": str(artifacts.get("comparison_dir") or ""),
+        "management_summary_md": str(artifacts.get("management_summary_md") or ""),
+        "ground_truth_match_quality_md": str(artifacts.get("ground_truth_match_quality_md") or ""),
+        "ground_truth_match_quality_json": str(artifacts.get("ground_truth_match_quality_json") or ""),
+        "generation_summary_json": str(generation_meta.get("generation_summary_json") or ""),
+        "base_input_json": str(generation_meta.get("base_input_json") or ""),
+        "mapped_output_jsonl": str(generation_meta.get("mapped_output_jsonl") or ""),
+    }
+
+    fieldnames = [
+        "generated_at",
+        "run_directory",
+        "run_name",
+        "overall_ok",
+        "records_input",
+        "data_sources",
+        "input_file",
+        "load_input_jsonl",
+        "project_dir",
+        "fast_mode",
+        "comparison_dir",
+        "management_summary_md",
+        "ground_truth_match_quality_md",
+        "ground_truth_match_quality_json",
+        "generation_summary_json",
+        "base_input_json",
+        "mapped_output_jsonl",
+    ]
+
+    write_header = not registry_path.exists() or registry_path.stat().st_size == 0
+    with registry_path.open("a", encoding="utf-8", newline="") as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        if write_header:
+            writer.writeheader()
+        writer.writerow(row)
+    return registry_path
 
 
 def make_comparison_outputs(
@@ -1381,6 +1521,7 @@ def make_comparison_outputs(
 def main() -> int:
     """Entry point."""
     args = parse_args()
+    repo_root = Path(__file__).resolve().parents[2]
     if args.fast_mode:
         args.skip_snapshot = True
         args.skip_export = True
@@ -1450,6 +1591,8 @@ def main() -> int:
     why_records_file = explain_dir / "why_records_pairs.jsonl"
     summary_file = run_dir / "run_summary.json"
     comparison_artifacts: dict[str, str | int | dict[str, int] | None] = {}
+    loader_temp_files_removed: list[str] = []
+    run_registry_path: Path | None = None
 
     print(f"Run directory: {run_dir}")
     print(f"Input file: {input_path}")
@@ -1573,6 +1716,13 @@ def main() -> int:
         summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print("FAILED at load_records", file=sys.stderr)
         return 1
+
+    if not args.keep_loader_temp_files:
+        loader_temp_files_removed = cleanup_loader_shuffle_files(load_input_jsonl)
+        if loader_temp_files_removed:
+            runtime_warnings.append(
+                f"Removed {len(loader_temp_files_removed)} loader temp file(s)."
+            )
 
     if not args.skip_snapshot:
         snapshot_attempts: list[tuple[str, str, Path]] = [
@@ -1869,12 +2019,14 @@ def main() -> int:
             "skip_comparison": args.skip_comparison,
             "use_input_jsonl_directly": args.use_input_jsonl_directly,
             "data_sources_override": data_sources_override,
+            "keep_loader_temp_files": args.keep_loader_temp_files,
             "stability_retries_enabled": not args.disable_stability_retries,
         },
         "runtime_warnings": runtime_warnings,
         "artifacts": {
             "normalized_jsonl": str(normalized_jsonl) if normalized_jsonl.exists() else None,
             "load_input_jsonl": str(load_input_jsonl),
+            "loader_temp_files_removed": loader_temp_files_removed,
             "config_scripts_dir": str(config_scripts_dir),
             "snapshot_json": str(snapshot_json) if snapshot_json.exists() else None,
             "export_file": str(export_file) if export_file.exists() else None,
@@ -1896,10 +2048,24 @@ def main() -> int:
         "comparison": comparison_artifacts,
         "steps": steps,
     }
+    try:
+        run_registry_path = append_run_registry_entry(
+            repo_root=repo_root,
+            summary=summary,
+            load_input_jsonl=load_input_jsonl,
+        )
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        runtime_warnings.append(f"Unable to append run registry entry: {err}")
+        run_registry_path = None
+
+    summary["artifacts"]["run_registry_csv"] = str(run_registry_path) if run_registry_path else None
+
     summary_file.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     print("Pipeline complete. Success=True")
     print(f"Summary: {summary_file}")
+    if run_registry_path:
+        print(f"Run registry: {run_registry_path}")
     print(f"Project: {project_dir}")
     print(f"Artifacts: {run_dir}")
     return 0
