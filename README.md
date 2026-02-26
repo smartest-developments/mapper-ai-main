@@ -123,6 +123,7 @@ Generation defaults:
 - `docs/partner_json_to_senzing.md`
 - `docs/management_reporting.md`
 - `senzing/workflows/README.md`
+- `MVP/README.md` (portable execution package for production handoff)
 
 ## Environment Setup
 

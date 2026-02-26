@@ -1,0 +1,13 @@
+# Runtime artifacts
+output/*
+!output/.gitkeep
+
+runs/*
+!runs/.gitkeep
+
+projects/*
+!projects/.gitkeep
+
+# Python cache
+__pycache__/
+*.pyc
