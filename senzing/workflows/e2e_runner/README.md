@@ -42,6 +42,15 @@ What this does:
 - avoids JSONL normalization copy
 - keeps run logs and summary for load verification
 
+To run full explain without cap:
+
+```bash
+python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
+  /path/to/input_senzing_ready.jsonl \
+  --max-explain-records 0 \
+  --max-explain-pairs 0
+```
+
 ## Main Artifacts
 
 Inside the generated run folder:
@@ -52,4 +61,6 @@ Inside the generated run folder:
 - `comparison/entity_records.csv`
 - `comparison/matched_pairs.csv`
 - `comparison/management_summary.md`
+- `comparison/ground_truth_match_quality.md`
+- `comparison/ground_truth_match_quality.json`
 - `run_summary.json`

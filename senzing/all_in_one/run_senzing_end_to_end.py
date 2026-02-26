@@ -17,7 +17,7 @@ Input must already be Senzing-ready JSON objects (JSONL or JSON array).
 from __future__ import annotations
 
 import argparse
-from collections import Counter
+from collections import Counter, defaultdict
 import ctypes
 import csv
 import datetime as dt
@@ -673,13 +673,13 @@ def parse_args() -> argparse.Namespace:
         "--max-explain-records",
         type=int,
         default=200,
-        help="Maximum matched records to explain (default: 200)",
+        help="Maximum matched records to explain (default: 200, 0 = no limit)",
     )
     parser.add_argument(
         "--max-explain-pairs",
         type=int,
         default=200,
-        help="Maximum matched pairs to explain (default: 200)",
+        help="Maximum matched pairs to explain (default: 200, 0 = no limit)",
     )
     parser.add_argument(
         "--export-output-name",
@@ -889,15 +889,263 @@ def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) -> 
             writer.writerow(normalized)
 
 
+def comb2(value: int) -> int:
+    """Return number of unordered pairs from a set size."""
+    if value < 2:
+        return 0
+    return value * (value - 1) // 2
+
+
+def safe_ratio(numerator: int, denominator: int) -> float | None:
+    """Return a safe ratio or None when denominator is zero."""
+    if denominator <= 0:
+        return None
+    return numerator / denominator
+
+
+def parse_record_key(data_source: Any, record_id: Any) -> tuple[str, str] | None:
+    """Normalize record key (DATA_SOURCE, RECORD_ID)."""
+    ds = str(data_source or "").strip()
+    rid = str(record_id or "").strip()
+    if not ds or not rid:
+        return None
+    return ds, rid
+
+
+def format_percent(value: float | None) -> str:
+    """Render percentage text from a 0..1 ratio."""
+    if value is None:
+        return "N/A"
+    return f"{value * 100:.2f}%"
+
+
+def load_source_ipg_labels(input_jsonl_path: Path) -> dict[str, Any]:
+    """Load SOURCE_IPG_ID labels keyed by (DATA_SOURCE, RECORD_ID)."""
+    labels: dict[tuple[str, str], str] = {}
+    total_rows = 0
+    rows_with_record_key = 0
+    rows_with_source_ipg_id = 0
+    duplicate_conflicts = 0
+
+    with input_jsonl_path.open("r", encoding="utf-8") as infile:
+        for line_no, line in enumerate(infile, start=1):
+            text = line.strip()
+            if not text:
+                continue
+            total_rows += 1
+            obj = json.loads(text)
+            if not isinstance(obj, dict):
+                raise ValueError(f"Invalid JSON object in input JSONL at line {line_no}")
+            key = parse_record_key(obj.get("DATA_SOURCE"), obj.get("RECORD_ID"))
+            if key is None:
+                continue
+            rows_with_record_key += 1
+            source_ipg_id = str(obj.get("SOURCE_IPG_ID") or "").strip()
+            if not source_ipg_id:
+                continue
+            rows_with_source_ipg_id += 1
+            existing = labels.get(key)
+            if existing is not None and existing != source_ipg_id:
+                duplicate_conflicts += 1
+                continue
+            labels[key] = source_ipg_id
+
+    return {
+        "labels": labels,
+        "total_rows": total_rows,
+        "rows_with_record_key": rows_with_record_key,
+        "rows_with_source_ipg_id": rows_with_source_ipg_id,
+        "duplicate_conflicts": duplicate_conflicts,
+    }
+
+
+def build_ground_truth_match_quality(
+    input_jsonl_path: Path,
+    entity_rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Compute match quality metrics against SOURCE_IPG_ID ground truth."""
+    source_info = load_source_ipg_labels(input_jsonl_path)
+    labels: dict[tuple[str, str], str] = source_info["labels"]
+
+    record_to_entity: dict[tuple[str, str], str] = {}
+    for row in entity_rows:
+        key = parse_record_key(row.get("data_source"), row.get("record_id"))
+        entity_id = str(row.get("resolved_entity_id") or "").strip()
+        if key is None or not entity_id:
+            continue
+        record_to_entity[key] = entity_id
+
+    ipg_counts: Counter[str] = Counter()
+    entity_ipg_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    labeled_records_in_export = 0
+
+    for key, source_ipg_id in labels.items():
+        entity_id = record_to_entity.get(key)
+        if not entity_id:
+            continue
+        labeled_records_in_export += 1
+        ipg_counts[source_ipg_id] += 1
+        entity_ipg_counts[entity_id][source_ipg_id] += 1
+
+    true_pairs = sum(comb2(count) for count in ipg_counts.values())
+    predicted_pairs = sum(comb2(sum(counter.values())) for counter in entity_ipg_counts.values())
+    true_positive = sum(comb2(count) for counter in entity_ipg_counts.values() for count in counter.values())
+    false_positive = max(0, predicted_pairs - true_positive)
+    false_negative = max(0, true_pairs - true_positive)
+
+    pair_precision = safe_ratio(true_positive, true_positive + false_positive)
+    pair_recall = safe_ratio(true_positive, true_positive + false_negative)
+    pair_f1 = None
+    if pair_precision is not None and pair_recall is not None and (pair_precision + pair_recall) > 0:
+        pair_f1 = 2 * pair_precision * pair_recall / (pair_precision + pair_recall)
+
+    entities_with_labels = len(entity_ipg_counts)
+    pure_entities = sum(1 for counter in entity_ipg_counts.values() if len(counter) == 1)
+    mixed_entities = entities_with_labels - pure_entities
+    entity_purity = safe_ratio(pure_entities, entities_with_labels)
+
+    ipg_to_entities: dict[str, set[str]] = defaultdict(set)
+    for entity_id, counter in entity_ipg_counts.items():
+        for source_ipg_id in counter.keys():
+            ipg_to_entities[source_ipg_id].add(entity_id)
+
+    ipg_groups_size_ge_2 = sum(1 for count in ipg_counts.values() if count >= 2)
+    ipg_groups_single_entity = sum(
+        1
+        for source_ipg_id, count in ipg_counts.items()
+        if count >= 2 and len(ipg_to_entities.get(source_ipg_id, set())) == 1
+    )
+    ipg_groups_split = ipg_groups_size_ge_2 - ipg_groups_single_entity
+    ipg_group_concentration = safe_ratio(ipg_groups_single_entity, ipg_groups_size_ge_2)
+
+    mixed_entity_examples: list[dict[str, Any]] = []
+    for entity_id, counter in sorted(
+        entity_ipg_counts.items(),
+        key=lambda item: (-sum(item[1].values()), item[0]),
+    ):
+        if len(counter) <= 1:
+            continue
+        mixed_entity_examples.append(
+            {
+                "resolved_entity_id": entity_id,
+                "labeled_records": sum(counter.values()),
+                "source_ipg_id_counts": dict(counter),
+            }
+        )
+        if len(mixed_entity_examples) >= 10:
+            break
+
+    return {
+        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "input_jsonl": str(input_jsonl_path),
+        "data_quality": {
+            "input_rows_total": source_info["total_rows"],
+            "rows_with_record_key": source_info["rows_with_record_key"],
+            "rows_with_source_ipg_id": source_info["rows_with_source_ipg_id"],
+            "source_ipg_duplicate_conflicts": source_info["duplicate_conflicts"],
+            "labeled_records_in_export": labeled_records_in_export,
+        },
+        "pair_metrics": {
+            "pair_precision": pair_precision,
+            "pair_recall": pair_recall,
+            "pair_f1": pair_f1,
+            "true_positive": true_positive,
+            "false_positive": false_positive,
+            "false_negative": false_negative,
+            "predicted_pairs_labeled": predicted_pairs,
+            "ground_truth_pairs_labeled": true_pairs,
+        },
+        "entity_metrics": {
+            "entities_with_labeled_records": entities_with_labels,
+            "pure_entities": pure_entities,
+            "mixed_entities": mixed_entities,
+            "entity_purity": entity_purity,
+        },
+        "group_metrics": {
+            "ipg_groups_size_ge_2": ipg_groups_size_ge_2,
+            "ipg_groups_single_entity": ipg_groups_single_entity,
+            "ipg_groups_split": ipg_groups_split,
+            "ipg_group_concentration": ipg_group_concentration,
+        },
+        "mixed_entity_examples": mixed_entity_examples,
+    }
+
+
+def write_ground_truth_match_quality_reports(
+    comparison_dir: Path,
+    payload: dict[str, Any],
+) -> tuple[Path, Path]:
+    """Write management-facing ground truth quality reports."""
+    quality_json = comparison_dir / "ground_truth_match_quality.json"
+    quality_md = comparison_dir / "ground_truth_match_quality.md"
+
+    quality_json.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    pair_metrics = payload.get("pair_metrics", {})
+    entity_metrics = payload.get("entity_metrics", {})
+    group_metrics = payload.get("group_metrics", {})
+    data_quality = payload.get("data_quality", {})
+
+    lines: list[str] = []
+    lines.append("# Match Quality vs SOURCE_IPG_ID")
+    lines.append("")
+    lines.append(f"- Generated at: {payload.get('generated_at')}")
+    lines.append(f"- Input JSONL: {payload.get('input_jsonl')}")
+    lines.append("")
+    lines.append("## Pair Quality")
+    lines.append("")
+    lines.append(f"- Pair precision: {format_percent(pair_metrics.get('pair_precision'))}")
+    lines.append(f"- Pair recall: {format_percent(pair_metrics.get('pair_recall'))}")
+    lines.append(f"- Pair F1: {format_percent(pair_metrics.get('pair_f1'))}")
+    lines.append(f"- True positive: {pair_metrics.get('true_positive', 0)}")
+    lines.append(f"- False positive: {pair_metrics.get('false_positive', 0)}")
+    lines.append(f"- False negative: {pair_metrics.get('false_negative', 0)}")
+    lines.append("")
+    lines.append("## Extra Metrics")
+    lines.append("")
+    lines.append(f"- Predicted pairs (labeled): {pair_metrics.get('predicted_pairs_labeled', 0)}")
+    lines.append(f"- Ground-truth pairs (labeled): {pair_metrics.get('ground_truth_pairs_labeled', 0)}")
+    lines.append(f"- Labeled records in export: {data_quality.get('labeled_records_in_export', 0)}")
+    lines.append(f"- Rows with SOURCE_IPG_ID in input: {data_quality.get('rows_with_source_ipg_id', 0)}")
+    lines.append(f"- Entity purity (labeled): {format_percent(entity_metrics.get('entity_purity'))}")
+    lines.append(f"- Pure entities (labeled): {entity_metrics.get('pure_entities', 0)}")
+    lines.append(f"- Mixed entities (labeled): {entity_metrics.get('mixed_entities', 0)}")
+    lines.append(
+        "- IPG group concentration (size>=2): "
+        f"{format_percent(group_metrics.get('ipg_group_concentration'))}"
+    )
+    lines.append(
+        f"- Split IPG groups (size>=2): {group_metrics.get('ipg_groups_split', 0)}"
+        f"/{group_metrics.get('ipg_groups_size_ge_2', 0)}"
+    )
+
+    mixed_examples = payload.get("mixed_entity_examples", [])
+    if mixed_examples:
+        lines.append("")
+        lines.append("## Mixed Entity Examples")
+        lines.append("")
+        lines.append("| Entity | Labeled Records | SOURCE_IPG_ID Counts |")
+        lines.append("| --- | ---: | --- |")
+        for item in mixed_examples:
+            lines.append(
+                f"| {item.get('resolved_entity_id')} | {item.get('labeled_records', 0)} | "
+                f"{json.dumps(item.get('source_ipg_id_counts', {}), ensure_ascii=False)} |"
+            )
+
+    quality_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return quality_json, quality_md
+
+
 def make_comparison_outputs(
     run_dir: Path,
+    input_jsonl_path: Path,
     export_rows: list[dict[str, str]],
     matched_records: list[dict[str, str]],
     matched_pairs: list[dict[str, str]],
     why_entity_results: list[dict[str, Any]],
     why_records_results: list[dict[str, Any]],
     records_input_count: int,
-) -> dict[str, str | int | dict[str, int] | None]:
+) -> dict[str, Any]:
     """Create comparison-ready artifacts for downstream testing and management."""
     comparison_dir = run_dir / "comparison"
     comparison_dir.mkdir(parents=True, exist_ok=True)
@@ -1027,6 +1275,15 @@ def make_comparison_outputs(
     )
     write_csv(match_stats_csv, ["metric", "value"], stats_rows)
 
+    ground_truth_payload = build_ground_truth_match_quality(
+        input_jsonl_path=input_jsonl_path,
+        entity_rows=entity_rows,
+    )
+    ground_truth_json, ground_truth_md = write_ground_truth_match_quality_reports(
+        comparison_dir=comparison_dir,
+        payload=ground_truth_payload,
+    )
+
     summary_obj = {
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
         "records_input": records_input_count,
@@ -1047,7 +1304,10 @@ def make_comparison_outputs(
             "matched_pairs_csv": str(matched_pairs_csv),
             "match_stats_csv": str(match_stats_csv),
             "management_summary_md": str(management_md),
+            "ground_truth_match_quality_json": str(ground_truth_json),
+            "ground_truth_match_quality_md": str(ground_truth_md),
         },
+        "ground_truth_match_quality": ground_truth_payload,
     }
     management_json.write_text(json.dumps(summary_obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
@@ -1112,6 +1372,8 @@ def make_comparison_outputs(
         "match_stats_csv": str(match_stats_csv),
         "management_summary_json": str(management_json),
         "management_summary_md": str(management_md),
+        "ground_truth_match_quality_json": str(ground_truth_json),
+        "ground_truth_match_quality_md": str(ground_truth_md),
         "matched_pairs_count": len(matched_pairs),
     }
 
@@ -1131,6 +1393,9 @@ def main() -> int:
 
     if args.step_timeout_seconds <= 0:
         print("ERROR: --step-timeout-seconds must be > 0", file=sys.stderr)
+        return 2
+    if args.max_explain_records < 0 or args.max_explain_pairs < 0:
+        print("ERROR: --max-explain-records and --max-explain-pairs must be >= 0", file=sys.stderr)
         return 2
     if args.load_threads <= 0 or args.load_fallback_threads <= 0:
         print("ERROR: --load-threads and --load-fallback-threads must be > 0", file=sys.stderr)
@@ -1441,12 +1706,12 @@ def main() -> int:
             )
 
             explain_summary["status"] = "done"
-            if len(matched_records) > args.max_explain_records:
+            if args.max_explain_records > 0 and len(matched_records) > args.max_explain_records:
                 explain_summary["warnings"].append(
                     f"Matched records limited from {len(matched_records)} to {args.max_explain_records}."
                 )
                 matched_records = matched_records[: args.max_explain_records]
-            if len(matched_pairs) > args.max_explain_pairs:
+            if args.max_explain_pairs > 0 and len(matched_pairs) > args.max_explain_pairs:
                 explain_summary["warnings"].append(
                     f"Matched pairs limited from {len(matched_pairs)} to {args.max_explain_pairs}."
                 )
@@ -1576,6 +1841,7 @@ def main() -> int:
     if export_rows and not args.skip_comparison:
         comparison_artifacts = make_comparison_outputs(
             run_dir=run_dir,
+            input_jsonl_path=load_input_jsonl,
             export_rows=export_rows,
             matched_records=matched_records,
             matched_pairs=matched_pairs,
@@ -1622,6 +1888,8 @@ def main() -> int:
             "match_stats_csv": comparison_artifacts.get("match_stats_csv"),
             "management_summary_json": comparison_artifacts.get("management_summary_json"),
             "management_summary_md": comparison_artifacts.get("management_summary_md"),
+            "ground_truth_match_quality_json": comparison_artifacts.get("ground_truth_match_quality_json"),
+            "ground_truth_match_quality_md": comparison_artifacts.get("ground_truth_match_quality_md"),
             "logs_dir": str(logs_dir),
         },
         "explain": explain_summary,
