@@ -1,1 +1,1 @@
-# mapper-ai examples
+# mapper examples

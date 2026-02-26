@@ -42,7 +42,7 @@ EXIT CODES:
   1 = One or more records had errors
   2 = Invalid usage (no input or invalid JSON)
 
-FOR AI AGENTS:
+FOR OPERATORS:
 When generating Senzing JSON, pipe it directly to the linter:
   echo '{"DATA_SOURCE":"TEST",...}' | python3 tools/lint_senzing_json.py
 The linter will report any validation errors that need fixing.

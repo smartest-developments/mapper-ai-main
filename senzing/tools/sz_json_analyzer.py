@@ -650,7 +650,7 @@ def format_csv_table(table_rows):
 
 # ----------------------------------------
 def format_markdown_table(table_rows):
-    """Format report as markdown with sections for better AI readability."""
+    """Format report as markdown with sections for better readability."""
     if not table_rows or len(table_rows) < 2:
         return "No report data available.\n"
 

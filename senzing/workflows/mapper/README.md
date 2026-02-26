@@ -7,12 +7,12 @@ Convert production source JSON (array of records) into Senzing-ready JSONL.
 ## Script
 
 - `run_mapper_jsonl.py` (wrapper)
-- Delegates to: `/Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_senzing.py`
+- Delegates to: `senzing/tools/partner_json_to_senzing.py`
 
 ## Command
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/workflows/mapper/run_mapper_jsonl.py \
+python3 senzing/workflows/mapper/run_mapper_jsonl.py \
   /path/to/input.json \
   /path/to/output.jsonl \
   --data-source PARTNERS

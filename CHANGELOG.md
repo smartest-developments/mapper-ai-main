@@ -14,5 +14,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Mapping assistant: better stage gating and improved multi-entity loop tracking
   - Entity specification: consolidated into text and tables, removed unused images
   - Tools reference: clarified tool usage, added multi-environment support (local/Docker/remote) via `senzing_server.json`
-  - README: restructured with Getting Started, Environment Setup, and tool-agnostic context loading for AI IDEs
+  - README: restructured with Getting Started, Environment Setup, and tool-agnostic context loading for IDEs
 - Added `senzing_mcp_reference.md` for MCP server usage

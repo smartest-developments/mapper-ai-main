@@ -1,6 +1,6 @@
 # Senzing Tools Reference Guide
 
-This document provides concise command-line reference for Senzing tools used in the workshop environment. Each tool section covers: what it does, when to run it, the exact command AI should use, and how to interpret the output.
+This document provides concise command-line reference for Senzing tools used in the workshop environment. Each tool section covers: what it does, when to run it, the exact command to run, and how to interpret the output.
 
 ## Tool Categories
 
@@ -120,7 +120,7 @@ Before copying files, check if the project directory is already mounted:
 
 **When to run:** Before mapping, to understand source data structure.
 
-**AI Command:**
+**Command:**
 python3 senzing/tools/sz_schema_generator.py <input_file> -o <source_filename>_schema.md
 
 **Reading output:**
@@ -138,9 +138,9 @@ python3 senzing/tools/sz_schema_generator.py customers.csv -o customers_schema.m
 
 **Purpose:** Validate Senzing JSON structure against specification rules.
 
-**When to run:** During mapping development as a self-test on sample JSON records created by AI. Used to verify JSON structure is correct before writing the full mapper code.
+**When to run:** During mapping development as a self-test on sample JSON records created during development. Used to verify JSON structure is correct before writing the full mapper code.
 
-**AI Command:**
+**Command:**
 python3 senzing/tools/lint_senzing_json.py <file.jsonl>
 
 **Reading output:**
@@ -166,13 +166,13 @@ python3 senzing/tools/lint_senzing_json.py <file.jsonl>
 
 **When to run:** After mapper code generates the complete JSONL output file, before loading. This is the critical pre-load check that provides comprehensive analysis of the entire mapped dataset.
 
-**AI Command:**
+**Command:**
 python3 senzing/tools/sz_json_analyzer.py <input.jsonl> -o <analysis>.md
 
-**IMPORTANT:** Always use `.md` extension for AI-friendly structured format.
+**IMPORTANT:** Always use `.md` extension for structured format.
 
 **Reading output:**
-After running, **AI MUST read the markdown file** and provide a summary covering:
+After running, Review the markdown file and provide a summary covering:
 
 1. **Critical Errors (❌)** - MUST fix before loading:
    - `DATA_SOURCE not found: <NAME>` → Run sz_configtool to add data source
@@ -227,7 +227,7 @@ NEXT STEPS:
 
 **When to run:** After analyzer shows "DATA_SOURCE not found" error, before loading.
 
-**AI Command (by environment):**
+**Command (by environment):**
 
 First, create the config file locally:
 cat > <project>_config.g2c << 'EOF'
@@ -273,7 +273,7 @@ source /home/user/senzing/project/setupEnv && sz_configtool -f customers_config.
 
 **When to run:** After linting passes, analyzer shows no critical errors, and all DATA_SOURCE values are configured.
 
-**AI Command (by environment):**
+**Command (by environment):**
 
 **Local:**
 source <senzingEnv> && sz_file_loader -f <file.jsonl>
@@ -323,7 +323,7 @@ Next step: Run sz_snapshot to analyze entity resolution results
 
 **When to run:** After loading data with sz_file_loader, to understand match quality and entity distribution.
 
-**AI Command (by environment):**
+**Command (by environment):**
 
 **Local:**
 source <senzingEnv> && sz_snapshot -o <project>-snapshot-$(date +%Y-%m-%d) -Q
@@ -364,7 +364,7 @@ Where:
 - Compression = (Records - Entities) / Records * 100%
 - Relationships = sum of AMBIGUOUS_MATCH + POSSIBLE_MATCH + POSSIBLE_RELATION counts
 
-Then provide AI analysis of interesting findings:
+Then provide analysis of interesting findings:
 ```
 ✅ Snapshot complete: <filename>.json
 
@@ -400,10 +400,10 @@ Which would you like to explore, or something else?
 1. Analyze source data
    python3 senzing/tools/sz_schema_generator.py source.csv -o source_schema.md
 
-2. Develop mapper (AI-assisted)
-   - AI creates sample JSON records
-   - AI runs linter on samples to validate structure
-   - AI generates mapper code once samples pass linting
+2. Develop mapper
+   - Create sample JSON records
+   - Run linter on samples to validate structure
+   - Generate mapper code once samples pass linting
 
 3. Run mapper to generate complete output
    python3 mapper.py source.csv output.jsonl
@@ -448,9 +448,9 @@ Which would you like to explore, or something else?
 
 ---
 
-## AI Integration
+## MCP Integration
 
-For AI assistants with MCP (Model Context Protocol) support, the **Senzing MCP Server** provides interactive access to entity resolution results after data is loaded.
+For environments with MCP (Model Context Protocol) support, the **Senzing MCP Server** provides interactive access to entity resolution results after data is loaded.
 
 See the [Senzing MCP Server](https://github.com/jbutcher21/senzing-mcp-server) repo for tools and response formatting.
 

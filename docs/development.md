@@ -1,1 +1,1 @@
-# mapper-ai development
+# mapper development

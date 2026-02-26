@@ -4,7 +4,7 @@
 
 This guide describes how to convert a simple JSON array of partner records into Senzing-ready JSONL using:
 
-- `/Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_senzing.py`
+- `senzing/tools/partner_json_to_senzing.py`
 
 The output JSONL can be validated with the existing toolkit tools and then loaded into Senzing.
 
@@ -111,7 +111,7 @@ Optional: with `--include-unmapped-source-fields`, unknown source attributes are
 Use the wrapper to run all steps in sequence (convert + lint + analyzer + stakeholder report):
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/run_partner_mapping_pipeline.py \
+python3 senzing/tools/run_partner_mapping_pipeline.py \
   /path/to/input_partners.json
 ```
 
@@ -129,7 +129,7 @@ Each run creates a timestamped folder containing:
 Run with input only. The script creates a timestamped run folder automatically:
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_senzing.py \
+python3 senzing/tools/partner_json_to_senzing.py \
   /path/to/input_partners.json
 ```
 
@@ -145,7 +145,7 @@ Generated files per run:
 ### Basic conversion
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_senzing.py \
+python3 senzing/tools/partner_json_to_senzing.py \
   /path/to/input_partners.json \
   /path/to/output_partners.jsonl \
   --data-source PARTNERS
@@ -154,7 +154,7 @@ python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_se
 ### Recommended conversion (keep extra unmapped attributes + export inferred map)
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_senzing.py \
+python3 senzing/tools/partner_json_to_senzing.py \
   /path/to/input_partners.json \
   /path/to/output_partners.jsonl \
   --data-source PARTNERS \
@@ -165,7 +165,7 @@ python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_se
 ### Strict mode
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/partner_json_to_senzing.py \
+python3 senzing/tools/partner_json_to_senzing.py \
   /path/to/input_partners.json \
   /path/to/output_partners.jsonl \
   --data-source PARTNERS \
@@ -179,26 +179,13 @@ After conversion:
 1. Validate structure:
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/lint_senzing_json.py /path/to/output_partners.jsonl
+python3 senzing/tools/lint_senzing_json.py /path/to/output_partners.jsonl
 ```
 
 2. Analyze mapping quality:
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/tools/sz_json_analyzer.py \
+python3 senzing/tools/sz_json_analyzer.py \
   /path/to/output_partners.jsonl \
   -o /path/to/output_partners_analysis.md
 ```
-
-## OpenAI API Key Naming
-
-If you want a dedicated key label for this workflow in the OpenAI console, use:
-
-- `senzing-mapper-dev`
-
-Environment variable:
-
-- Standard: `OPENAI_API_KEY`
-- Optional project-specific alias: `SENZING_MAPPER_OPENAI_API_KEY`
-
-Note: this mapper script itself does not call OpenAI APIs. The key is useful for AI-assisted development sessions.

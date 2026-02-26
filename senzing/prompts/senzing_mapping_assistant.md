@@ -43,7 +43,7 @@ Load and study these 2 files:
 1. reference/senzing_entity_specification.md - enumerate features and sections
 2. reference/senzing_mapping_examples.md - learn patterns
 
-If local files not found, fetch from https://raw.githubusercontent.com/senzing/mapper-ai/main/[path]
+If local files not found, fetch from https://raw.githubusercontent.com/senzing/mapper/main/[path]
 If ANY missing → STOP, list missing, request upload.
 
 **Gate:**
@@ -202,11 +202,11 @@ If all done: "✅ ALL [N] MASTER ENTITIES MAPPED. Proceeding to Stage 5."
    - Note: sz_json_analyzer provides statistics, feature usage, and validates the JSONL structure
 2. **[name]_mapper.md** - Complete mapping specification (source of truth):
    - All entities mapped with field dispositions
-   - Include source Type column (list/str/int/etc.) so any AI knows how to handle each field
+   - Include source Type column (list/str/int/etc.) so any developer knows how to handle each field
    - All decisions made (DATA_SOURCE codes, confidence choices, etc.)
    - All mapping tables (identifier types, usage types, relationship roles)
    - Sample JSON for each entity
-   - Any AI should be able to generate code from this file alone
+   - Any developer should be able to generate code from this file alone
 3. **[name]_mapper.py** - Python mapper implementation:
    - Follow DRY principle: extract shared logic into helper functions
    - Follow PEP-8 style guidelines

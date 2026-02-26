@@ -15,12 +15,12 @@ Run Senzing from A to Z for one JSONL input:
 ## Script
 
 - `run_senzing_e2e.py` (wrapper)
-- Delegates to: `/Users/simones/Developer/mapper-ai-main/senzing/all_in_one/run_senzing_end_to_end.py`
+- Delegates to: `senzing/all_in_one/run_senzing_end_to_end.py`
 
 ## Command
 
 ```bash
-python3 /Users/simones/Developer/mapper-ai-main/senzing/workflows/e2e_runner/run_senzing_e2e.py \
+python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
   /path/to/input_senzing_ready.jsonl
 ```
 
