@@ -50,7 +50,10 @@ def main() -> int:
 
     mvp_dir = Path(__file__).resolve().parent
     repo_root = mvp_dir.parent
-    core_script = repo_root / "senzing" / "all_in_one" / "run_senzing_end_to_end.py"
+    core_script = mvp_dir / "bin" / "run_senzing_end_to_end.py"
+    if not core_script.exists():
+        # Fallback for development mode.
+        core_script = repo_root / "senzing" / "all_in_one" / "run_senzing_end_to_end.py"
 
     if not core_script.exists():
         print(f"ERROR: Core runner not found: {core_script}", file=sys.stderr)

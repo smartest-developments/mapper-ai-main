@@ -5,6 +5,7 @@ This folder contains the minimum setup to run Senzing end-to-end in one place.
 ## Contents
 
 - `run_e2e_mvp.py`: single launcher script
+- `bin/run_senzing_end_to_end.py`: local core runner used by MVP launcher
 - `input/sample_senzing_ready.jsonl`: ready-to-run sample input
 - `runs/`: run artifacts (auto-generated)
 - `projects/`: isolated Senzing projects (auto-generated)
