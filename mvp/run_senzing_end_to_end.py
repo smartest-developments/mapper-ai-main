@@ -153,6 +153,23 @@ def run_shell_with_fallback(
     }
 
 
+def command_available(project_setup_env: Path, command_name: str) -> bool:
+    """Return True when command exists after sourcing project setupEnv."""
+    cmd = (
+        f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
+        f"command -v {shlex.quote(command_name)} >/dev/null 2>&1"
+    )
+    result = subprocess.run(
+        ["bash", "-lc", cmd],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    return result.returncode == 0
+
+
 def create_project(project_dir: Path, base_setup_env: Path | None, log_path: Path) -> dict[str, Any]:
     """Create an isolated project, trying preferred Senzing commands first."""
     project_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -878,6 +895,12 @@ def main() -> int:
             explain_dir.mkdir(parents=True, exist_ok=True)
             explain_logs_dir.mkdir(parents=True, exist_ok=True)
 
+            why_entity_available = command_available(project_setup_env, "sz_why_entity_by_record_id") or command_available(
+                project_setup_env,
+                "sz_why_record_in_entity",
+            )
+            why_records_available = command_available(project_setup_env, "sz_why_records")
+
             match_inputs_file.write_text(
                 json.dumps(
                     {
@@ -906,67 +929,77 @@ def main() -> int:
                 )
                 matched_pairs = matched_pairs[: args.max_explain_pairs]
 
-            with why_entity_file.open("w", encoding="utf-8") as outfile:
-                for index, rec in enumerate(matched_records, start=1):
-                    ds = rec["data_source"]
-                    rid = rec["record_id"]
-                    commands = make_why_entity_commands(project_setup_env, ds, rid)
-                    step = run_shell_with_fallback(
-                        step_name=f"why_entity_by_record_{index:04d}",
-                        commands=commands,
-                        log_path=explain_logs_dir / f"why_entity_{index:04d}.log",
-                    )
-                    steps.append(step)
-                    explain_summary["why_entity_attempted"] += 1
-                    if step["ok"]:
-                        explain_summary["why_entity_ok"] += 1
+            if why_entity_available:
+                with why_entity_file.open("w", encoding="utf-8") as outfile:
+                    for index, rec in enumerate(matched_records, start=1):
+                        ds = rec["data_source"]
+                        rid = rec["record_id"]
+                        commands = make_why_entity_commands(project_setup_env, ds, rid)
+                        step = run_shell_with_fallback(
+                            step_name=f"why_entity_by_record_{index:04d}",
+                            commands=commands,
+                            log_path=explain_logs_dir / f"why_entity_{index:04d}.log",
+                        )
+                        steps.append(step)
+                        explain_summary["why_entity_attempted"] += 1
+                        if step["ok"]:
+                            explain_summary["why_entity_ok"] += 1
 
-                    stdout = step.get("stdout_full", "")
-                    parsed = try_parse_json(stdout)
-                    item = {
-                        "index": index,
-                        "input": rec,
-                        "ok": step["ok"],
-                        "command_used": step.get("command_used"),
-                        "log_file": step.get("log_file"),
-                        "output_json": parsed,
-                        "output_text": None if parsed is not None else stdout.strip(),
-                        "stderr": (step.get("stderr_full") or "").strip() or None,
-                    }
-                    why_entity_results.append(item)
-                    outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+                        stdout = step.get("stdout_full", "")
+                        parsed = try_parse_json(stdout)
+                        item = {
+                            "index": index,
+                            "input": rec,
+                            "ok": step["ok"],
+                            "command_used": step.get("command_used"),
+                            "log_file": step.get("log_file"),
+                            "output_json": parsed,
+                            "output_text": None if parsed is not None else stdout.strip(),
+                            "stderr": (step.get("stderr_full") or "").strip() or None,
+                        }
+                        why_entity_results.append(item)
+                        outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+            else:
+                explain_summary["warnings"].append(
+                    "Explain entity step skipped: no supported why-entity command found in this Senzing environment."
+                )
 
-            with why_records_file.open("w", encoding="utf-8") as outfile:
-                for index, pair in enumerate(matched_pairs, start=1):
-                    ds1 = pair["anchor_data_source"]
-                    rid1 = pair["anchor_record_id"]
-                    ds2 = pair["matched_data_source"]
-                    rid2 = pair["matched_record_id"]
-                    commands = make_why_records_commands(project_setup_env, ds1, rid1, ds2, rid2)
-                    step = run_shell_with_fallback(
-                        step_name=f"why_records_{index:04d}",
-                        commands=commands,
-                        log_path=explain_logs_dir / f"why_records_{index:04d}.log",
-                    )
-                    steps.append(step)
-                    explain_summary["why_records_attempted"] += 1
-                    if step["ok"]:
-                        explain_summary["why_records_ok"] += 1
+            if why_records_available:
+                with why_records_file.open("w", encoding="utf-8") as outfile:
+                    for index, pair in enumerate(matched_pairs, start=1):
+                        ds1 = pair["anchor_data_source"]
+                        rid1 = pair["anchor_record_id"]
+                        ds2 = pair["matched_data_source"]
+                        rid2 = pair["matched_record_id"]
+                        commands = make_why_records_commands(project_setup_env, ds1, rid1, ds2, rid2)
+                        step = run_shell_with_fallback(
+                            step_name=f"why_records_{index:04d}",
+                            commands=commands,
+                            log_path=explain_logs_dir / f"why_records_{index:04d}.log",
+                        )
+                        steps.append(step)
+                        explain_summary["why_records_attempted"] += 1
+                        if step["ok"]:
+                            explain_summary["why_records_ok"] += 1
 
-                    stdout = step.get("stdout_full", "")
-                    parsed = try_parse_json(stdout)
-                    item = {
-                        "index": index,
-                        "input": pair,
-                        "ok": step["ok"],
-                        "command_used": step.get("command_used"),
-                        "log_file": step.get("log_file"),
-                        "output_json": parsed,
-                        "output_text": None if parsed is not None else stdout.strip(),
-                        "stderr": (step.get("stderr_full") or "").strip() or None,
-                    }
-                    why_records_results.append(item)
-                    outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+                        stdout = step.get("stdout_full", "")
+                        parsed = try_parse_json(stdout)
+                        item = {
+                            "index": index,
+                            "input": pair,
+                            "ok": step["ok"],
+                            "command_used": step.get("command_used"),
+                            "log_file": step.get("log_file"),
+                            "output_json": parsed,
+                            "output_text": None if parsed is not None else stdout.strip(),
+                            "stderr": (step.get("stderr_full") or "").strip() or None,
+                        }
+                        why_records_results.append(item)
+                        outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+            else:
+                explain_summary["warnings"].append(
+                    "Explain pair step skipped: sz_why_records not found in this Senzing environment."
+                )
 
             if explain_summary["why_entity_attempted"] > 0 and explain_summary["why_entity_ok"] == 0:
                 explain_summary["warnings"].append(
