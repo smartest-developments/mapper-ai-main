@@ -9,7 +9,7 @@ This script intentionally uses Senzing CLI tools in shell order:
 5. Snapshot (`sz_snapshot`)
 6. Export (`sz_export -o <file>`)
 7. Extract matched records from export
-8. Run explain commands for matched records only (`why...`)
+8. Run explain for matched records using Python SDK (`G2Engine`)
 
 Input must already be Senzing-ready JSON objects (JSONL or JSON array).
 """
@@ -21,6 +21,7 @@ from collections import Counter
 import csv
 import datetime as dt
 import json
+import os
 import shlex
 import subprocess
 import sys
@@ -96,78 +97,180 @@ def run_shell_step(step_name: str, shell_command: str, log_path: Path) -> dict[s
     }
 
 
-def run_shell_with_fallback(
-    step_name: str,
-    commands: list[str],
-    log_path: Path,
-) -> dict[str, Any]:
-    """Try commands in order, return success of first passing command."""
-    start = time.time()
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-
-    selected_command = ""
-    selected_stdout = ""
-    selected_stderr = ""
-    selected_exit_code = 1
-    ok = False
-
-    with log_path.open("w", encoding="utf-8") as log:
-        log.write(f"STEP: {step_name}\n")
-        for index, command in enumerate(commands, start=1):
-            result = subprocess.run(
-                ["bash", "-lc", command],
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                check=False,
-            )
-            log.write(f"\n--- ATTEMPT {index} ---\n")
-            log.write(f"COMMAND: {command}\n")
-            log.write(f"EXIT_CODE: {result.returncode}\n")
-            log.write("\nSTDOUT:\n")
-            log.write(result.stdout or "")
-            log.write("\nSTDERR:\n")
-            log.write(result.stderr or "")
-
-            selected_command = command
-            selected_stdout = result.stdout or ""
-            selected_stderr = result.stderr or ""
-            selected_exit_code = result.returncode
-            if result.returncode == 0:
-                ok = True
-                break
-
-    elapsed = round(time.time() - start, 3)
-    return {
-        "step": step_name,
-        "ok": ok,
-        "exit_code": selected_exit_code,
-        "duration_seconds": elapsed,
-        "command_used": selected_command,
-        "log_file": str(log_path),
-        "stdout_tail": selected_stdout[-1200:],
-        "stderr_tail": selected_stderr[-1200:],
-        "stdout_full": selected_stdout,
-        "stderr_full": selected_stderr,
-    }
-
-
-def command_available(project_setup_env: Path, command_name: str) -> bool:
-    """Return True when command exists after sourcing project setupEnv."""
-    cmd = (
-        f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
-        f"command -v {shlex.quote(command_name)} >/dev/null 2>&1"
-    )
+def load_setup_env(project_setup_env: Path) -> dict[str, str]:
+    """Load environment variables by sourcing setupEnv in a subshell."""
+    cmd = f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && env -0"
     result = subprocess.run(
         ["bash", "-lc", cmd],
         capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
+        text=False,
         check=False,
     )
-    return result.returncode == 0
+    if result.returncode != 0:
+        return {}
+
+    env_map: dict[str, str] = {}
+    for item in result.stdout.split(b"\x00"):
+        if not item or b"=" not in item:
+            continue
+        key, value = item.split(b"=", 1)
+        env_map[key.decode("utf-8", errors="replace")] = value.decode("utf-8", errors="replace")
+    return env_map
+
+
+def build_engine_config_json(project_dir: Path) -> str:
+    """Build a fallback G2Engine config JSON based on project directory layout."""
+    payload = {
+        "PIPELINE": {
+            "CONFIGPATH": str(project_dir / "etc"),
+            "SUPPORTPATH": str(project_dir / "data"),
+            "RESOURCEPATH": str(project_dir / "resources"),
+        },
+        "SQL": {
+            "CONNECTION": f"sqlite3://na:na@/{project_dir / 'var' / 'sqlite' / 'G2C.db'}",
+        },
+    }
+    return json.dumps(payload)
+
+
+def init_g2_engine(project_dir: Path, project_setup_env: Path) -> tuple[Any | None, dict[str, Any]]:
+    """Initialize G2Engine for SDK-based explain calls."""
+    details: dict[str, Any] = {
+        "ok": False,
+        "config_source": None,
+        "error": None,
+    }
+
+    loaded_env = load_setup_env(project_setup_env)
+    if loaded_env:
+        os.environ.update(loaded_env)
+        py_path = loaded_env.get("PYTHONPATH", "")
+        for part in py_path.split(":"):
+            if part and part not in sys.path:
+                sys.path.insert(0, part)
+
+    try:
+        from senzing import G2Engine  # type: ignore
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        details["error"] = f"Unable to import senzing SDK: {err}"
+        return None, details
+
+    config_json = os.environ.get("SENZING_ENGINE_CONFIGURATION_JSON", "").strip()
+    if config_json:
+        details["config_source"] = "setupEnv:SENZING_ENGINE_CONFIGURATION_JSON"
+    else:
+        config_json = build_engine_config_json(project_dir)
+        details["config_source"] = "generated_from_project_paths"
+
+    try:
+        g2 = G2Engine()
+        g2.init("mapper_e2e", config_json)
+        details["ok"] = True
+        return g2, details
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        details["error"] = f"G2Engine init failed: {err}"
+        return None, details
+
+
+def try_sdk_call(method: Any, args: list[str]) -> tuple[bool, bytearray | None, str | None]:
+    """Call SDK method with common signatures and capture response buffer."""
+    response = bytearray()
+    try:
+        method(*args, response)
+        return True, response, None
+    except TypeError:
+        try:
+            method(*args, response, 0)
+            return True, response, None
+        except Exception as err:  # pylint: disable=broad-exception-caught
+            return False, None, str(err)
+    except Exception as err:  # pylint: disable=broad-exception-caught
+        return False, None, str(err)
+
+
+def run_sdk_why_entity(g2: Any, data_source: str, record_id: str) -> dict[str, Any]:
+    """Run why-entity explain via SDK methods."""
+    for method_name in ("whyEntityByRecordID", "whyRecordInEntity"):
+        if not hasattr(g2, method_name):
+            continue
+        ok, response, error = try_sdk_call(getattr(g2, method_name), [data_source, record_id])
+        if ok and response is not None:
+            output_text = response.decode("utf-8", errors="replace").strip()
+            return {
+                "ok": True,
+                "method": method_name,
+                "output_text": output_text,
+                "output_json": try_parse_json(output_text),
+                "error": None,
+            }
+    return {
+        "ok": False,
+        "method": None,
+        "output_text": "",
+        "output_json": None,
+        "error": "No supported SDK method available for why entity by record.",
+    }
+
+
+def run_sdk_why_records(
+    g2: Any,
+    data_source_1: str,
+    record_id_1: str,
+    data_source_2: str,
+    record_id_2: str,
+) -> dict[str, Any]:
+    """Run why-records explain via SDK methods."""
+    if hasattr(g2, "whyRecords"):
+        ok, response, error = try_sdk_call(
+            getattr(g2, "whyRecords"),
+            [data_source_1, record_id_1, data_source_2, record_id_2],
+        )
+        if ok and response is not None:
+            output_text = response.decode("utf-8", errors="replace").strip()
+            return {
+                "ok": True,
+                "method": "whyRecords",
+                "output_text": output_text,
+                "output_json": try_parse_json(output_text),
+                "error": None,
+            }
+        return {
+            "ok": False,
+            "method": "whyRecords",
+            "output_text": "",
+            "output_json": None,
+            "error": error or "whyRecords failed.",
+        }
+
+    return {
+        "ok": False,
+        "method": None,
+        "output_text": "",
+        "output_json": None,
+        "error": "SDK method whyRecords not available.",
+    }
+
+
+def write_sdk_log(
+    log_path: Path,
+    step_name: str,
+    input_payload: dict[str, Any],
+    sdk_result: dict[str, Any],
+    duration_seconds: float,
+) -> None:
+    """Write one explain SDK invocation log file."""
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "step": step_name,
+        "duration_seconds": duration_seconds,
+        "input": input_payload,
+        "ok": sdk_result.get("ok"),
+        "method": sdk_result.get("method"),
+        "error": sdk_result.get("error"),
+        "output_json": sdk_result.get("output_json"),
+        "output_text": sdk_result.get("output_text"),
+    }
+    log_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def create_project(project_dir: Path, base_setup_env: Path | None, log_path: Path) -> dict[str, Any]:
@@ -384,35 +487,6 @@ def try_parse_json(text: str) -> Any:
         return json.loads(cleaned)
     except json.JSONDecodeError:
         return None
-
-
-def make_why_entity_commands(project_setup_env: Path, data_source: str, record_id: str) -> list[str]:
-    """Build command fallbacks for whyEntityByRecordID-style explain."""
-    source = f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
-    ds = shlex.quote(data_source)
-    rid = shlex.quote(record_id)
-    return [
-        f"{source}sz_why_entity_by_record_id {ds} {rid}",
-        f"{source}sz_why_record_in_entity {ds} {rid}",
-    ]
-
-
-def make_why_records_commands(
-    project_setup_env: Path,
-    data_source_1: str,
-    record_id_1: str,
-    data_source_2: str,
-    record_id_2: str,
-) -> list[str]:
-    """Build command fallbacks for whyRecords explain."""
-    source = f"source {shlex.quote(str(project_setup_env))} >/dev/null 2>&1 && "
-    ds1 = shlex.quote(data_source_1)
-    rid1 = shlex.quote(record_id_1)
-    ds2 = shlex.quote(data_source_2)
-    rid2 = shlex.quote(record_id_2)
-    return [
-        f"{source}sz_why_records {ds1} {rid1} {ds2} {rid2}",
-    ]
 
 
 def extract_reason_summary(output_json: Any, output_text: str | None, max_items: int = 4) -> str:
@@ -895,12 +969,6 @@ def main() -> int:
             explain_dir.mkdir(parents=True, exist_ok=True)
             explain_logs_dir.mkdir(parents=True, exist_ok=True)
 
-            why_entity_available = command_available(project_setup_env, "sz_why_entity_by_record_id") or command_available(
-                project_setup_env,
-                "sz_why_record_in_entity",
-            )
-            why_records_available = command_available(project_setup_env, "sz_why_records")
-
             match_inputs_file.write_text(
                 json.dumps(
                     {
@@ -929,86 +997,125 @@ def main() -> int:
                 )
                 matched_pairs = matched_pairs[: args.max_explain_pairs]
 
-            if why_entity_available:
-                with why_entity_file.open("w", encoding="utf-8") as outfile:
-                    for index, rec in enumerate(matched_records, start=1):
-                        ds = rec["data_source"]
-                        rid = rec["record_id"]
-                        commands = make_why_entity_commands(project_setup_env, ds, rid)
-                        step = run_shell_with_fallback(
-                            step_name=f"why_entity_by_record_{index:04d}",
-                            commands=commands,
-                            log_path=explain_logs_dir / f"why_entity_{index:04d}.log",
-                        )
-                        steps.append(step)
-                        explain_summary["why_entity_attempted"] += 1
-                        if step["ok"]:
-                            explain_summary["why_entity_ok"] += 1
-
-                        stdout = step.get("stdout_full", "")
-                        parsed = try_parse_json(stdout)
-                        item = {
-                            "index": index,
-                            "input": rec,
-                            "ok": step["ok"],
-                            "command_used": step.get("command_used"),
-                            "log_file": step.get("log_file"),
-                            "output_json": parsed,
-                            "output_text": None if parsed is not None else stdout.strip(),
-                            "stderr": (step.get("stderr_full") or "").strip() or None,
-                        }
-                        why_entity_results.append(item)
-                        outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+            g2, engine_details = init_g2_engine(project_dir, project_setup_env)
+            explain_summary["engine_mode"] = "python_sdk"
+            explain_summary["engine_init_ok"] = bool(g2)
+            explain_summary["engine_config_source"] = engine_details.get("config_source")
+            if not g2:
+                explain_summary["status"] = "skipped_sdk_init_failed"
+                explain_summary["warnings"].append(
+                    str(engine_details.get("error") or "Unable to initialize SDK engine for explain phase.")
+                )
             else:
-                explain_summary["warnings"].append(
-                    "Explain entity step skipped: no supported why-entity command found in this Senzing environment."
-                )
+                try:
+                    with why_entity_file.open("w", encoding="utf-8") as outfile:
+                        for index, rec in enumerate(matched_records, start=1):
+                            ds = rec["data_source"]
+                            rid = rec["record_id"]
+                            started = time.time()
+                            sdk_result = run_sdk_why_entity(g2, ds, rid)
+                            duration = round(time.time() - started, 3)
+                            log_path = explain_logs_dir / f"why_entity_{index:04d}.log"
+                            write_sdk_log(
+                                log_path=log_path,
+                                step_name=f"why_entity_by_record_{index:04d}",
+                                input_payload=rec,
+                                sdk_result=sdk_result,
+                                duration_seconds=duration,
+                            )
 
-            if why_records_available:
-                with why_records_file.open("w", encoding="utf-8") as outfile:
-                    for index, pair in enumerate(matched_pairs, start=1):
-                        ds1 = pair["anchor_data_source"]
-                        rid1 = pair["anchor_record_id"]
-                        ds2 = pair["matched_data_source"]
-                        rid2 = pair["matched_record_id"]
-                        commands = make_why_records_commands(project_setup_env, ds1, rid1, ds2, rid2)
-                        step = run_shell_with_fallback(
-                            step_name=f"why_records_{index:04d}",
-                            commands=commands,
-                            log_path=explain_logs_dir / f"why_records_{index:04d}.log",
-                        )
-                        steps.append(step)
-                        explain_summary["why_records_attempted"] += 1
-                        if step["ok"]:
-                            explain_summary["why_records_ok"] += 1
+                            explain_summary["why_entity_attempted"] += 1
+                            if sdk_result.get("ok"):
+                                explain_summary["why_entity_ok"] += 1
 
-                        stdout = step.get("stdout_full", "")
-                        parsed = try_parse_json(stdout)
-                        item = {
-                            "index": index,
-                            "input": pair,
-                            "ok": step["ok"],
-                            "command_used": step.get("command_used"),
-                            "log_file": step.get("log_file"),
-                            "output_json": parsed,
-                            "output_text": None if parsed is not None else stdout.strip(),
-                            "stderr": (step.get("stderr_full") or "").strip() or None,
-                        }
-                        why_records_results.append(item)
-                        outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
-            else:
-                explain_summary["warnings"].append(
-                    "Explain pair step skipped: sz_why_records not found in this Senzing environment."
-                )
+                            item = {
+                                "index": index,
+                                "input": rec,
+                                "ok": bool(sdk_result.get("ok")),
+                                "command_used": f"sdk:{sdk_result.get('method')}" if sdk_result.get("method") else "sdk:unavailable",
+                                "log_file": str(log_path),
+                                "output_json": sdk_result.get("output_json"),
+                                "output_text": None if sdk_result.get("output_json") is not None else str(sdk_result.get("output_text", "")).strip(),
+                                "stderr": sdk_result.get("error"),
+                            }
+                            why_entity_results.append(item)
+                            outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
 
-            if explain_summary["why_entity_attempted"] > 0 and explain_summary["why_entity_ok"] == 0:
-                explain_summary["warnings"].append(
-                    "No why-entity command succeeded. Check Senzing command availability in this environment."
-                )
-            if explain_summary["why_records_attempted"] > 0 and explain_summary["why_records_ok"] == 0:
-                explain_summary["warnings"].append(
-                    "No why-records command succeeded. Check Senzing command availability in this environment."
-                )
+                            steps.append(
+                                {
+                                    "step": f"why_entity_by_record_{index:04d}",
+                                    "ok": item["ok"],
+                                    "exit_code": 0 if item["ok"] else 1,
+                                    "duration_seconds": duration,
+                                    "command_used": item["command_used"],
+                                    "log_file": str(log_path),
+                                    "stdout_tail": str(item.get("output_text") or "")[-1200:],
+                                    "stderr_tail": str(item.get("stderr") or "")[-1200:],
+                                }
+                            )
+
+                    with why_records_file.open("w", encoding="utf-8") as outfile:
+                        for index, pair in enumerate(matched_pairs, start=1):
+                            ds1 = pair["anchor_data_source"]
+                            rid1 = pair["anchor_record_id"]
+                            ds2 = pair["matched_data_source"]
+                            rid2 = pair["matched_record_id"]
+                            started = time.time()
+                            sdk_result = run_sdk_why_records(g2, ds1, rid1, ds2, rid2)
+                            duration = round(time.time() - started, 3)
+                            log_path = explain_logs_dir / f"why_records_{index:04d}.log"
+                            write_sdk_log(
+                                log_path=log_path,
+                                step_name=f"why_records_{index:04d}",
+                                input_payload=pair,
+                                sdk_result=sdk_result,
+                                duration_seconds=duration,
+                            )
+
+                            explain_summary["why_records_attempted"] += 1
+                            if sdk_result.get("ok"):
+                                explain_summary["why_records_ok"] += 1
+
+                            item = {
+                                "index": index,
+                                "input": pair,
+                                "ok": bool(sdk_result.get("ok")),
+                                "command_used": f"sdk:{sdk_result.get('method')}" if sdk_result.get("method") else "sdk:unavailable",
+                                "log_file": str(log_path),
+                                "output_json": sdk_result.get("output_json"),
+                                "output_text": None if sdk_result.get("output_json") is not None else str(sdk_result.get("output_text", "")).strip(),
+                                "stderr": sdk_result.get("error"),
+                            }
+                            why_records_results.append(item)
+                            outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+                            steps.append(
+                                {
+                                    "step": f"why_records_{index:04d}",
+                                    "ok": item["ok"],
+                                    "exit_code": 0 if item["ok"] else 1,
+                                    "duration_seconds": duration,
+                                    "command_used": item["command_used"],
+                                    "log_file": str(log_path),
+                                    "stdout_tail": str(item.get("output_text") or "")[-1200:],
+                                    "stderr_tail": str(item.get("stderr") or "")[-1200:],
+                                }
+                            )
+                finally:
+                    try:
+                        if hasattr(g2, "destroy"):
+                            g2.destroy()
+                    except Exception:
+                        pass
+
+                if explain_summary["why_entity_attempted"] > 0 and explain_summary["why_entity_ok"] == 0:
+                    explain_summary["warnings"].append(
+                        "No why-entity call succeeded in SDK mode."
+                    )
+                if explain_summary["why_records_attempted"] > 0 and explain_summary["why_records_ok"] == 0:
+                    explain_summary["warnings"].append(
+                        "No why-records call succeeded in SDK mode."
+                    )
 
     if export_rows:
         comparison_artifacts = make_comparison_outputs(
