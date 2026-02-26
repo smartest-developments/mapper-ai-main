@@ -23,3 +23,13 @@ tests/icij/relationships.csv
 
 # Retired reference files (kept locally for reference)
 senzing/senzing_mcp_reference.md
+
+# Generated realistic samples and mapped outputs (kept locally)
+sample/*
+output/*
+!sample/.gitkeep
+!output/.gitkeep
+
+# Local Senzing runtime artifacts
+.senzing_projects_test/
+.senzing_runs_test/

@@ -26,6 +26,16 @@ python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
   /path/to/production_output.jsonl
 ```
 
+For large datasets (500k+), run performance mode:
+
+```bash
+python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
+  /path/to/production_output.jsonl \
+  --fast-mode \
+  --use-input-jsonl-directly \
+  --data-sources PARTNERS
+```
+
 3. Run management tests on that run folder:
 
 ```bash

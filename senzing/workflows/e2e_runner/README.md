@@ -24,6 +24,24 @@ python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
   /path/to/input_senzing_ready.jsonl
 ```
 
+## Fast Command (Large Files)
+
+For large loads (e.g. 500k), use the performance preset:
+
+```bash
+python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
+  /path/to/input_senzing_ready.jsonl \
+  --fast-mode \
+  --use-input-jsonl-directly \
+  --data-sources PARTNERS
+```
+
+What this does:
+- skips snapshot/export/explain/comparison
+- disables retry passes
+- avoids JSONL normalization copy
+- keeps run logs and summary for load verification
+
 ## Main Artifacts
 
 Inside the generated run folder:

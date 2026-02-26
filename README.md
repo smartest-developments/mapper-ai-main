@@ -20,13 +20,20 @@ senzing/
 │   ├── lint_senzing_json.py
 │   ├── sz_json_analyzer.py
 │   ├── partner_json_to_senzing.py
+│   ├── generate_realistic_partner_dataset.py
 │   └── run_partner_mapping_pipeline.py
-├── all_in_one/
-│   └── run_senzing_end_to_end.py
 └── workflows/
     ├── mapper/
     ├── e2e_runner/
     └── testing/
+
+sample/
+└── partner_input_realistic_<records>_<timestamp>.json
+
+output/
+├── partner_output_senzing_<records>_<timestamp>.jsonl
+├── field_map_<records>_<timestamp>.json
+└── generation_summary_<records>_<timestamp>.json
 ```
 
 ## Main Workflows
@@ -47,12 +54,40 @@ python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
   /path/to/output.jsonl
 ```
 
+For large runs (e.g. 500k), use performance mode:
+
+```bash
+python3 senzing/workflows/e2e_runner/run_senzing_e2e.py \
+  /path/to/output.jsonl \
+  --fast-mode \
+  --use-input-jsonl-directly \
+  --data-sources PARTNERS
+```
+
 3. Run automated management test cases on one run folder:
 
 ```bash
 python3 senzing/workflows/testing/run_management_tests.py \
   /path/to/senzing_run_folder
 ```
+
+4. Generate realistic source sample and map it to Senzing JSONL (500k default):
+
+```bash
+python3 senzing/tools/generate_realistic_partner_dataset.py --records 500000
+```
+
+This command writes:
+- source-style input JSON to `sample/`
+- mapped Senzing JSONL + field map + summary to `output/`
+- timestamped filenames for every run
+
+Generation defaults:
+- `70%` PERSON, `30%` ORGANIZATION
+- `IPG ID` present on `35%` of records
+- always present source IDs:
+  - `externalPartnerKeyDirExternalID`
+  - `partnerKeyDirBusRelExternalID`
 
 ## Documentation
 

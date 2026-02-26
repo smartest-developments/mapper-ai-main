@@ -63,6 +63,93 @@ def read_records(input_path: Path) -> list[dict[str, Any]]:
     return records
 
 
+def parse_csv_items(value: str | None) -> list[str]:
+    """Parse comma-separated CLI values into a stable de-duplicated list."""
+    if value is None:
+        return []
+    seen: set[str] = set()
+    items: list[str] = []
+    for raw in value.split(","):
+        token = raw.strip()
+        if not token:
+            continue
+        if token in seen:
+            continue
+        seen.add(token)
+        items.append(token)
+    return items
+
+
+def count_non_empty_lines(path: Path) -> int:
+    """Count non-empty lines in a text file."""
+    total = 0
+    with path.open("r", encoding="utf-8") as infile:
+        for line in infile:
+            if line.strip():
+                total += 1
+    return total
+
+
+def normalize_input_to_jsonl(
+    input_path: Path,
+    normalized_jsonl_path: Path,
+    provided_data_sources: list[str],
+    use_input_jsonl_directly: bool,
+) -> tuple[int, list[str], Path]:
+    """Normalize supported input formats to JSONL and extract metadata."""
+    if use_input_jsonl_directly:
+        if input_path.suffix.lower() != ".jsonl":
+            raise ValueError("--use-input-jsonl-directly requires .jsonl input")
+        if not provided_data_sources:
+            raise ValueError("--use-input-jsonl-directly requires --data-sources")
+        record_count = count_non_empty_lines(input_path)
+        if record_count <= 0:
+            raise ValueError("Input contains no records.")
+        return record_count, provided_data_sources, input_path
+
+    data_sources_found: set[str] = set()
+    record_count = 0
+
+    if input_path.suffix.lower() == ".jsonl":
+        with input_path.open("r", encoding="utf-8") as infile, normalized_jsonl_path.open("w", encoding="utf-8") as outfile:
+            for line_no, line in enumerate(infile, start=1):
+                text = line.strip()
+                if not text:
+                    continue
+                obj = json.loads(text)
+                if not isinstance(obj, dict):
+                    raise ValueError(f"Line {line_no} is not a JSON object")
+                data_source = str(obj.get("DATA_SOURCE", "")).strip()
+                if data_source:
+                    data_sources_found.add(data_source)
+                outfile.write(json.dumps(obj, ensure_ascii=False) + "\n")
+                record_count += 1
+    else:
+        with input_path.open("r", encoding="utf-8") as infile:
+            data = json.load(infile)
+        if not isinstance(data, list):
+            raise ValueError("JSON input must be an array of objects")
+
+        with normalized_jsonl_path.open("w", encoding="utf-8") as outfile:
+            for idx, item in enumerate(data, start=1):
+                if not isinstance(item, dict):
+                    raise ValueError(f"Record {idx} is not a JSON object")
+                data_source = str(item.get("DATA_SOURCE", "")).strip()
+                if data_source:
+                    data_sources_found.add(data_source)
+                outfile.write(json.dumps(item, ensure_ascii=False) + "\n")
+                record_count += 1
+
+    if record_count <= 0:
+        raise ValueError("Input contains no records.")
+
+    data_sources = provided_data_sources or sorted(data_sources_found)
+    if not data_sources:
+        raise ValueError("No DATA_SOURCE found in input records.")
+
+    return record_count, data_sources, normalized_jsonl_path
+
+
 def run_shell_step(
     step_name: str,
     shell_command: str,
@@ -555,9 +642,32 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-snapshot", action="store_true", help="Skip snapshot step")
     parser.add_argument("--skip-export", action="store_true", help="Skip sz_export step")
     parser.add_argument(
+        "--skip-comparison",
+        action="store_true",
+        help="Skip comparison artifact generation from export rows",
+    )
+    parser.add_argument(
         "--skip-explain",
         action="store_true",
         help="Skip explain phase (whyEntityByRecordID / whyRecords)",
+    )
+    parser.add_argument(
+        "--data-sources",
+        default=None,
+        help="Optional comma-separated DATA_SOURCE list (e.g. PARTNERS,CRM)",
+    )
+    parser.add_argument(
+        "--use-input-jsonl-directly",
+        action="store_true",
+        help="Use input .jsonl directly without normalization copy (requires --data-sources)",
+    )
+    parser.add_argument(
+        "--fast-mode",
+        action="store_true",
+        help=(
+            "Performance preset for large loads: skip snapshot/export/explain/comparison "
+            "and disable stability retries"
+        ),
     )
     parser.add_argument(
         "--max-explain-records",
@@ -1009,6 +1119,16 @@ def make_comparison_outputs(
 def main() -> int:
     """Entry point."""
     args = parse_args()
+    if args.fast_mode:
+        args.skip_snapshot = True
+        args.skip_export = True
+        args.skip_explain = True
+        args.skip_comparison = True
+        args.disable_stability_retries = True
+        if args.load_threads == 4:
+            cpu_guess = os.cpu_count() or 4
+            args.load_threads = max(4, min(12, cpu_guess))
+
     if args.step_timeout_seconds <= 0:
         print("ERROR: --step-timeout-seconds must be > 0", file=sys.stderr)
         return 2
@@ -1023,6 +1143,22 @@ def main() -> int:
     if not input_path.exists():
         print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
         return 2
+
+    data_sources_override = parse_csv_items(args.data_sources)
+    if (
+        args.fast_mode
+        and input_path.suffix.lower() == ".jsonl"
+        and data_sources_override
+        and not args.use_input_jsonl_directly
+    ):
+        args.use_input_jsonl_directly = True
+    if args.use_input_jsonl_directly:
+        if input_path.suffix.lower() != ".jsonl":
+            print("ERROR: --use-input-jsonl-directly requires .jsonl input", file=sys.stderr)
+            return 2
+        if not data_sources_override:
+            print("ERROR: --use-input-jsonl-directly requires --data-sources", file=sys.stderr)
+            return 2
 
     base_setup_env = Path(args.senzing_env).expanduser().resolve() if args.senzing_env else None
     if base_setup_env and not base_setup_env.exists():
@@ -1053,24 +1189,22 @@ def main() -> int:
     print(f"Run directory: {run_dir}")
     print(f"Input file: {input_path}")
     print(f"Project dir: {project_dir}")
+    if args.fast_mode:
+        print("Fast mode: enabled")
 
     try:
-        records = read_records(input_path)
+        records_input_count, data_sources, load_input_jsonl = normalize_input_to_jsonl(
+            input_path=input_path,
+            normalized_jsonl_path=normalized_jsonl,
+            provided_data_sources=data_sources_override,
+            use_input_jsonl_directly=args.use_input_jsonl_directly,
+        )
     except Exception as err:  # pylint: disable=broad-exception-caught
-        print(f"ERROR: Unable to parse input: {err}", file=sys.stderr)
+        print(f"ERROR: Unable to normalize input: {err}", file=sys.stderr)
         return 2
-    if not records:
-        print("ERROR: Input contains no records.", file=sys.stderr)
-        return 2
-
-    data_sources = sorted({str(r.get("DATA_SOURCE", "")).strip() for r in records if str(r.get("DATA_SOURCE", "")).strip()})
-    if not data_sources:
-        print("ERROR: No DATA_SOURCE found in input records.", file=sys.stderr)
-        return 2
-
-    with normalized_jsonl.open("w", encoding="utf-8") as outfile:
-        for record in records:
-            outfile.write(json.dumps(record, ensure_ascii=False) + "\n")
+    print(f"Load input JSONL: {load_input_jsonl}")
+    print(f"Records detected: {records_input_count}")
+    print(f"Data sources: {', '.join(data_sources)}")
 
     config_scripts_dir.mkdir(parents=True, exist_ok=True)
     steps: list[dict[str, Any]] = []
@@ -1125,7 +1259,7 @@ def main() -> int:
     load_attempts: list[tuple[str, str, Path]] = [
         (
             "primary",
-            build_load_command(project_setup_env, normalized_jsonl, args.load_threads, no_shuffle=False),
+            build_load_command(project_setup_env, load_input_jsonl, args.load_threads, no_shuffle=False),
             logs_dir / "02_load.log",
         )
     ]
@@ -1135,7 +1269,7 @@ def main() -> int:
                 "fallback_single_thread",
                 build_load_command(
                     project_setup_env,
-                    normalized_jsonl,
+                    load_input_jsonl,
                     args.load_fallback_threads,
                     no_shuffle=True,
                 ),
@@ -1258,7 +1392,8 @@ def main() -> int:
             print("FAILED at export", file=sys.stderr)
             return 1
 
-    export_rows: list[dict[str, str]] = parse_export_rows(export_file) if export_file.exists() else []
+    need_export_rows = export_file.exists() and (not args.skip_explain or not args.skip_comparison)
+    export_rows: list[dict[str, str]] = parse_export_rows(export_file) if need_export_rows else []
     matched_records: list[dict[str, str]] = []
     matched_pairs: list[dict[str, str]] = []
     if export_rows:
@@ -1438,7 +1573,7 @@ def main() -> int:
                         "No why-records call succeeded in SDK mode."
                     )
 
-    if export_rows:
+    if export_rows and not args.skip_comparison:
         comparison_artifacts = make_comparison_outputs(
             run_dir=run_dir,
             export_rows=export_rows,
@@ -1446,7 +1581,7 @@ def main() -> int:
             matched_pairs=matched_pairs,
             why_entity_results=why_entity_results,
             why_records_results=why_records_results,
-            records_input_count=len(records),
+            records_input_count=records_input_count,
         )
 
     summary = {
@@ -1456,7 +1591,7 @@ def main() -> int:
         "project_dir": str(project_dir),
         "project_setup_env": str(project_setup_env),
         "run_directory": str(run_dir),
-        "records_input": len(records),
+        "records_input": records_input_count,
         "data_sources": data_sources,
         "runtime_options": {
             "step_timeout_seconds": args.step_timeout_seconds,
@@ -1464,11 +1599,16 @@ def main() -> int:
             "load_fallback_threads": args.load_fallback_threads,
             "snapshot_threads": args.snapshot_threads,
             "snapshot_fallback_threads": args.snapshot_fallback_threads,
+            "fast_mode": args.fast_mode,
+            "skip_comparison": args.skip_comparison,
+            "use_input_jsonl_directly": args.use_input_jsonl_directly,
+            "data_sources_override": data_sources_override,
             "stability_retries_enabled": not args.disable_stability_retries,
         },
         "runtime_warnings": runtime_warnings,
         "artifacts": {
-            "normalized_jsonl": str(normalized_jsonl),
+            "normalized_jsonl": str(normalized_jsonl) if normalized_jsonl.exists() else None,
+            "load_input_jsonl": str(load_input_jsonl),
             "config_scripts_dir": str(config_scripts_dir),
             "snapshot_json": str(snapshot_json) if snapshot_json.exists() else None,
             "export_file": str(export_file) if export_file.exists() else None,
