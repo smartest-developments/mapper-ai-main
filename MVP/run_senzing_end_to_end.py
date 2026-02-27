@@ -36,6 +36,24 @@ def now_timestamp() -> str:
     return dt.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
+def detect_repo_root(script_path: Path) -> Path:
+    """Resolve repository root for both legacy and flat MVP layouts."""
+    resolved = script_path.resolve()
+    # Legacy layout: <root>/senzing/all_in_one/run_senzing_end_to_end.py
+    if resolved.parent.name == "all_in_one" and resolved.parent.parent.name == "senzing":
+        return resolved.parents[2]
+    # Flat MVP layout: <root>/run_senzing_end_to_end.py
+    return resolved.parent
+
+
+def resolve_registry_dir(repo_root: Path) -> Path:
+    """Resolve directory used for run registry / generation summaries."""
+    output_dir = repo_root / "output"
+    if output_dir.exists():
+        return output_dir
+    return repo_root
+
+
 def read_records(input_path: Path) -> list[dict[str, Any]]:
     """Read Senzing-ready records from JSONL or JSON array."""
     if input_path.suffix.lower() == ".jsonl":
@@ -1161,8 +1179,8 @@ def resolve_generation_summary_for_input(
     input_jsonl_path: Path,
 ) -> dict[str, str | None]:
     """Resolve generation summary metadata matching the run input JSONL."""
-    output_dir = repo_root / "output"
-    if not output_dir.exists():
+    registry_dir = resolve_registry_dir(repo_root)
+    if not registry_dir.exists():
         return {
             "generation_summary_json": None,
             "base_input_json": None,
@@ -1172,7 +1190,7 @@ def resolve_generation_summary_for_input(
     input_path_text = str(input_jsonl_path)
     input_name = input_jsonl_path.name
 
-    for summary_path in sorted(output_dir.glob("generation_summary_*.json"), reverse=True):
+    for summary_path in sorted(registry_dir.glob("generation_summary_*.json"), reverse=True):
         try:
             payload = json.loads(summary_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -1201,7 +1219,7 @@ def append_run_registry_entry(
     load_input_jsonl: Path,
 ) -> Path | None:
     """Append one execution row to output/run_registry.csv."""
-    registry_dir = repo_root / "output"
+    registry_dir = resolve_registry_dir(repo_root)
     if not registry_dir.exists():
         return None
 
@@ -1521,7 +1539,7 @@ def make_comparison_outputs(
 def main() -> int:
     """Entry point."""
     args = parse_args()
-    repo_root = Path(__file__).resolve().parents[2]
+    repo_root = detect_repo_root(Path(__file__))
     if args.fast_mode:
         args.skip_snapshot = True
         args.skip_export = True

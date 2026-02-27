@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
-"""Portable MVP pipeline for JSON -> Senzing JSONL -> E2E -> management outputs.
-
-This script is self-contained inside the MVP folder and does not rely on the
-full repository layout.
-"""
+"""Flat MVP pipeline: JSON -> Senzing JSONL -> Senzing E2E -> flat artifacts."""
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -20,7 +18,7 @@ def now_timestamp() -> str:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run MVP pipeline from source JSON to Senzing management outputs.")
+    parser = argparse.ArgumentParser(description="Run MVP pipeline from source JSON to flat management outputs.")
     parser.add_argument("--input-json", required=True, help="Source JSON path (array of records)")
     parser.add_argument("--input-array-key", default=None, help="Optional key if JSON root is an object containing array")
     parser.add_argument("--data-source", default="PARTNERS", help="Senzing DATA_SOURCE (default: PARTNERS)")
@@ -30,9 +28,6 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Include non-mapped source fields as SRC_* payload fields",
     )
-    parser.add_argument("--output-dir", default="output", help="Mapped artifacts directory (default: output)")
-    parser.add_argument("--runs-root", default="runs", help="Run directory root (default: runs)")
-    parser.add_argument("--projects-root", default="projects", help="Senzing project root (default: projects)")
     parser.add_argument("--run-name-prefix", default="run_mvp", help="Run folder prefix")
     parser.add_argument("--project-name-prefix", default="Senzing_MVP", help="Project folder prefix")
     parser.add_argument(
@@ -54,6 +49,16 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Keep sz_file_loader temporary shuffle files",
     )
+    parser.add_argument(
+        "--runtime-dir",
+        default=None,
+        help="Optional runtime directory (default: temporary directory outside MVP)",
+    )
+    parser.add_argument(
+        "--keep-runtime-dir",
+        action="store_true",
+        help="Do not delete runtime directory after completion",
+    )
     return parser.parse_args()
 
 
@@ -61,31 +66,77 @@ def run_command(command: list[str], cwd: Path) -> None:
     subprocess.run(command, cwd=str(cwd), check=True)
 
 
-def to_container_path(root: Path, host_path: Path) -> Path:
-    return Path("/workspace") / host_path.resolve().relative_to(root.resolve())
-
-
-def from_container_path(root: Path, value: str | None) -> str | None:
-    if not value:
-        return value
-    prefix = "/workspace/"
-    if value == "/workspace":
-        return str(root)
-    if value.startswith(prefix):
-        rel = value[len(prefix):]
-        return str((root / rel).resolve())
-    return value
-
-
-def find_new_run_dir(runs_root: Path, prefix: str, before: set[Path]) -> Path:
-    after = set(path for path in runs_root.glob(f"{prefix}_*") if path.is_dir())
-    created = sorted(after - before, key=lambda p: p.stat().st_mtime, reverse=True)
-    if created:
-        return created[0]
-    fallback = sorted(after, key=lambda p: p.stat().st_mtime, reverse=True)
-    if not fallback:
+def find_new_run_dir(runs_root: Path, prefix: str) -> Path:
+    run_dirs = sorted(
+        [path for path in runs_root.glob(f"{prefix}_*") if path.is_dir()],
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    if not run_dirs:
         raise FileNotFoundError(f"No run directory found under {runs_root} with prefix {prefix}")
-    return fallback[0]
+    return run_dirs[0]
+
+
+def copy_if_exists(source: Path, destination: Path) -> bool:
+    if not source.exists():
+        return False
+    shutil.copy2(source, destination)
+    return True
+
+
+def copy_artifacts_flat(
+    mvp_root: Path,
+    runtime_dir: Path,
+    ts: str,
+    mapped_output_jsonl: Path,
+    field_map_json: Path,
+    mapping_summary_json: Path,
+    run_summary_json: Path,
+) -> dict[str, str]:
+    copied: dict[str, str] = {}
+
+    def to_host_path(raw_path: Path) -> Path:
+        raw = str(raw_path)
+        if raw.startswith("/runtime/"):
+            return runtime_dir / raw.removeprefix("/runtime/")
+        if raw.startswith("/workspace/"):
+            return mvp_root / raw.removeprefix("/workspace/")
+        return raw_path
+
+    targets = {
+        mapped_output_jsonl: mvp_root / f"mapped_output_{ts}.jsonl",
+        field_map_json: mvp_root / f"field_map_{ts}.json",
+        mapping_summary_json: mvp_root / f"mapping_summary_{ts}.json",
+        run_summary_json: mvp_root / f"run_summary_{ts}.json",
+    }
+    run_summary_payload = json.loads(run_summary_json.read_text(encoding="utf-8"))
+    artifacts = run_summary_payload.get("artifacts", {}) if isinstance(run_summary_payload.get("artifacts"), dict) else {}
+    for key, suffix in [
+        ("management_summary_md", f"management_summary_{ts}.md"),
+        ("management_summary_json", f"management_summary_{ts}.json"),
+        ("ground_truth_match_quality_md", f"ground_truth_match_quality_{ts}.md"),
+        ("ground_truth_match_quality_json", f"ground_truth_match_quality_{ts}.json"),
+        ("matched_pairs_csv", f"matched_pairs_{ts}.csv"),
+        ("match_stats_csv", f"match_stats_{ts}.csv"),
+        ("entity_records_csv", f"entity_records_{ts}.csv"),
+    ]:
+        value = artifacts.get(key)
+        if not value:
+            continue
+        targets[to_host_path(Path(str(value)))] = mvp_root / suffix
+
+    for source, destination in targets.items():
+        if copy_if_exists(source, destination):
+            copied[destination.name] = str(destination.resolve())
+
+    manifest_path = mvp_root / f"execution_manifest_{ts}.json"
+    manifest = {
+        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "copied_artifacts": copied,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    copied[manifest_path.name] = str(manifest_path.resolve())
+    return copied
 
 
 def main() -> int:
@@ -97,9 +148,8 @@ def main() -> int:
         print(f"ERROR: input JSON not found: {input_json}", file=sys.stderr)
         return 2
 
-    mapper_script = mvp_root / "senzing" / "tools" / "partner_json_to_senzing.py"
-    e2e_script = mvp_root / "senzing" / "all_in_one" / "run_senzing_end_to_end.py"
-
+    mapper_script = mvp_root / "partner_json_to_senzing.py"
+    e2e_script = mvp_root / "run_senzing_end_to_end.py"
     missing_scripts = [str(path) for path in [mapper_script, e2e_script] if not path.exists()]
     if missing_scripts:
         print("ERROR: missing required scripts:", file=sys.stderr)
@@ -107,17 +157,25 @@ def main() -> int:
             print(f"  - {item}", file=sys.stderr)
         return 2
 
-    output_dir = (mvp_root / args.output_dir).resolve()
-    runs_root = (mvp_root / args.runs_root).resolve()
-    projects_root = (mvp_root / args.projects_root).resolve()
-    output_dir.mkdir(parents=True, exist_ok=True)
-    runs_root.mkdir(parents=True, exist_ok=True)
-    projects_root.mkdir(parents=True, exist_ok=True)
-
     ts = now_timestamp()
-    mapped_output_jsonl = output_dir / f"partner_output_senzing_from_input_{ts}.jsonl"
-    field_map_json = output_dir / f"field_map_from_input_{ts}.json"
-    mapping_summary_json = output_dir / f"mapping_summary_from_input_{ts}.json"
+    if args.runtime_dir:
+        runtime_dir = Path(args.runtime_dir).expanduser().resolve()
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        runtime_created = False
+    else:
+        runtime_dir = Path(tempfile.mkdtemp(prefix="mvp_runtime_"))
+        runtime_created = True
+
+    runtime_output = runtime_dir / "output"
+    runtime_runs = runtime_dir / "runs"
+    runtime_projects = runtime_dir / "projects"
+    runtime_output.mkdir(parents=True, exist_ok=True)
+    runtime_runs.mkdir(parents=True, exist_ok=True)
+    runtime_projects.mkdir(parents=True, exist_ok=True)
+
+    mapped_output_jsonl = runtime_output / f"partner_output_senzing_from_input_{ts}.jsonl"
+    field_map_json = runtime_output / f"field_map_from_input_{ts}.json"
+    mapping_summary_json = runtime_output / f"mapping_summary_from_input_{ts}.json"
 
     mapper_cmd = [
         sys.executable,
@@ -135,7 +193,6 @@ def main() -> int:
         mapper_cmd.extend(["--array-key", args.input_array_key])
     if args.include_unmapped_source_fields:
         mapper_cmd.append("--include-unmapped-source-fields")
-
     run_command(mapper_cmd, mvp_root)
 
     mapping_summary = {
@@ -148,15 +205,9 @@ def main() -> int:
         "tax_id_type": args.tax_id_type,
         "input_array_key": args.input_array_key,
         "include_unmapped_source_fields": bool(args.include_unmapped_source_fields),
+        "runtime_dir": str(runtime_dir),
     }
     mapping_summary_json.write_text(json.dumps(mapping_summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-
-    runs_before = set(path for path in runs_root.glob(f"{args.run_name_prefix}_*") if path.is_dir())
-
-    container_input_jsonl = to_container_path(mvp_root, mapped_output_jsonl)
-    container_runs_root = to_container_path(mvp_root, runs_root)
-    container_projects_root = to_container_path(mvp_root, projects_root)
-    container_e2e_script = to_container_path(mvp_root, e2e_script)
 
     docker_cmd = [
         "docker",
@@ -166,18 +217,20 @@ def main() -> int:
         args.docker_platform,
         "-v",
         f"{mvp_root}:/workspace",
+        "-v",
+        f"{runtime_dir}:/runtime",
         "-w",
         "/workspace",
         args.docker_image,
         "python3",
-        str(container_e2e_script),
-        str(container_input_jsonl),
+        "/workspace/run_senzing_end_to_end.py",
+        f"/runtime/output/{mapped_output_jsonl.name}",
         "--output-root",
-        str(container_runs_root),
+        "/runtime/runs",
         "--run-name-prefix",
         args.run_name_prefix,
         "--project-parent-dir",
-        str(container_projects_root),
+        "/runtime/projects",
         "--project-name-prefix",
         args.project_name_prefix,
         "--use-input-jsonl-directly",
@@ -186,35 +239,46 @@ def main() -> int:
         "--step-timeout-seconds",
         str(args.step_timeout_seconds),
     ]
-
     if args.with_why:
         docker_cmd.extend(["--max-explain-records", str(args.max_explain_records)])
         docker_cmd.extend(["--max-explain-pairs", str(args.max_explain_pairs)])
     else:
         docker_cmd.append("--skip-explain")
-
     if args.keep_loader_temp_files:
         docker_cmd.append("--keep-loader-temp-files")
 
     run_command(docker_cmd, mvp_root)
 
-    run_dir = find_new_run_dir(runs_root, args.run_name_prefix, runs_before)
-    run_summary = run_dir / "run_summary.json"
-    if not run_summary.exists():
-        print(f"ERROR: run summary not found: {run_summary}", file=sys.stderr)
+    run_dir = find_new_run_dir(runtime_runs, args.run_name_prefix)
+    run_summary_json = run_dir / "run_summary.json"
+    if not run_summary_json.exists():
+        print(f"ERROR: run summary not found: {run_summary_json}", file=sys.stderr)
         return 2
 
-    payload = json.loads(run_summary.read_text(encoding="utf-8"))
-    artifacts = payload.get("artifacts", {})
+    copied = copy_artifacts_flat(
+        mvp_root=mvp_root,
+        runtime_dir=runtime_dir,
+        ts=ts,
+        mapped_output_jsonl=mapped_output_jsonl,
+        field_map_json=field_map_json,
+        mapping_summary_json=mapping_summary_json,
+        run_summary_json=run_summary_json,
+    )
+
+    keep_runtime = args.keep_runtime_dir or not runtime_created
+    if not keep_runtime:
+        shutil.rmtree(runtime_dir, ignore_errors=True)
 
     print("\nMVP pipeline completed.")
     print(f"Input JSON: {input_json}")
-    print(f"Mapping summary: {mapping_summary_json}")
-    print(f"Mapped JSONL: {mapped_output_jsonl}")
-    print(f"Run summary: {run_summary}")
-    print(f"Management summary (md): {from_container_path(mvp_root, artifacts.get('management_summary_md'))}")
-    print(f"Ground truth quality (md): {from_container_path(mvp_root, artifacts.get('ground_truth_match_quality_md'))}")
-    print(f"Run registry CSV: {from_container_path(mvp_root, artifacts.get('run_registry_csv'))}")
+    print(f"Artifacts copied (flat): {len(copied)}")
+    print(f"Mapped JSONL: {copied.get(f'mapped_output_{ts}.jsonl')}")
+    print(f"Run summary: {copied.get(f'run_summary_{ts}.json')}")
+    print(f"Management summary (md): {copied.get(f'management_summary_{ts}.md')}")
+    print(f"Ground truth quality (md): {copied.get(f'ground_truth_match_quality_{ts}.md')}")
+    print(f"Run registry CSV: {(mvp_root / 'run_registry.csv').resolve() if (mvp_root / 'run_registry.csv').exists() else None}")
+    if keep_runtime:
+        print(f"Runtime directory kept: {runtime_dir}")
     return 0
 
 

@@ -1,18 +1,19 @@
-# MVP Pipeline (Portable)
+# MVP Pipeline (Flat)
 
-Questa cartella e' pensata per essere copiata "as is" in produzione insieme al tuo file JSON reale.
+Questa cartella e' completamente flat: solo file nella root, nessuna sottocartella.
 
-## Cosa contiene
+## File inclusi
 
 - `run_mvp_pipeline.py`: wrapper unico (mapping + run Senzing + comparison/report)
-- `senzing/tools/partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
-- `senzing/all_in_one/run_senzing_end_to_end.py`: esecuzione E2E Senzing con output di comparison/management
+- `partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
+- `run_senzing_end_to_end.py`: runner E2E Senzing
+- `partner_input_realistic_500.json`: sample pronto (500 record)
 
 ## Prerequisiti
 
 - Docker disponibile
-- immagine Senzing gia' pronta: `mapper-senzing-poc:4.2.1`
-- file input JSON reale
+- immagine Senzing: `mapper-senzing-poc:4.2.1`
+- file input JSON reale (array oppure oggetto con array)
 
 ## Comando base
 
@@ -20,32 +21,24 @@ Questa cartella e' pensata per essere copiata "as is" in produzione insieme al t
 python3 run_mvp_pipeline.py --input-json /path/to/real_input.json
 ```
 
-## Sample incluso (500 record)
-
-Dentro `MVP/sample/` trovi una copia pronta:
-
-- `partner_input_realistic_500.json`
-
-Esecuzione rapida:
+## Esempio con sample incluso
 
 ```bash
-python3 run_mvp_pipeline.py --input-json sample/partner_input_realistic_500.json
+python3 run_mvp_pipeline.py --input-json partner_input_realistic_500.json
 ```
 
-## Input con array annidato
+## Input annidato
 
-Se il root JSON e' un oggetto con array interno (es. `{"records": [...]}`):
+Se il JSON e' del tipo `{"records":[...]}`:
 
 ```bash
-python3 run_mvp_pipeline.py \
-  --input-json /path/to/real_input.json \
-  --input-array-key records
+python3 run_mvp_pipeline.py --input-json /path/to/input.json --input-array-key records
 ```
 
 ## WHY (opzionale)
 
-Per performance, di default WHY/explain e' disattivato.
-Se vuoi i file WHY:
+Di default WHY e' disattivato per performance.  
+Per abilitarlo:
 
 ```bash
 python3 run_mvp_pipeline.py \
@@ -55,21 +48,25 @@ python3 run_mvp_pipeline.py \
   --max-explain-pairs 0
 ```
 
-## Dove trovi i file
+## Output (sempre flat in root)
 
-- Mapping output: `output/`
-  - `partner_output_senzing_from_input_<timestamp>.jsonl`
-  - `field_map_from_input_<timestamp>.json`
-  - `mapping_summary_from_input_<timestamp>.json`
-  - `run_registry.csv`
-- Esecuzioni: `runs/<run_name>_<timestamp>/`
-  - `run_summary.json`
-  - `comparison/management_summary.md`
-  - `comparison/ground_truth_match_quality.md`
-  - `comparison/ground_truth_match_quality.json`
-- Progetti Senzing locali: `projects/`
+Dopo ogni run trovi file timestampati, ad esempio:
 
-## Note performance (dataset grandi)
+- `mapped_output_<timestamp>.jsonl`
+- `field_map_<timestamp>.json`
+- `mapping_summary_<timestamp>.json`
+- `run_summary_<timestamp>.json`
+- `management_summary_<timestamp>.md`
+- `ground_truth_match_quality_<timestamp>.md`
+- `ground_truth_match_quality_<timestamp>.json`
+- `execution_manifest_<timestamp>.json`
+- `run_registry.csv`
 
-- Il wrapper usa `--use-input-jsonl-directly` per evitare copie inutili del JSONL.
-- Tieni WHY disattivato sui run grandi, salvo analisi specifiche.
+## Runtime
+
+Il wrapper usa una directory temporanea esterna a `MVP` per i file intermedi e poi copia gli artifact finali nella root di `MVP`.  
+Per mantenere la directory runtime:
+
+```bash
+python3 run_mvp_pipeline.py --input-json /path/to/real_input.json --keep-runtime-dir
+```

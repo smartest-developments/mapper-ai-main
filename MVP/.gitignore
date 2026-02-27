@@ -1,12 +1,17 @@
-# Runtime artifacts
-output/*
-!output/.gitkeep
-
-runs/*
-!runs/.gitkeep
-
-projects/*
-!projects/.gitkeep
+# Generated artifacts (flat files in MVP root)
+mapped_output_*.jsonl
+field_map_*.json
+mapping_summary_*.json
+run_summary_*.json
+management_summary_*.md
+management_summary_*.json
+ground_truth_match_quality_*.md
+ground_truth_match_quality_*.json
+matched_pairs_*.csv
+match_stats_*.csv
+entity_records_*.csv
+execution_manifest_*.json
+run_registry.csv
 
 # Python cache
 __pycache__/
