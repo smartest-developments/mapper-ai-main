@@ -105,13 +105,18 @@
 
   function renderSelectedRunCards(run) {
     const matchMissed = toMissedPct(run.pair_recall_pct);
+    const extraGain = typeof run.extra_gain_vs_known_pct === 'number' ? run.extra_gain_vs_known_pct : null;
+    const fpPct = typeof run.overall_false_positive_pct === 'number' ? run.overall_false_positive_pct : null;
+    const ourCoverage = typeof run.our_match_coverage_pct === 'number' ? run.our_match_coverage_pct : null;
     const cards = [
       { label: 'Selected Input Records', value: fmtInt(run.records_input) },
-      { label: 'Selected Matched Pairs', value: fmtInt(run.matched_pairs) },
+      { label: 'Matched Pairs', value: fmtInt(run.matched_pairs) },
+      { label: 'Our Match Coverage', value: fmtPct(ourCoverage) },
       { label: 'Match Correctness', value: fmtPct(run.pair_precision_pct) },
       { label: 'Match Missed', value: fmtPct(matchMissed) },
-      { label: 'Selected True Positive', value: fmtInt(run.true_positive) },
-      { label: 'Selected False Positive', value: fmtInt(run.false_positive) },
+      { label: 'False Positive %', value: fmtPct(fpPct) },
+      { label: 'Extra True Matches Found', value: fmtInt(run.extra_true_matches_found) },
+      { label: 'Senzing Gain vs Our Matches', value: fmtPct(extraGain) },
       { label: 'Selected False Negative', value: fmtInt(run.false_negative) },
       { label: 'Selected Resolved Entities', value: fmtInt(run.resolved_entities) },
     ];
@@ -169,7 +174,17 @@
       type: 'bar',
       data: {
         labels: entity.labels,
-        datasets: [{ label: 'Entity count', data: entity.values, backgroundColor: '#8aa8ff' }],
+        datasets: [
+          {
+            label: 'Entity count',
+            data: entity.values,
+            backgroundColor: '#ffffff',
+            borderColor: '#ffffff',
+            hoverBackgroundColor: '#ffffff',
+            hoverBorderColor: '#ffffff',
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -177,12 +192,12 @@
         plugins: { legend: { display: false } },
         scales: {
           x: {
-            ticks: { color: '#93a4c1' },
-            grid: { color: 'rgba(147,164,193,0.12)' },
+            ticks: { color: '#e6edf8' },
+            grid: { color: 'rgba(230,237,248,0.14)' },
           },
           y: {
-            ticks: { color: '#93a4c1' },
-            grid: { color: 'rgba(147,164,193,0.12)' },
+            ticks: { color: '#e6edf8' },
+            grid: { color: 'rgba(230,237,248,0.14)' },
           },
         },
       },

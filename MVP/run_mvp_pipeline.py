@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+from collections import Counter, defaultdict
 import datetime as dt
 import json
 import re
@@ -134,6 +136,210 @@ def find_new_run_dir(runs_root: Path, prefix: str) -> Path:
     if not run_dirs:
         raise FileNotFoundError(f"No run directory found under {runs_root} with prefix {prefix}")
     return run_dirs[0]
+
+
+def comb2(value: int) -> int:
+    return value * (value - 1) // 2 if value > 1 else 0
+
+
+def safe_ratio(numerator: int, denominator: int) -> float:
+    if denominator <= 0:
+        return 0.0
+    return numerator / denominator
+
+
+def text_from_keys(record: dict[str, object], keys: list[str]) -> str:
+    for key in keys:
+        value = record.get(key)
+        if value is None:
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return ""
+
+
+def load_source_records(input_json: Path, input_array_key: str | None) -> list[dict[str, object]]:
+    payload = json.loads(input_json.read_text(encoding="utf-8"))
+    if isinstance(payload, list):
+        records = payload
+    elif isinstance(payload, dict):
+        candidate_key = input_array_key or detect_input_array_key(input_json) or "records"
+        records = payload.get(candidate_key)
+    else:
+        raise TypeError("Unsupported source JSON root type")
+    if not isinstance(records, list):
+        raise TypeError("Source records array not found in input JSON")
+    validated: list[dict[str, object]] = []
+    for item in records:
+        if isinstance(item, dict):
+            validated.append(item)
+    return validated
+
+
+def compute_extra_match_metrics(source_records: list[dict[str, object]], matched_pairs_csv: Path) -> dict[str, object] | None:
+    if not matched_pairs_csv.exists():
+        return None
+
+    true_group_keys = [
+        "SOURCE_TRUE_GROUP_ID",
+        "source_true_group_id",
+        "TRUE_GROUP_ID",
+        "true_group_id",
+        "TRUE_ENTITY_ID",
+        "true_entity_id",
+    ]
+    ipg_keys = ["IPG ID", "IPG_ID", "ipg_id", "SOURCE_IPG_ID", "source_ipg_id"]
+
+    record_truth: dict[str, dict[str, str]] = {}
+    true_group_counts: Counter[str] = Counter()
+    true_group_ipg_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    records_with_true_group = 0
+    records_with_ipg = 0
+
+    for index, record in enumerate(source_records, start=1):
+        true_group = text_from_keys(record, true_group_keys)
+        ipg_id = text_from_keys(record, ipg_keys)
+        record_truth[str(index)] = {"true_group": true_group, "ipg_id": ipg_id}
+        if true_group:
+            records_with_true_group += 1
+            true_group_counts[true_group] += 1
+            if ipg_id:
+                true_group_ipg_counts[true_group][ipg_id] += 1
+        if ipg_id:
+            records_with_ipg += 1
+
+    if records_with_true_group <= 1:
+        return None
+
+    true_pairs_total = sum(comb2(count) for count in true_group_counts.values())
+    known_pairs_ipg = sum(
+        comb2(ipg_count)
+        for ipg_counter in true_group_ipg_counts.values()
+        for ipg_count in ipg_counter.values()
+    )
+    discoverable_true_pairs = max(0, true_pairs_total - known_pairs_ipg)
+
+    predicted_pairs_beyond_known = 0
+    extra_true_matches_found = 0
+    extra_false_matches_found = 0
+    overall_predicted_pairs = 0
+    overall_true_pairs_found = 0
+    overall_false_pairs_found = 0
+
+    with matched_pairs_csv.open("r", encoding="utf-8", newline="") as infile:
+        reader = csv.DictReader(infile)
+        for row in reader:
+            anchor_meta = record_truth.get(str(row.get("anchor_record_id") or "").strip())
+            matched_meta = record_truth.get(str(row.get("matched_record_id") or "").strip())
+            if not anchor_meta or not matched_meta:
+                continue
+
+            anchor_true_group = anchor_meta["true_group"]
+            matched_true_group = matched_meta["true_group"]
+            anchor_ipg = anchor_meta["ipg_id"]
+            matched_ipg = matched_meta["ipg_id"]
+
+            is_true_pair = bool(anchor_true_group and matched_true_group and anchor_true_group == matched_true_group)
+            is_known_pair = bool(anchor_ipg and matched_ipg and anchor_ipg == matched_ipg)
+
+            overall_predicted_pairs += 1
+            if is_true_pair:
+                overall_true_pairs_found += 1
+            else:
+                overall_false_pairs_found += 1
+
+            if is_known_pair:
+                continue
+
+            predicted_pairs_beyond_known += 1
+            if is_true_pair:
+                extra_true_matches_found += 1
+            else:
+                extra_false_matches_found += 1
+
+    return {
+        "available": True,
+        "records_with_true_group": records_with_true_group,
+        "records_with_ipg": records_with_ipg,
+        "true_pairs_total": true_pairs_total,
+        "known_pairs_ipg": known_pairs_ipg,
+        "baseline_match_coverage": safe_ratio(known_pairs_ipg, true_pairs_total),
+        "discoverable_true_pairs": discoverable_true_pairs,
+        "predicted_pairs_beyond_known": predicted_pairs_beyond_known,
+        "extra_true_matches_found": extra_true_matches_found,
+        "extra_false_matches_found": extra_false_matches_found,
+        "extra_match_precision": safe_ratio(extra_true_matches_found, predicted_pairs_beyond_known),
+        "extra_match_recall": safe_ratio(extra_true_matches_found, discoverable_true_pairs),
+        "extra_gain_vs_known": safe_ratio(extra_true_matches_found, known_pairs_ipg),
+        "net_extra_matches": extra_true_matches_found - extra_false_matches_found,
+        "overall_predicted_pairs": overall_predicted_pairs,
+        "overall_true_pairs_found": overall_true_pairs_found,
+        "overall_false_pairs_found": overall_false_pairs_found,
+        "overall_false_positive_rate": safe_ratio(overall_false_pairs_found, overall_predicted_pairs),
+        "overall_match_correctness": safe_ratio(overall_true_pairs_found, overall_predicted_pairs),
+        "senzing_true_coverage": safe_ratio(overall_true_pairs_found, true_pairs_total),
+    }
+
+
+def enrich_management_summary_with_extra_metrics(
+    source_input_json: Path,
+    input_array_key: str | None,
+    output_run_dir: Path,
+) -> None:
+    technical_dir = output_run_dir / "technical output"
+    management_json = technical_dir / "management_summary.json"
+    management_md = output_run_dir / "management_summary.md"
+    matched_pairs_csv = technical_dir / "matched_pairs.csv"
+    if not management_json.exists() or not management_md.exists() or not matched_pairs_csv.exists():
+        return
+
+    source_records = load_source_records(source_input_json, input_array_key)
+    discovery_metrics = compute_extra_match_metrics(source_records, matched_pairs_csv)
+    if not discovery_metrics:
+        return
+
+    summary_payload = json.loads(management_json.read_text(encoding="utf-8"))
+    if not isinstance(summary_payload, dict):
+        return
+    summary_payload["discovery_metrics"] = discovery_metrics
+    management_json.write_text(json.dumps(summary_payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    lines = management_md.read_text(encoding="utf-8").rstrip("\n")
+    lines += "\n\n## Extra True Matches Beyond SOURCE_IPG_ID\n\n"
+    lines += (
+        f"- Our match coverage (without Senzing): {discovery_metrics['baseline_match_coverage'] * 100:.2f}% "
+        "(Portion of true pairs that were already known from SOURCE_IPG_ID labels before Senzing.)\n"
+    )
+    lines += (
+        f"- Extra true matches found: {discovery_metrics['extra_true_matches_found']} "
+        "(True matches discovered by Senzing where SOURCE_IPG_ID did not already label the pair.)\n"
+    )
+    lines += (
+        f"- Extra gain vs known pairs: {discovery_metrics['extra_gain_vs_known'] * 100:.2f}% "
+        "(Extra true matches divided by pairs already known via SOURCE_IPG_ID.)\n"
+    )
+    lines += (
+        f"- Extra match precision: {discovery_metrics['extra_match_precision'] * 100:.2f}% "
+        "(Among predicted pairs beyond known labels, how many are truly correct.)\n"
+    )
+    lines += (
+        f"- Extra match recall: {discovery_metrics['extra_match_recall'] * 100:.2f}% "
+        "(Share of true-but-unlabeled pairs that Senzing successfully found.)\n"
+    )
+    lines += (
+        f"- Discoverable true pairs (beyond known): {discovery_metrics['discoverable_true_pairs']} "
+        "(Total true pairs present in hidden ground truth that are not in SOURCE_IPG_ID labels.)\n"
+    )
+    lines += (
+        f"- False positive % (all predicted pairs): {discovery_metrics['overall_false_positive_rate'] * 100:.2f}% "
+        "(Among all pairs predicted by Senzing, percentage that are not true matches by SOURCE_TRUE_GROUP_ID.)\n"
+    )
+    lines += (
+        f"- Senzing true coverage: {discovery_metrics['senzing_true_coverage'] * 100:.2f}% "
+        "(Portion of all true pairs in the sample that Senzing actually recovered.)\n"
+    )
+    management_md.write_text(lines + "\n", encoding="utf-8")
 
 
 def copy_if_exists(source: Path, destination: Path) -> bool:
@@ -399,6 +605,14 @@ def main() -> int:
             mapping_summary_json=mapping_summary_json,
             run_summary_json=run_summary_json,
         )
+        try:
+            enrich_management_summary_with_extra_metrics(
+                source_input_json=input_json,
+                input_array_key=effective_input_array_key,
+                output_run_dir=output_run_dir,
+            )
+        except Exception as exc:
+            print(f"WARNING: unable to compute extra match metrics ({exc})")
         refresh_dashboard_data(mvp_root=mvp_root, output_root=output_root)
 
         print("\nMVP pipeline completed.")

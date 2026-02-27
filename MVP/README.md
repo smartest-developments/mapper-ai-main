@@ -2,13 +2,14 @@
 
 Script restano nella root di `MVP`.  
 Sample input JSON restano in `sample_input/`.  
-Gli output finali vengono scritti in `output/<timestamp>/`.
+Gli output finali vengono scritti in `output/<timestamp>__<input_label>/`.
 
 ## File inclusi
 
 - `run_mvp_pipeline.py`: wrapper unico (mapping + run Senzing + comparison/report)
 - `run_samples_batch.py`: esegue il pipeline su tutti i JSON in `sample_input/`
 - `generate_sample_inputs.py`: rigenera 10 sample curati (500 record ciascuno) con metadati descrittivi in testa
+  e hidden true groups (`SOURCE_TRUE_GROUP_ID`) per misurare match reali non etichettati con IPG
 - `partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
 - `run_senzing_end_to_end.py`: runner E2E Senzing
 - `build_management_dashboard.py`: builds dashboard data from all `output/<timestamp>/` runs
@@ -83,6 +84,8 @@ Ogni file in `sample_input/` viene scritto con metadati iniziali:
 
 - `_sample_comment`: descrizione breve del caso
 - `_sample_special_features`: elenco delle caratteristiche del sample
+- `_hidden_truth_groups`: quanti gruppi true match senza IPG label sono stati introdotti
+- `_hidden_truth_records`: quanti record partecipano a questi gruppi hidden
 - `records`: array di 500 record usato dal pipeline
 
 ## WHY (opzionale)
@@ -102,13 +105,19 @@ python3 run_mvp_pipeline.py \
 
 Ogni esecuzione crea una cartella dedicata:
 
-- `output/<timestamp>/`
+- `output/<timestamp>__<input_label>/`
 
 Dentro `output/<timestamp>/` (management-friendly) trovi:
 
 - `input_source.json` (exact source JSON used for that run)
 - `management_summary.md`
 - `ground_truth_match_quality.md`
+
+`management_summary.md` include anche la sezione:
+
+- `Extra True Matches Beyond SOURCE_IPG_ID`
+  - quanti match veri in piu' Senzing trova rispetto ai match gia' noti via IPG
+  - extra gain percentuale rispetto ai pair gia' noti (`extra_gain_vs_known`)
 
 Dentro `output/<timestamp>/technical output/` trovi gli artifact tecnici:
 

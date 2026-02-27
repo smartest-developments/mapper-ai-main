@@ -22,13 +22,19 @@ PROFILES: list[dict[str, Any]] = [
             "original 500-record baseline",
             "mixed PERSON/ORGANIZATION",
             "default sparsity pattern",
+            "includes hidden true matches without IPG labels",
         ],
         "source": "legacy",
     },
     {
         "filename": "sample_02_balanced_baseline_500.json",
         "description": "Balanced baseline with default realism and moderate IPG coverage.",
-        "features": ["balanced person/org split", "moderate missing fields", "standard noise"],
+        "features": [
+            "balanced person/org split",
+            "moderate missing fields",
+            "standard noise",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027101,
         "person_ratio": 0.70,
         "ipg_rate": 0.35,
@@ -37,7 +43,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_03_sparse_fields_500.json",
         "description": "High sparsity scenario with many optional fields missing.",
-        "features": ["aggressive null optional fields", "harder matching due to low completeness"],
+        "features": [
+            "aggressive null optional fields",
+            "harder matching due to low completeness",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027102,
         "person_ratio": 0.70,
         "ipg_rate": 0.30,
@@ -46,7 +56,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_04_name_noise_500.json",
         "description": "Name formatting noise (case/punctuation/spacing variations).",
-        "features": ["name normalization stress", "formatting inconsistencies"],
+        "features": [
+            "name normalization stress",
+            "formatting inconsistencies",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027103,
         "person_ratio": 0.72,
         "ipg_rate": 0.35,
@@ -55,7 +69,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_05_taxid_noise_500.json",
         "description": "Tax ID quality issues with malformed identifiers on a subset of records.",
-        "features": ["identifier quality degradation", "weaker deterministic signals"],
+        "features": [
+            "identifier quality degradation",
+            "weaker deterministic signals",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027104,
         "person_ratio": 0.68,
         "ipg_rate": 0.35,
@@ -64,7 +82,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_06_address_noise_500.json",
         "description": "Address inconsistencies and partial address drops.",
-        "features": ["address quality stress", "missing residence/street/postal values"],
+        "features": [
+            "address quality stress",
+            "missing residence/street/postal values",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027105,
         "person_ratio": 0.70,
         "ipg_rate": 0.35,
@@ -73,7 +95,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_07_duplicate_pressure_500.json",
         "description": "Higher duplicate pressure by making subsets look near-identical.",
-        "features": ["larger ambiguous clusters", "false positive/negative pressure"],
+        "features": [
+            "larger ambiguous clusters",
+            "false positive/negative pressure",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027106,
         "person_ratio": 0.70,
         "ipg_rate": 0.35,
@@ -82,7 +108,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_08_organization_heavy_500.json",
         "description": "Organization-heavy dataset with more corporate records than persons.",
-        "features": ["organization-heavy", "different identifier mix"],
+        "features": [
+            "organization-heavy",
+            "different identifier mix",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027107,
         "person_ratio": 0.40,
         "ipg_rate": 0.32,
@@ -91,7 +121,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_09_person_heavy_low_ipg_500.json",
         "description": "Person-heavy dataset with low SOURCE IPG labeling coverage.",
-        "features": ["person-heavy", "low IPG labels"],
+        "features": [
+            "person-heavy",
+            "low IPG labels",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027108,
         "person_ratio": 0.88,
         "ipg_rate": 0.15,
@@ -100,7 +134,11 @@ PROFILES: list[dict[str, Any]] = [
     {
         "filename": "sample_10_high_ipg_coverage_500.json",
         "description": "High SOURCE IPG coverage for comparison against lower-labeling scenarios.",
-        "features": ["high IPG labels", "quality evaluation easier"],
+        "features": [
+            "high IPG labels",
+            "quality evaluation easier",
+            "includes hidden true matches without IPG labels",
+        ],
         "seed": 2027109,
         "person_ratio": 0.70,
         "ipg_rate": 0.65,
@@ -152,22 +190,136 @@ def maybe(rng: random.Random, probability: float) -> bool:
     return rng.random() < probability
 
 
+def class_code_to_type(class_code: str) -> str:
+    code = str(class_code or "").strip().upper()
+    return "PERSON" if code == "I" else "ORGANIZATION"
+
+
+def mutate_hidden_name(anchor_name: str, rng: random.Random) -> str:
+    if not anchor_name:
+        return anchor_name
+    variants = [
+        anchor_name,
+        anchor_name.upper(),
+        anchor_name.lower(),
+        anchor_name.replace(",", ""),
+        anchor_name.replace("  ", " ").strip(),
+    ]
+    return rng.choice(variants)
+
+
+def hide_part_of_email(value: str, rng: random.Random) -> str:
+    if "@" not in value:
+        return value
+    local, at, domain = value.partition("@")
+    if not local:
+        return value
+    if maybe(rng, 0.4):
+        local = local.replace(".", "_")
+    if maybe(rng, 0.3):
+        local = local[: max(1, len(local) - 2)]
+    return f"{local}{at}{domain}"
+
+
+def impose_hidden_truth_clusters(records: list[dict[str, Any]], rng: random.Random) -> dict[str, int]:
+    ipg_key = "IPG ID"
+    true_key = "SOURCE_TRUE_GROUP_ID"
+
+    ipg_group_map: dict[str, str] = {}
+    hidden_group_counter = 0
+    unlabeled_indices: list[int] = []
+
+    for idx, record in enumerate(records):
+        ipg_value = str(record.get(ipg_key) or "").strip()
+        if ipg_value:
+            group_id = ipg_group_map.setdefault(ipg_value, f"TG_IPG_{len(ipg_group_map)+1:05d}")
+            record[true_key] = group_id
+        else:
+            unlabeled_indices.append(idx)
+            record[true_key] = f"TG_SINGLE_{idx+1:05d}"
+
+    if len(unlabeled_indices) < 6:
+        return {"hidden_groups": 0, "hidden_records": 0}
+
+    rng.shuffle(unlabeled_indices)
+    hidden_target_records = max(20, min(len(unlabeled_indices) // 3, 150))
+    consumed = 0
+    cursor = 0
+
+    while cursor + 1 < len(unlabeled_indices) and consumed < hidden_target_records:
+        size = rng.choice([2, 2, 3, 3, 4])
+        if cursor + size > len(unlabeled_indices):
+            size = len(unlabeled_indices) - cursor
+        if size < 2:
+            break
+        if consumed + size > hidden_target_records and hidden_group_counter >= 8:
+            break
+
+        group_indices = unlabeled_indices[cursor : cursor + size]
+        cursor += size
+        consumed += size
+        hidden_group_counter += 1
+        hidden_group_id = f"TG_HIDDEN_{hidden_group_counter:05d}"
+
+        anchor = records[group_indices[0]]
+        anchor_name = str(anchor.get("PartnerName") or "").strip()
+        anchor_type = class_code_to_type(str(anchor.get("PartnerClassCode") or ""))
+
+        for member_pos, idx in enumerate(group_indices):
+            target = records[idx]
+            target[true_key] = hidden_group_id
+            if member_pos == 0:
+                continue
+
+            # Keep business IDs and IPG untouched, align identity signals to hidden anchor.
+            target["PartnerClassCode"] = anchor.get("PartnerClassCode")
+            for key in [
+                "LegalFirstName",
+                "AdditionalName",
+                "BirthOrFoundationDate",
+                "DomicileCountryCode",
+                "PrimeNationalityCountryCode",
+                "AddressStreetName",
+                "AddressResidenceIdentifier",
+                "AddressPostalCode",
+                "AddressPostalCityName",
+                "Tax ID",
+                "idDocumentNumber",
+                "LEI",
+                "LEM ID",
+                "CRN",
+                "Electronic Address",
+            ]:
+                target[key] = anchor.get(key)
+
+            if anchor_name:
+                target["PartnerName"] = mutate_hidden_name(anchor_name, rng)
+            if isinstance(target.get("Electronic Address"), str) and maybe(rng, 0.25):
+                target["Electronic Address"] = hide_part_of_email(str(target["Electronic Address"]), rng)
+            if anchor_type == "PERSON" and maybe(rng, 0.35):
+                target["AddressResidenceIdentifier"] = None
+            if anchor_type == "ORGANIZATION" and maybe(rng, 0.20):
+                target["Tax ID"] = None
+
+    return {"hidden_groups": hidden_group_counter, "hidden_records": consumed}
+
+
 def apply_sparse(records: list[dict[str, Any]], rng: random.Random) -> None:
     optional_fields = [
-        "legal_first_name",
-        "additional_name",
-        "birth_or_foundation_date",
-        "prime_nationality_country_code",
-        "address_street_name",
-        "address_residence_identifier",
-        "address_postal_code",
-        "address_postal_city_name",
-        "lei",
-        "lem_id",
-        "crn",
-        "tax_id",
-        "id_document_number",
-        "electronic_address",
+        "LegalFirstName",
+        "AdditionalName",
+        "BirthOrFoundationDate",
+        "PrimeNationalityCountryCode",
+        "AddressStreetName",
+        "AddressResidenceIdentifier",
+        "AddressPostalCode",
+        "AddressPostalCityName",
+        "LEI",
+        "LEM ID",
+        "CRN",
+        "Tax ID",
+        "idDocumentNumber",
+        "Electronic Address",
     ]
     for record in records:
         for key in optional_fields:
@@ -177,7 +329,7 @@ def apply_sparse(records: list[dict[str, Any]], rng: random.Random) -> None:
 
 def apply_name_noise(records: list[dict[str, Any]], rng: random.Random) -> None:
     for record in records:
-        name = record.get("partner_name")
+        name = record.get("PartnerName")
         if not isinstance(name, str) or not name.strip() or not maybe(rng, 0.35):
             continue
         variant = rng.choice([
@@ -187,32 +339,32 @@ def apply_name_noise(records: list[dict[str, Any]], rng: random.Random) -> None:
             name.replace(" ", "  "),
             name.replace(",", "").replace(".", ""),
         ])
-        record["partner_name"] = variant
+        record["PartnerName"] = variant
 
 
 def apply_tax_noise(records: list[dict[str, Any]], rng: random.Random) -> None:
     for record in records:
         if not maybe(rng, 0.22):
             continue
-        tax_id = record.get("tax_id")
+        tax_id = record.get("Tax ID")
         if not tax_id:
             continue
         if maybe(rng, 0.50):
-            record["tax_id"] = str(tax_id).replace("-", "").replace(" ", "")[:6]
+            record["Tax ID"] = str(tax_id).replace("-", "").replace(" ", "")[:6]
         else:
-            record["tax_id"] = f"BAD-{rng.randint(100,999)}"
+            record["Tax ID"] = f"BAD-{rng.randint(100,999)}"
 
 
 def apply_address_noise(records: list[dict[str, Any]], rng: random.Random) -> None:
     for record in records:
         if maybe(rng, 0.30):
-            record["address_street_name"] = None
+            record["AddressStreetName"] = None
         if maybe(rng, 0.28):
-            record["address_postal_city_name"] = None
+            record["AddressPostalCityName"] = None
         if maybe(rng, 0.24):
-            record["address_postal_code"] = None
-        if isinstance(record.get("address_residence_identifier"), str) and maybe(rng, 0.20):
-            record["address_residence_identifier"] = f" {record['address_residence_identifier']} "
+            record["AddressPostalCode"] = None
+        if isinstance(record.get("AddressResidenceIdentifier"), str) and maybe(rng, 0.20):
+            record["AddressResidenceIdentifier"] = f" {record['AddressResidenceIdentifier']} "
 
 
 def apply_duplicate_pressure(records: list[dict[str, Any]], rng: random.Random) -> None:
@@ -229,25 +381,25 @@ def apply_duplicate_pressure(records: list[dict[str, Any]], rng: random.Random) 
         target = records[target_idx]
         # Keep business IDs untouched, overwrite match-relevant content.
         for key in [
-            "partner_name",
-            "legal_first_name",
-            "additional_name",
-            "birth_or_foundation_date",
-            "address_street_name",
-            "address_residence_identifier",
-            "address_postal_code",
-            "address_postal_city_name",
-            "tax_id",
-            "id_document_number",
-            "electronic_address",
-            "prime_nationality_country_code",
-            "lei",
-            "lem_id",
-            "crn",
+            "PartnerName",
+            "LegalFirstName",
+            "AdditionalName",
+            "BirthOrFoundationDate",
+            "AddressStreetName",
+            "AddressResidenceIdentifier",
+            "AddressPostalCode",
+            "AddressPostalCityName",
+            "Tax ID",
+            "idDocumentNumber",
+            "Electronic Address",
+            "PrimeNationalityCountryCode",
+            "LEI",
+            "LEM ID",
+            "CRN",
         ]:
             target[key] = source.get(key)
-        if isinstance(target.get("partner_name"), str) and maybe(rng, 0.60):
-            target["partner_name"] = target["partner_name"].replace("  ", " ").strip()
+        if isinstance(target.get("PartnerName"), str) and maybe(rng, 0.60):
+            target["PartnerName"] = target["PartnerName"].replace("  ", " ").strip()
 
 
 MUTATORS = {
@@ -373,12 +525,16 @@ def main() -> int:
                 raise KeyError(f"Unknown mutation: {mutation_name}")
             mutator(array_data, rng)
 
+        hidden_truth_stats = impose_hidden_truth_clusters(array_data, rng)
+
         wrapped = wrap_sample(
             filename=filename,
             description=profile["description"],
             features=profile["features"],
             records=array_data,
         )
+        wrapped["_hidden_truth_groups"] = hidden_truth_stats["hidden_groups"]
+        wrapped["_hidden_truth_records"] = hidden_truth_stats["hidden_records"]
 
         target = sample_dir / filename
         target.write_text(json.dumps(wrapped, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

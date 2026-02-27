@@ -4,10 +4,11 @@
   "_sample_special_features": [
     "original 500-record baseline",
     "mixed PERSON/ORGANIZATION",
-    "default sparsity pattern"
+    "default sparsity pattern",
+    "includes hidden true matches without IPG labels"
   ],
   "_records_count": 500,
-  "_generated_at": "2026-02-27T22:13:11",
+  "_generated_at": "2026-02-27T23:02:50",
   "records": [
     {
       "externalPartnerKeyDirExternalID": "PTN-000000001",
@@ -29,7 +30,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AU-768504",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000001"
+      "IPG ID": "IPG-000000001",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00001"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000002",
@@ -51,7 +53,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "carlos.lopez@mail.au",
-      "IPG ID": "IPG-000000001"
+      "IPG ID": "IPG-000000001",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00001"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000003",
@@ -73,7 +76,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "elena.hassan@mail.de",
-      "IPG ID": "IPG-000000002"
+      "IPG ID": "IPG-000000002",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00002"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000004",
@@ -95,7 +99,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000002"
+      "IPG ID": "IPG-000000002",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00002"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000005",
@@ -117,7 +122,8 @@
       "Tax ID": "DE88Q776437P",
       "idDocumentNumber": null,
       "Electronic Address": "elena_hassan@mail.de",
-      "IPG ID": "IPG-000000002"
+      "IPG ID": "IPG-000000002",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00002"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000006",
@@ -139,7 +145,8 @@
       "Tax ID": "CH57Z143458Z",
       "idDocumentNumber": "DOC-CH-388663",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000003"
+      "IPG ID": "IPG-000000003",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000007",
@@ -161,7 +168,8 @@
       "Tax ID": "CH57Z143458Z",
       "idDocumentNumber": null,
       "Electronic Address": "ana.lopez@mail.ch",
-      "IPG ID": "IPG-000000003"
+      "IPG ID": "IPG-000000003",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000008",
@@ -183,7 +191,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000003"
+      "IPG ID": "IPG-000000003",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000009",
@@ -205,7 +214,8 @@
       "Tax ID": "DE848501973",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.artemis-maritime-pte.de",
-      "IPG ID": "IPG-000000004"
+      "IPG ID": "IPG-000000004",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00004"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000010",
@@ -227,7 +237,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.artemis-maritime-pte.de",
-      "IPG ID": "IPG-000000004"
+      "IPG ID": "IPG-000000004",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00004"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000011",
@@ -249,7 +260,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.artemis-maritime-pte.de",
-      "IPG ID": "IPG-000000004"
+      "IPG ID": "IPG-000000004",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00004"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000012",
@@ -271,7 +283,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-825310",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000005"
+      "IPG ID": "IPG-000000005",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00005"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000013",
@@ -293,7 +306,8 @@
       "Tax ID": "IT29O888079A",
       "idDocumentNumber": "DOC-IT-825310",
       "Electronic Address": "noah.rossi@mail.it",
-      "IPG ID": "IPG-000000005"
+      "IPG ID": "IPG-000000005",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00005"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000014",
@@ -315,7 +329,8 @@
       "Tax ID": "CA46Y551395H",
       "idDocumentNumber": "DOC-CA-502010",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000006"
+      "IPG ID": "IPG-000000006",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000015",
@@ -337,7 +352,8 @@
       "Tax ID": "CA46Y551395H",
       "idDocumentNumber": null,
       "Electronic Address": "omar.tanaka@mail.ca",
-      "IPG ID": "IPG-000000006"
+      "IPG ID": "IPG-000000006",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000016",
@@ -359,7 +375,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "omar.tanaka@mail.ca",
-      "IPG ID": "IPG-000000006"
+      "IPG ID": "IPG-000000006",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000017",
@@ -381,7 +398,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ari.miller@mail.de",
-      "IPG ID": "IPG-000000007"
+      "IPG ID": "IPG-000000007",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00007"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000018",
@@ -403,7 +421,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-272824",
       "Electronic Address": "ari_miller@mail.de",
-      "IPG ID": "IPG-000000007"
+      "IPG ID": "IPG-000000007",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00007"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000019",
@@ -425,7 +444,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-272824",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000007"
+      "IPG ID": "IPG-000000007",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00007"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000020",
@@ -447,7 +467,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000008"
+      "IPG ID": "IPG-000000008",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00008"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000021",
@@ -469,7 +490,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.helios-advisory-inc.co.uk",
-      "IPG ID": "IPG-000000008"
+      "IPG ID": "IPG-000000008",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00008"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000022",
@@ -491,7 +513,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000009"
+      "IPG ID": "IPG-000000009",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00009"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000023",
@@ -513,7 +536,8 @@
       "Tax ID": "AE56U847884K",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000009"
+      "IPG ID": "IPG-000000009",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00009"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000024",
@@ -535,7 +559,8 @@
       "Tax ID": "AE56U847884K",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000009"
+      "IPG ID": "IPG-000000009",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00009"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000025",
@@ -557,7 +582,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-719246",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000010"
+      "IPG ID": "IPG-000000010",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00010"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000026",
@@ -579,7 +605,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "liam.costa@mail.es",
-      "IPG ID": "IPG-000000010"
+      "IPG ID": "IPG-000000010",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00010"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000027",
@@ -601,7 +628,8 @@
       "Tax ID": "SG529801534",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.crescent-logistics-pte.sg",
-      "IPG ID": "IPG-000000011"
+      "IPG ID": "IPG-000000011",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00011"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000028",
@@ -623,7 +651,8 @@
       "Tax ID": "SG529801534",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.crescent-logistics-pte.sg",
-      "IPG ID": "IPG-000000011"
+      "IPG ID": "IPG-000000011",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00011"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000029",
@@ -645,7 +674,8 @@
       "Tax ID": "SG529801534",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.crescent-logistics-pte.sg",
-      "IPG ID": "IPG-000000011"
+      "IPG ID": "IPG-000000011",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00011"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000030",
@@ -667,7 +697,8 @@
       "Tax ID": "IT78V807761S",
       "idDocumentNumber": null,
       "Electronic Address": "leon.smith@mail.it",
-      "IPG ID": "IPG-000000012"
+      "IPG ID": "IPG-000000012",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000031",
@@ -689,7 +720,8 @@
       "Tax ID": "IT78V807761S",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000012"
+      "IPG ID": "IPG-000000012",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000032",
@@ -711,7 +743,8 @@
       "Tax ID": "IT78V807761S",
       "idDocumentNumber": "DOC-IT-842072",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000012"
+      "IPG ID": "IPG-000000012",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000033",
@@ -733,7 +766,8 @@
       "Tax ID": "IT78V807761S",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000012"
+      "IPG ID": "IPG-000000012",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000034",
@@ -755,7 +789,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-744568",
       "Electronic Address": "marta.ricci@mail.de",
-      "IPG ID": "IPG-000000013"
+      "IPG ID": "IPG-000000013",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000035",
@@ -777,7 +812,8 @@
       "Tax ID": "DE30S642072O",
       "idDocumentNumber": null,
       "Electronic Address": "marta_ricci@mail.de",
-      "IPG ID": "IPG-000000013"
+      "IPG ID": "IPG-000000013",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000036",
@@ -799,7 +835,8 @@
       "Tax ID": "DE30S642072O",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000013"
+      "IPG ID": "IPG-000000013",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000037",
@@ -821,7 +858,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-744568",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000013"
+      "IPG ID": "IPG-000000013",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000038",
@@ -843,7 +881,8 @@
       "Tax ID": "GB853192186",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000014"
+      "IPG ID": "IPG-000000014",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000039",
@@ -865,7 +904,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000014"
+      "IPG ID": "IPG-000000014",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000040",
@@ -887,7 +927,8 @@
       "Tax ID": "GB853192186",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000014"
+      "IPG ID": "IPG-000000014",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000041",
@@ -909,7 +950,8 @@
       "Tax ID": "ES52B631711A",
       "idDocumentNumber": "DOC-ES-631912",
       "Electronic Address": "marta.kovacs@mail.es",
-      "IPG ID": "IPG-000000015"
+      "IPG ID": "IPG-000000015",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000042",
@@ -931,7 +973,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-631912",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000015"
+      "IPG ID": "IPG-000000015",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000043",
@@ -953,7 +996,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-631912",
       "Electronic Address": "marta_kovacs@mail.es",
-      "IPG ID": "IPG-000000015"
+      "IPG ID": "IPG-000000015",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000044",
@@ -975,7 +1019,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.helios-engineering-inc.es",
-      "IPG ID": "IPG-000000016"
+      "IPG ID": "IPG-000000016",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000045",
@@ -997,7 +1042,8 @@
       "Tax ID": "ES515158315",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.helios-engineering-inc.es",
-      "IPG ID": "IPG-000000016"
+      "IPG ID": "IPG-000000016",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000046",
@@ -1019,7 +1065,8 @@
       "Tax ID": "ES515158315",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.helios-engineering-inc.es",
-      "IPG ID": "IPG-000000016"
+      "IPG ID": "IPG-000000016",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000047",
@@ -1041,7 +1088,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000017"
+      "IPG ID": "IPG-000000017",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000048",
@@ -1063,7 +1111,8 @@
       "Tax ID": "CA499145983",
       "idDocumentNumber": null,
       "Electronic Address": "contact@aurora-foods-group.ca",
-      "IPG ID": "IPG-000000017"
+      "IPG ID": "IPG-000000017",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000049",
@@ -1085,7 +1134,8 @@
       "Tax ID": "CA499145983",
       "idDocumentNumber": null,
       "Electronic Address": "contact@aurora-foods-group.ca",
-      "IPG ID": "IPG-000000017"
+      "IPG ID": "IPG-000000017",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000050",
@@ -1107,7 +1157,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-554872",
       "Electronic Address": "olivia.rahman@mail.sg",
-      "IPG ID": "IPG-000000018"
+      "IPG ID": "IPG-000000018",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000051",
@@ -1129,7 +1180,8 @@
       "Tax ID": "SG11H170264F",
       "idDocumentNumber": "DOC-SG-554872",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000018"
+      "IPG ID": "IPG-000000018",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000052",
@@ -1151,7 +1203,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-554872",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000018"
+      "IPG ID": "IPG-000000018",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000053",
@@ -1173,7 +1226,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-554872",
       "Electronic Address": "olivia.rahman@mail.sg",
-      "IPG ID": "IPG-000000018"
+      "IPG ID": "IPG-000000018",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000054",
@@ -1195,7 +1249,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000019"
+      "IPG ID": "IPG-000000019",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000055",
@@ -1217,7 +1272,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-659674",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000019"
+      "IPG ID": "IPG-000000019",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000056",
@@ -1239,7 +1295,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-659674",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000019"
+      "IPG ID": "IPG-000000019",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000057",
@@ -1261,7 +1318,8 @@
       "Tax ID": "US54L183167J",
       "idDocumentNumber": null,
       "Electronic Address": "yuki.schmidt@mail.com",
-      "IPG ID": "IPG-000000019"
+      "IPG ID": "IPG-000000019",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000058",
@@ -1283,7 +1341,8 @@
       "Tax ID": "CA466101560",
       "idDocumentNumber": null,
       "Electronic Address": "contact@crescent-retail-ag.ca",
-      "IPG ID": "IPG-000000020"
+      "IPG ID": "IPG-000000020",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000059",
@@ -1305,7 +1364,8 @@
       "Tax ID": "CA466101560",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000020"
+      "IPG ID": "IPG-000000020",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000060",
@@ -1327,7 +1387,8 @@
       "Tax ID": "CA466101560",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000020"
+      "IPG ID": "IPG-000000020",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000061",
@@ -1349,7 +1410,8 @@
       "Tax ID": "AE49Z226034C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000021"
+      "IPG ID": "IPG-000000021",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00021"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000062",
@@ -1371,7 +1433,8 @@
       "Tax ID": "AE49Z226034C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000021"
+      "IPG ID": "IPG-000000021",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00021"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000063",
@@ -1393,7 +1456,8 @@
       "Tax ID": "AE49Z226034C",
       "idDocumentNumber": "DOC-AE-300073",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000021"
+      "IPG ID": "IPG-000000021",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00021"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000064",
@@ -1415,7 +1479,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000022"
+      "IPG ID": "IPG-000000022",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000065",
@@ -1437,7 +1502,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000022"
+      "IPG ID": "IPG-000000022",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000066",
@@ -1459,7 +1525,8 @@
       "Tax ID": "AE94Y295493D",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000022"
+      "IPG ID": "IPG-000000022",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000067",
@@ -1481,7 +1548,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AE-493217",
       "Electronic Address": "jonas.neri@mail.ae",
-      "IPG ID": "IPG-000000022"
+      "IPG ID": "IPG-000000022",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000068",
@@ -1503,7 +1571,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-779112",
       "Electronic Address": "olivia.thomas@mail.nl",
-      "IPG ID": "IPG-000000023"
+      "IPG ID": "IPG-000000023",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00023"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000069",
@@ -1525,7 +1594,8 @@
       "Tax ID": "NL79S203269O",
       "idDocumentNumber": "DOC-NL-779112",
       "Electronic Address": "olivia.thomas@mail.nl",
-      "IPG ID": "IPG-000000023"
+      "IPG ID": "IPG-000000023",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00023"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000070",
@@ -1547,7 +1617,8 @@
       "Tax ID": "NL24F753319F",
       "idDocumentNumber": "DOC-NL-346011",
       "Electronic Address": "luca.bianchi@mail.nl",
-      "IPG ID": "IPG-000000024"
+      "IPG ID": "IPG-000000024",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00024"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000071",
@@ -1569,7 +1640,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-346011",
       "Electronic Address": "luca.bianchi@mail.nl",
-      "IPG ID": "IPG-000000024"
+      "IPG ID": "IPG-000000024",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00024"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000072",
@@ -1591,7 +1663,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "luca_bianchi@mail.nl",
-      "IPG ID": "IPG-000000024"
+      "IPG ID": "IPG-000000024",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00024"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000073",
@@ -1613,7 +1686,8 @@
       "Tax ID": "NL24F753319F",
       "idDocumentNumber": "DOC-NL-346011",
       "Electronic Address": "luca.bianchi@mail.nl",
-      "IPG ID": "IPG-000000024"
+      "IPG ID": "IPG-000000024",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00024"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000074",
@@ -1635,7 +1709,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.harbor-technology-ag.ca",
-      "IPG ID": "IPG-000000025"
+      "IPG ID": "IPG-000000025",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00025"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000075",
@@ -1657,7 +1732,8 @@
       "Tax ID": "CA216197529",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.harbor-technology-ag.ca",
-      "IPG ID": "IPG-000000025"
+      "IPG ID": "IPG-000000025",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00025"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000076",
@@ -1679,7 +1755,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.global-media-llc.ae",
-      "IPG ID": "IPG-000000026"
+      "IPG ID": "IPG-000000026",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00026"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000077",
@@ -1701,7 +1778,8 @@
       "Tax ID": "AE827389792",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.global-media-llc.ae",
-      "IPG ID": "IPG-000000026"
+      "IPG ID": "IPG-000000026",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00026"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000078",
@@ -1723,7 +1801,8 @@
       "Tax ID": "AE827389792",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000026"
+      "IPG ID": "IPG-000000026",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00026"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000079",
@@ -1745,7 +1824,8 @@
       "Tax ID": "ES78C512645K",
       "idDocumentNumber": "DOC-ES-581166",
       "Electronic Address": "noah.keller@mail.es",
-      "IPG ID": "IPG-000000027"
+      "IPG ID": "IPG-000000027",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00027"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000080",
@@ -1767,7 +1847,8 @@
       "Tax ID": "ES78C512645K",
       "idDocumentNumber": "DOC-ES-581166",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000027"
+      "IPG ID": "IPG-000000027",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00027"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000081",
@@ -1789,7 +1870,8 @@
       "Tax ID": "ES78C512645K",
       "idDocumentNumber": "DOC-ES-581166",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000027"
+      "IPG ID": "IPG-000000027",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00027"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000082",
@@ -1811,7 +1893,8 @@
       "Tax ID": "SG57H325999D",
       "idDocumentNumber": "DOC-SG-476237",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000028"
+      "IPG ID": "IPG-000000028",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00028"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000083",
@@ -1833,7 +1916,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "leon.rossi@mail.sg",
-      "IPG ID": "IPG-000000028"
+      "IPG ID": "IPG-000000028",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00028"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000084",
@@ -1855,7 +1939,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000028"
+      "IPG ID": "IPG-000000028",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00028"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000085",
@@ -1877,7 +1962,8 @@
       "Tax ID": "SG57H325999D",
       "idDocumentNumber": "DOC-SG-476237",
       "Electronic Address": "leon.rossi@mail.sg",
-      "IPG ID": "IPG-000000028"
+      "IPG ID": "IPG-000000028",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00028"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000086",
@@ -1899,7 +1985,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000029"
+      "IPG ID": "IPG-000000029",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00029"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000087",
@@ -1921,7 +2008,8 @@
       "Tax ID": "GB515889756",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000029"
+      "IPG ID": "IPG-000000029",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00029"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000088",
@@ -1943,7 +2031,8 @@
       "Tax ID": "GB515889756",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-analytics-sa.co.uk",
-      "IPG ID": "IPG-000000029"
+      "IPG ID": "IPG-000000029",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00029"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000089",
@@ -1965,7 +2054,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000029"
+      "IPG ID": "IPG-000000029",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00029"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000090",
@@ -1987,7 +2077,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-852602",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000030"
+      "IPG ID": "IPG-000000030",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00030"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000091",
@@ -2009,7 +2100,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000030"
+      "IPG ID": "IPG-000000030",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00030"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000092",
@@ -2031,7 +2123,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000030"
+      "IPG ID": "IPG-000000030",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00030"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000093",
@@ -2053,7 +2146,8 @@
       "Tax ID": "SG84F961802O",
       "idDocumentNumber": null,
       "Electronic Address": "marco.costa@mail.sg",
-      "IPG ID": "IPG-000000031"
+      "IPG ID": "IPG-000000031",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00031"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000094",
@@ -2075,7 +2169,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-625522",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000031"
+      "IPG ID": "IPG-000000031",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00031"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000095",
@@ -2097,7 +2192,8 @@
       "Tax ID": "SG84F961802O",
       "idDocumentNumber": "DOC-SG-625522",
       "Electronic Address": "marco_costa@mail.sg",
-      "IPG ID": "IPG-000000031"
+      "IPG ID": "IPG-000000031",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00031"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000096",
@@ -2119,7 +2215,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.prime-healthcare-llc.de",
-      "IPG ID": "IPG-000000032"
+      "IPG ID": "IPG-000000032",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00032"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000097",
@@ -2141,7 +2238,8 @@
       "Tax ID": "DE558958699",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000032"
+      "IPG ID": "IPG-000000032",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00032"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000098",
@@ -2163,7 +2261,8 @@
       "Tax ID": "DE558958699",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.prime-healthcare-llc.de",
-      "IPG ID": "IPG-000000032"
+      "IPG ID": "IPG-000000032",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00032"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000099",
@@ -2185,7 +2284,8 @@
       "Tax ID": "DE558958699",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000032"
+      "IPG ID": "IPG-000000032",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00032"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000100",
@@ -2207,7 +2307,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000033"
+      "IPG ID": "IPG-000000033",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00033"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000101",
@@ -2229,7 +2330,8 @@
       "Tax ID": "CH980252155",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000033"
+      "IPG ID": "IPG-000000033",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00033"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000102",
@@ -2251,7 +2353,8 @@
       "Tax ID": "CH980252155",
       "idDocumentNumber": null,
       "Electronic Address": "contact@global-logistics-sa.ch",
-      "IPG ID": "IPG-000000033"
+      "IPG ID": "IPG-000000033",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00033"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000103",
@@ -2273,7 +2376,8 @@
       "Tax ID": "CH980252155",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000033"
+      "IPG ID": "IPG-000000033",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00033"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000104",
@@ -2295,7 +2399,8 @@
       "Tax ID": "GB933127030",
       "idDocumentNumber": null,
       "Electronic Address": "contact@terra-engineering-bv.co.uk",
-      "IPG ID": "IPG-000000034"
+      "IPG ID": "IPG-000000034",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00034"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000105",
@@ -2317,7 +2422,8 @@
       "Tax ID": "GB933127030",
       "idDocumentNumber": null,
       "Electronic Address": "contact@terra-engineering-bv.co.uk",
-      "IPG ID": "IPG-000000034"
+      "IPG ID": "IPG-000000034",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00034"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000106",
@@ -2339,7 +2445,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-670404",
       "Electronic Address": "luca.vitale@mail.it",
-      "IPG ID": "IPG-000000035"
+      "IPG ID": "IPG-000000035",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00035"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000107",
@@ -2361,7 +2468,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-670404",
       "Electronic Address": "luca.vitale@mail.it",
-      "IPG ID": "IPG-000000035"
+      "IPG ID": "IPG-000000035",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00035"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000108",
@@ -2383,7 +2491,8 @@
       "Tax ID": "NL48U228302B",
       "idDocumentNumber": "DOC-NL-864944",
       "Electronic Address": "aisha.moretti@mail.nl",
-      "IPG ID": "IPG-000000036"
+      "IPG ID": "IPG-000000036",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00036"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000109",
@@ -2405,7 +2514,8 @@
       "Tax ID": "NL48U228302B",
       "idDocumentNumber": "DOC-NL-864944",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000036"
+      "IPG ID": "IPG-000000036",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00036"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000110",
@@ -2427,7 +2537,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-261163",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000037"
+      "IPG ID": "IPG-000000037",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00037"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000111",
@@ -2449,7 +2560,8 @@
       "Tax ID": "IT47Y250355X",
       "idDocumentNumber": null,
       "Electronic Address": "giulia_ferri@mail.it",
-      "IPG ID": "IPG-000000037"
+      "IPG ID": "IPG-000000037",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00037"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000112",
@@ -2471,7 +2583,8 @@
       "Tax ID": "IT47Y250355X",
       "idDocumentNumber": "DOC-IT-261163",
       "Electronic Address": "giulia.ferri@mail.it",
-      "IPG ID": "IPG-000000037"
+      "IPG ID": "IPG-000000037",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00037"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000113",
@@ -2493,7 +2606,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000037"
+      "IPG ID": "IPG-000000037",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00037"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000114",
@@ -2515,7 +2629,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-647814",
       "Electronic Address": "jonas.novak@mail.it",
-      "IPG ID": "IPG-000000038"
+      "IPG ID": "IPG-000000038",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00038"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000115",
@@ -2537,7 +2652,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-647814",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000038"
+      "IPG ID": "IPG-000000038",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00038"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000116",
@@ -2559,7 +2675,8 @@
       "Tax ID": "IT58F391474X",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000038"
+      "IPG ID": "IPG-000000038",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00038"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000117",
@@ -2581,7 +2698,8 @@
       "Tax ID": "AE164077828",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000039"
+      "IPG ID": "IPG-000000039",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00039"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000118",
@@ -2603,7 +2721,8 @@
       "Tax ID": "AE164077828",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-media-sa.ae",
-      "IPG ID": "IPG-000000039"
+      "IPG ID": "IPG-000000039",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00039"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000119",
@@ -2625,7 +2744,8 @@
       "Tax ID": "AE164077828",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-media-sa.ae",
-      "IPG ID": "IPG-000000039"
+      "IPG ID": "IPG-000000039",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00039"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000120",
@@ -2647,7 +2767,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "liam.williams@mail.de",
-      "IPG ID": "IPG-000000040"
+      "IPG ID": "IPG-000000040",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000121",
@@ -2669,7 +2790,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000040"
+      "IPG ID": "IPG-000000040",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000122",
@@ -2691,7 +2813,8 @@
       "Tax ID": "DE94R715923B",
       "idDocumentNumber": null,
       "Electronic Address": "liam.williams@mail.de",
-      "IPG ID": "IPG-000000040"
+      "IPG ID": "IPG-000000040",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000123",
@@ -2713,7 +2836,8 @@
       "Tax ID": "IT621232267",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000041"
+      "IPG ID": "IPG-000000041",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00041"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000124",
@@ -2735,7 +2859,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000041"
+      "IPG ID": "IPG-000000041",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00041"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000125",
@@ -2757,7 +2882,8 @@
       "Tax ID": "IT621232267",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.bluewave-pharma-pte.it",
-      "IPG ID": "IPG-000000041"
+      "IPG ID": "IPG-000000041",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00041"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000126",
@@ -2779,7 +2905,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-378090",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000042"
+      "IPG ID": "IPG-000000042",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00042"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000127",
@@ -2801,7 +2928,8 @@
       "Tax ID": "US16V244956C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000042"
+      "IPG ID": "IPG-000000042",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00042"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000128",
@@ -2823,7 +2951,8 @@
       "Tax ID": "ES77S543270V",
       "idDocumentNumber": "DOC-ES-624009",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000043"
+      "IPG ID": "IPG-000000043",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00043"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000129",
@@ -2845,7 +2974,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-624009",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000043"
+      "IPG ID": "IPG-000000043",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00043"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000130",
@@ -2867,7 +2997,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "miguel.conti@mail.es",
-      "IPG ID": "IPG-000000043"
+      "IPG ID": "IPG-000000043",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00043"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000131",
@@ -2889,7 +3020,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-624009",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000043"
+      "IPG ID": "IPG-000000043",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00043"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000132",
@@ -2911,7 +3043,8 @@
       "Tax ID": "DE90D718171L",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000044"
+      "IPG ID": "IPG-000000044",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00044"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000133",
@@ -2933,7 +3066,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-234553",
       "Electronic Address": "liam.rossi@mail.de",
-      "IPG ID": "IPG-000000044"
+      "IPG ID": "IPG-000000044",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00044"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000134",
@@ -2955,7 +3089,8 @@
       "Tax ID": "DE90D718171L",
       "idDocumentNumber": "DOC-DE-234553",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000044"
+      "IPG ID": "IPG-000000044",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00044"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000135",
@@ -2977,7 +3112,8 @@
       "Tax ID": "NL96D704799J",
       "idDocumentNumber": null,
       "Electronic Address": "elena.bianchi@mail.nl",
-      "IPG ID": "IPG-000000045"
+      "IPG ID": "IPG-000000045",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00045"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000136",
@@ -2999,7 +3135,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-868035",
       "Electronic Address": "elena_bianchi@mail.nl",
-      "IPG ID": "IPG-000000045"
+      "IPG ID": "IPG-000000045",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00045"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000137",
@@ -3021,7 +3158,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-868035",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000045"
+      "IPG ID": "IPG-000000045",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00045"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000138",
@@ -3043,7 +3181,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ana.lopez@mail.it",
-      "IPG ID": "IPG-000000046"
+      "IPG ID": "IPG-000000046",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00046"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000139",
@@ -3065,7 +3204,8 @@
       "Tax ID": "IT48Q555090J",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000046"
+      "IPG ID": "IPG-000000046",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00046"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000140",
@@ -3087,7 +3227,8 @@
       "Tax ID": "IT48Q555090J",
       "idDocumentNumber": "DOC-IT-722558",
       "Electronic Address": "ana.lopez@mail.it",
-      "IPG ID": "IPG-000000046"
+      "IPG ID": "IPG-000000046",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00046"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000141",
@@ -3109,7 +3250,8 @@
       "Tax ID": "CH98N481075V",
       "idDocumentNumber": null,
       "Electronic Address": "hiro.miller@mail.ch",
-      "IPG ID": "IPG-000000047"
+      "IPG ID": "IPG-000000047",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00047"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000142",
@@ -3131,7 +3273,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CH-240277",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000047"
+      "IPG ID": "IPG-000000047",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00047"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000143",
@@ -3153,7 +3296,8 @@
       "Tax ID": "US65S427949Q",
       "idDocumentNumber": "DOC-US-418592",
       "Electronic Address": "elena.neri@mail.com",
-      "IPG ID": "IPG-000000048"
+      "IPG ID": "IPG-000000048",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00048"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000144",
@@ -3175,7 +3319,8 @@
       "Tax ID": "US65S427949Q",
       "idDocumentNumber": null,
       "Electronic Address": "elena_neri@mail.com",
-      "IPG ID": "IPG-000000048"
+      "IPG ID": "IPG-000000048",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00048"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000145",
@@ -3197,7 +3342,8 @@
       "Tax ID": "US65S427949Q",
       "idDocumentNumber": null,
       "Electronic Address": "elena.neri@mail.com",
-      "IPG ID": "IPG-000000048"
+      "IPG ID": "IPG-000000048",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00048"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000146",
@@ -3219,7 +3365,8 @@
       "Tax ID": "GB75O491992L",
       "idDocumentNumber": null,
       "Electronic Address": "omar.lefevre@mail.co.uk",
-      "IPG ID": "IPG-000000049"
+      "IPG ID": "IPG-000000049",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00049"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000147",
@@ -3241,7 +3388,8 @@
       "Tax ID": "GB75O491992L",
       "idDocumentNumber": "DOC-GB-475303",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000049"
+      "IPG ID": "IPG-000000049",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00049"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000148",
@@ -3263,7 +3411,8 @@
       "Tax ID": "GB75O491992L",
       "idDocumentNumber": "DOC-GB-475303",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000049"
+      "IPG ID": "IPG-000000049",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00049"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000149",
@@ -3285,7 +3434,8 @@
       "Tax ID": "GB75O491992L",
       "idDocumentNumber": null,
       "Electronic Address": "omar.lefevre@mail.co.uk",
-      "IPG ID": "IPG-000000049"
+      "IPG ID": "IPG-000000049",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00049"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000150",
@@ -3307,7 +3457,8 @@
       "Tax ID": "CA94W253447I",
       "idDocumentNumber": null,
       "Electronic Address": "sofia.vitale@mail.ca",
-      "IPG ID": "IPG-000000050"
+      "IPG ID": "IPG-000000050",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00050"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000151",
@@ -3329,7 +3480,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "sofia.vitale@mail.ca",
-      "IPG ID": "IPG-000000050"
+      "IPG ID": "IPG-000000050",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00050"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000152",
@@ -3351,7 +3503,8 @@
       "Tax ID": "CA94W253447I",
       "idDocumentNumber": "DOC-CA-870858",
       "Electronic Address": "sofia.vitale@mail.ca",
-      "IPG ID": "IPG-000000050"
+      "IPG ID": "IPG-000000050",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00050"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000153",
@@ -3373,7 +3526,8 @@
       "Tax ID": "CA94W253447I",
       "idDocumentNumber": null,
       "Electronic Address": "sofia.vitale@mail.ca",
-      "IPG ID": "IPG-000000050"
+      "IPG ID": "IPG-000000050",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00050"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000154",
@@ -3395,7 +3549,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-546351",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000051"
+      "IPG ID": "IPG-000000051",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00051"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000155",
@@ -3417,7 +3572,8 @@
       "Tax ID": "IT29L270914C",
       "idDocumentNumber": null,
       "Electronic Address": "luca.conti@mail.it",
-      "IPG ID": "IPG-000000051"
+      "IPG ID": "IPG-000000051",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00051"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000156",
@@ -3439,7 +3595,8 @@
       "Tax ID": "IT29L270914C",
       "idDocumentNumber": "DOC-IT-546351",
       "Electronic Address": "luca.conti@mail.it",
-      "IPG ID": "IPG-000000051"
+      "IPG ID": "IPG-000000051",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00051"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000157",
@@ -3461,7 +3618,8 @@
       "Tax ID": "GB96A361511X",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000052"
+      "IPG ID": "IPG-000000052",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00052"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000158",
@@ -3483,7 +3641,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-GB-893976",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000052"
+      "IPG ID": "IPG-000000052",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00052"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000159",
@@ -3505,7 +3664,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-747169",
       "Electronic Address": "marta.dubois@mail.com",
-      "IPG ID": "IPG-000000053"
+      "IPG ID": "IPG-000000053",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00053"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000160",
@@ -3527,7 +3687,8 @@
       "Tax ID": "US16G710799C",
       "idDocumentNumber": "DOC-US-747169",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000053"
+      "IPG ID": "IPG-000000053",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00053"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000161",
@@ -3549,7 +3710,8 @@
       "Tax ID": "CH827184163",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-pharma-gmbh.ch",
-      "IPG ID": "IPG-000000054"
+      "IPG ID": "IPG-000000054",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00054"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000162",
@@ -3571,7 +3733,8 @@
       "Tax ID": "CH827184163",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000054"
+      "IPG ID": "IPG-000000054",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00054"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000163",
@@ -3593,7 +3756,8 @@
       "Tax ID": "ES681061217",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.nimbus-trading-bv.es",
-      "IPG ID": "IPG-000000055"
+      "IPG ID": "IPG-000000055",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00055"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000164",
@@ -3615,7 +3779,8 @@
       "Tax ID": "ES681061217",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000055"
+      "IPG ID": "IPG-000000055",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00055"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000165",
@@ -3637,7 +3802,8 @@
       "Tax ID": "ES681061217",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000055"
+      "IPG ID": "IPG-000000055",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00055"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000166",
@@ -3659,7 +3825,8 @@
       "Tax ID": "GB15E103182J",
       "idDocumentNumber": "DOC-GB-270808",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000056"
+      "IPG ID": "IPG-000000056",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00056"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000167",
@@ -3681,7 +3848,8 @@
       "Tax ID": "GB15E103182J",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000056"
+      "IPG ID": "IPG-000000056",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00056"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000168",
@@ -3703,7 +3871,8 @@
       "Tax ID": "GB15E103182J",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000056"
+      "IPG ID": "IPG-000000056",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00056"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000169",
@@ -3725,7 +3894,8 @@
       "Tax ID": "AU397069929",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000057"
+      "IPG ID": "IPG-000000057",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00057"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000170",
@@ -3747,7 +3917,8 @@
       "Tax ID": "AU397069929",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000057"
+      "IPG ID": "IPG-000000057",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00057"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000171",
@@ -3769,7 +3940,8 @@
       "Tax ID": "CH599384331",
       "idDocumentNumber": null,
       "Electronic Address": "contact@bluewave-healthcare-pte.ch",
-      "IPG ID": "IPG-000000058"
+      "IPG ID": "IPG-000000058",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00058"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000172",
@@ -3791,7 +3963,8 @@
       "Tax ID": "CH599384331",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000058"
+      "IPG ID": "IPG-000000058",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00058"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000173",
@@ -3813,7 +3986,8 @@
       "Tax ID": "CH27N561562C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000059"
+      "IPG ID": "IPG-000000059",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00059"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000174",
@@ -3835,7 +4009,8 @@
       "Tax ID": "CH27N561562C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000059"
+      "IPG ID": "IPG-000000059",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00059"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000175",
@@ -3857,7 +4032,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000059"
+      "IPG ID": "IPG-000000059",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00059"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000176",
@@ -3879,7 +4055,8 @@
       "Tax ID": "FR84Y978714O",
       "idDocumentNumber": null,
       "Electronic Address": "leila.martinez@mail.fr",
-      "IPG ID": "IPG-000000060"
+      "IPG ID": "IPG-000000060",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00060"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000177",
@@ -3901,7 +4078,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000060"
+      "IPG ID": "IPG-000000060",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00060"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000178",
@@ -3923,7 +4101,8 @@
       "Tax ID": "CA370170700",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000061"
+      "IPG ID": "IPG-000000061",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00061"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000179",
@@ -3945,7 +4124,8 @@
       "Tax ID": "CA370170700",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000061"
+      "IPG ID": "IPG-000000061",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00061"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000180",
@@ -3967,7 +4147,8 @@
       "Tax ID": "CA370170700",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000061"
+      "IPG ID": "IPG-000000061",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00061"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000181",
@@ -3989,7 +4170,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-684282",
       "Electronic Address": "omar.bianchi@mail.nl",
-      "IPG ID": "IPG-000000062"
+      "IPG ID": "IPG-000000062",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00062"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000182",
@@ -4011,7 +4193,8 @@
       "Tax ID": "NL96F427795E",
       "idDocumentNumber": null,
       "Electronic Address": "omar_bianchi@mail.nl",
-      "IPG ID": "IPG-000000062"
+      "IPG ID": "IPG-000000062",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00062"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000183",
@@ -4033,7 +4216,8 @@
       "Tax ID": "GB23S157918V",
       "idDocumentNumber": "DOC-GB-370814",
       "Electronic Address": "samuel.bianchi@mail.co.uk",
-      "IPG ID": "IPG-000000063"
+      "IPG ID": "IPG-000000063",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00063"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000184",
@@ -4055,7 +4239,8 @@
       "Tax ID": "GB23S157918V",
       "idDocumentNumber": "DOC-GB-370814",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000063"
+      "IPG ID": "IPG-000000063",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00063"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000185",
@@ -4077,7 +4262,8 @@
       "Tax ID": "GB23S157918V",
       "idDocumentNumber": "DOC-GB-370814",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000063"
+      "IPG ID": "IPG-000000063",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00063"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000186",
@@ -4099,7 +4285,8 @@
       "Tax ID": "CH98Q352001Q",
       "idDocumentNumber": null,
       "Electronic Address": "leon.miller@mail.ch",
-      "IPG ID": "IPG-000000064"
+      "IPG ID": "IPG-000000064",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00064"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000187",
@@ -4121,7 +4308,8 @@
       "Tax ID": "CH98Q352001Q",
       "idDocumentNumber": "DOC-CH-383586",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000064"
+      "IPG ID": "IPG-000000064",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00064"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000188",
@@ -4143,7 +4331,8 @@
       "Tax ID": "CH98Q352001Q",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000064"
+      "IPG ID": "IPG-000000064",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00064"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000189",
@@ -4165,7 +4354,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "carlos.williams@mail.fr",
-      "IPG ID": "IPG-000000065"
+      "IPG ID": "IPG-000000065",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00065"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000190",
@@ -4187,7 +4377,8 @@
       "Tax ID": "FR68N550112Q",
       "idDocumentNumber": null,
       "Electronic Address": "carlos_williams@mail.fr",
-      "IPG ID": "IPG-000000065"
+      "IPG ID": "IPG-000000065",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00065"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000191",
@@ -4209,7 +4400,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-pharma-llc.sg",
-      "IPG ID": "IPG-000000066"
+      "IPG ID": "IPG-000000066",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00066"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000192",
@@ -4231,7 +4423,8 @@
       "Tax ID": "SG166941129",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000066"
+      "IPG ID": "IPG-000000066",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00066"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000193",
@@ -4253,7 +4446,8 @@
       "Tax ID": "SG166941129",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-pharma-llc.sg",
-      "IPG ID": "IPG-000000066"
+      "IPG ID": "IPG-000000066",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00066"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000194",
@@ -4275,7 +4469,8 @@
       "Tax ID": "SG166941129",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-pharma-llc.sg",
-      "IPG ID": "IPG-000000066"
+      "IPG ID": "IPG-000000066",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00066"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000195",
@@ -4297,7 +4492,8 @@
       "Tax ID": "ES66L106176E",
       "idDocumentNumber": null,
       "Electronic Address": "julia.taylor@mail.es",
-      "IPG ID": "IPG-000000067"
+      "IPG ID": "IPG-000000067",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00067"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000196",
@@ -4319,7 +4515,8 @@
       "Tax ID": "ES66L106176E",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000067"
+      "IPG ID": "IPG-000000067",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00067"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000197",
@@ -4341,7 +4538,8 @@
       "Tax ID": "GB171787918",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000068"
+      "IPG ID": "IPG-000000068",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00068"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000198",
@@ -4363,7 +4561,8 @@
       "Tax ID": "GB171787918",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-solutions-ag.co.uk",
-      "IPG ID": "IPG-000000068"
+      "IPG ID": "IPG-000000068",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00068"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000199",
@@ -4385,7 +4584,8 @@
       "Tax ID": "GB171787918",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000068"
+      "IPG ID": "IPG-000000068",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00068"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000200",
@@ -4407,7 +4607,8 @@
       "Tax ID": "AU45F108504A",
       "idDocumentNumber": "DOC-AU-293280",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000069"
+      "IPG ID": "IPG-000000069",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00069"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000201",
@@ -4429,7 +4630,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000069"
+      "IPG ID": "IPG-000000069",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00069"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000202",
@@ -4451,7 +4653,8 @@
       "Tax ID": "AU45F108504A",
       "idDocumentNumber": "DOC-AU-293280",
       "Electronic Address": "emma.moretti@mail.au",
-      "IPG ID": "IPG-000000069"
+      "IPG ID": "IPG-000000069",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00069"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000203",
@@ -4473,7 +4676,8 @@
       "Tax ID": "AU45F108504A",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000069"
+      "IPG ID": "IPG-000000069",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00069"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000204",
@@ -4495,7 +4699,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AE-103907",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000070"
+      "IPG ID": "IPG-000000070",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00070"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000205",
@@ -4517,7 +4722,8 @@
       "Tax ID": "AE61B270938Z",
       "idDocumentNumber": null,
       "Electronic Address": "ana.schmidt@mail.ae",
-      "IPG ID": "IPG-000000070"
+      "IPG ID": "IPG-000000070",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00070"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000206",
@@ -4539,7 +4745,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AE-103907",
       "Electronic Address": "ana_schmidt@mail.ae",
-      "IPG ID": "IPG-000000070"
+      "IPG ID": "IPG-000000070",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00070"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000207",
@@ -4561,7 +4768,8 @@
       "Tax ID": "AE61B270938Z",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000070"
+      "IPG ID": "IPG-000000070",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00070"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000208",
@@ -4583,7 +4791,8 @@
       "Tax ID": "GB13H251739N",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000071"
+      "IPG ID": "IPG-000000071",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00071"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000209",
@@ -4605,7 +4814,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "elena.johnson@mail.co.uk",
-      "IPG ID": "IPG-000000071"
+      "IPG ID": "IPG-000000071",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00071"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000210",
@@ -4627,7 +4837,8 @@
       "Tax ID": "AE43C922489R",
       "idDocumentNumber": "DOC-AE-262599",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000072"
+      "IPG ID": "IPG-000000072",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00072"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000211",
@@ -4649,7 +4860,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000072"
+      "IPG ID": "IPG-000000072",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00072"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000212",
@@ -4671,7 +4883,8 @@
       "Tax ID": "AE43C922489R",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000072"
+      "IPG ID": "IPG-000000072",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00072"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000213",
@@ -4693,7 +4906,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "olivia.lopez@mail.es",
-      "IPG ID": "IPG-000000073"
+      "IPG ID": "IPG-000000073",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00073"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000214",
@@ -4715,7 +4929,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000073"
+      "IPG ID": "IPG-000000073",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00073"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000215",
@@ -4737,7 +4952,8 @@
       "Tax ID": "ES40F923494N",
       "idDocumentNumber": "DOC-ES-625092",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000073"
+      "IPG ID": "IPG-000000073",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00073"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000216",
@@ -4759,7 +4975,8 @@
       "Tax ID": "CA999885422",
       "idDocumentNumber": null,
       "Electronic Address": "contact@summit-trading-inc.ca",
-      "IPG ID": "IPG-000000074"
+      "IPG ID": "IPG-000000074",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00074"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000217",
@@ -4781,7 +4998,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000074"
+      "IPG ID": "IPG-000000074",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00074"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000218",
@@ -4803,7 +5021,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000074"
+      "IPG ID": "IPG-000000074",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00074"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000219",
@@ -4825,7 +5044,8 @@
       "Tax ID": "CA999885422",
       "idDocumentNumber": null,
       "Electronic Address": "contact@summit-trading-inc.ca",
-      "IPG ID": "IPG-000000074"
+      "IPG ID": "IPG-000000074",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00074"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000220",
@@ -4847,7 +5067,8 @@
       "Tax ID": "FR407825430",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000075"
+      "IPG ID": "IPG-000000075",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00075"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000221",
@@ -4869,7 +5090,8 @@
       "Tax ID": "FR407825430",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000075"
+      "IPG ID": "IPG-000000075",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00075"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000222",
@@ -4891,7 +5113,8 @@
       "Tax ID": "SG16Y887907J",
       "idDocumentNumber": "DOC-SG-977932",
       "Electronic Address": "liam.taylor@mail.sg",
-      "IPG ID": "IPG-000000076"
+      "IPG ID": "IPG-000000076",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00076"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000223",
@@ -4913,7 +5136,8 @@
       "Tax ID": "SG16Y887907J",
       "idDocumentNumber": "DOC-SG-977932",
       "Electronic Address": "liam.taylor@mail.sg",
-      "IPG ID": "IPG-000000076"
+      "IPG ID": "IPG-000000076",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00076"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000224",
@@ -4935,7 +5159,8 @@
       "Tax ID": "SG16Y887907J",
       "idDocumentNumber": "DOC-SG-977932",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000076"
+      "IPG ID": "IPG-000000076",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00076"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000225",
@@ -4957,7 +5182,8 @@
       "Tax ID": "SG16Y887907J",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000076"
+      "IPG ID": "IPG-000000076",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00076"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000226",
@@ -4979,7 +5205,8 @@
       "Tax ID": "DE59A470877L",
       "idDocumentNumber": "DOC-DE-473718",
       "Electronic Address": "davide.vitale@mail.de",
-      "IPG ID": "IPG-000000077"
+      "IPG ID": "IPG-000000077",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00077"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000227",
@@ -5001,7 +5228,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "davide.vitale@mail.de",
-      "IPG ID": "IPG-000000077"
+      "IPG ID": "IPG-000000077",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00077"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000228",
@@ -5023,7 +5251,8 @@
       "Tax ID": "NL33X110337C",
       "idDocumentNumber": "DOC-NL-869042",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000078"
+      "IPG ID": "IPG-000000078",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00078"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000229",
@@ -5045,7 +5274,8 @@
       "Tax ID": "NL33X110337C",
       "idDocumentNumber": "DOC-NL-869042",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000078"
+      "IPG ID": "IPG-000000078",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00078"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000230",
@@ -5067,7 +5297,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AU-109743",
       "Electronic Address": "carlos.neri@mail.au",
-      "IPG ID": "IPG-000000079"
+      "IPG ID": "IPG-000000079",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00079"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000231",
@@ -5089,7 +5320,8 @@
       "Tax ID": "AU76M222109Z",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000079"
+      "IPG ID": "IPG-000000079",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00079"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000232",
@@ -5111,7 +5343,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AU-949337",
       "Electronic Address": "nina.brown@mail.au",
-      "IPG ID": "IPG-000000080"
+      "IPG ID": "IPG-000000080",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00080"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000233",
@@ -5133,7 +5366,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "nina.brown@mail.au",
-      "IPG ID": "IPG-000000080"
+      "IPG ID": "IPG-000000080",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00080"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000234",
@@ -5155,7 +5389,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AU-949337",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000080"
+      "IPG ID": "IPG-000000080",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00080"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000235",
@@ -5177,7 +5412,8 @@
       "Tax ID": "NL49Q505758Y",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000081"
+      "IPG ID": "IPG-000000081",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00081"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000236",
@@ -5199,7 +5435,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "liam.williams@mail.nl",
-      "IPG ID": "IPG-000000081"
+      "IPG ID": "IPG-000000081",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00081"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000237",
@@ -5221,7 +5458,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000081"
+      "IPG ID": "IPG-000000081",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00081"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000238",
@@ -5243,7 +5481,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000082"
+      "IPG ID": "IPG-000000082",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00082"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000239",
@@ -5265,7 +5504,8 @@
       "Tax ID": "ES94R673138F",
       "idDocumentNumber": "DOC-ES-253556",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000082"
+      "IPG ID": "IPG-000000082",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00082"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000240",
@@ -5287,7 +5527,8 @@
       "Tax ID": "ES94R673138F",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000082"
+      "IPG ID": "IPG-000000082",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00082"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000241",
@@ -5309,7 +5550,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000083"
+      "IPG ID": "IPG-000000083",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00083"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000242",
@@ -5331,7 +5573,8 @@
       "Tax ID": "FR56Z574503T",
       "idDocumentNumber": "DOC-FR-498511",
       "Electronic Address": "sofia.ferri@mail.fr",
-      "IPG ID": "IPG-000000083"
+      "IPG ID": "IPG-000000083",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00083"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000243",
@@ -5353,7 +5596,8 @@
       "Tax ID": "FR56Z574503T",
       "idDocumentNumber": "DOC-FR-498511",
       "Electronic Address": "sofia.ferri@mail.fr",
-      "IPG ID": "IPG-000000083"
+      "IPG ID": "IPG-000000083",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00083"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000244",
@@ -5375,7 +5619,8 @@
       "Tax ID": "ES48Z287119W",
       "idDocumentNumber": null,
       "Electronic Address": "ari.johnson@mail.es",
-      "IPG ID": "IPG-000000084"
+      "IPG ID": "IPG-000000084",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00084"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000245",
@@ -5397,7 +5642,8 @@
       "Tax ID": "ES48Z287119W",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000084"
+      "IPG ID": "IPG-000000084",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00084"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000246",
@@ -5419,7 +5665,8 @@
       "Tax ID": "DE95O950407L",
       "idDocumentNumber": null,
       "Electronic Address": "nina.lefevre@mail.de",
-      "IPG ID": "IPG-000000085"
+      "IPG ID": "IPG-000000085",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00085"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000247",
@@ -5441,7 +5688,8 @@
       "Tax ID": "DE95O950407L",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000085"
+      "IPG ID": "IPG-000000085",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00085"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000248",
@@ -5463,7 +5711,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.crescent-holdings-bv.com",
-      "IPG ID": "IPG-000000086"
+      "IPG ID": "IPG-000000086",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00086"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000249",
@@ -5485,7 +5734,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000086"
+      "IPG ID": "IPG-000000086",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00086"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000250",
@@ -5507,7 +5757,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AE-629840",
       "Electronic Address": "hiro.smith@mail.ae",
-      "IPG ID": "IPG-000000087"
+      "IPG ID": "IPG-000000087",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00087"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000251",
@@ -5529,7 +5780,8 @@
       "Tax ID": "AE70M537587I",
       "idDocumentNumber": "DOC-AE-629840",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000087"
+      "IPG ID": "IPG-000000087",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00087"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000252",
@@ -5551,7 +5803,8 @@
       "Tax ID": "FR243612691",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-partners-pte.fr",
-      "IPG ID": "IPG-000000088"
+      "IPG ID": "IPG-000000088",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00088"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000253",
@@ -5573,7 +5826,8 @@
       "Tax ID": "FR243612691",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-partners-pte.fr",
-      "IPG ID": "IPG-000000088"
+      "IPG ID": "IPG-000000088",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00088"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000254",
@@ -5595,7 +5849,8 @@
       "Tax ID": "FR243612691",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000088"
+      "IPG ID": "IPG-000000088",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00088"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000255",
@@ -5617,7 +5872,8 @@
       "Tax ID": "FR243612691",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-partners-pte.fr",
-      "IPG ID": "IPG-000000088"
+      "IPG ID": "IPG-000000088",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00088"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000256",
@@ -5639,7 +5895,8 @@
       "Tax ID": "DE31G951433A",
       "idDocumentNumber": null,
       "Electronic Address": "leila.keller@mail.de",
-      "IPG ID": "IPG-000000089"
+      "IPG ID": "IPG-000000089",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00089"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000257",
@@ -5661,7 +5918,8 @@
       "Tax ID": "DE31G951433A",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000089"
+      "IPG ID": "IPG-000000089",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00089"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000258",
@@ -5683,7 +5941,8 @@
       "Tax ID": "DE232471455",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.harbor-healthcare-ag.de",
-      "IPG ID": "IPG-000000090"
+      "IPG ID": "IPG-000000090",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00090"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000259",
@@ -5705,7 +5964,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.harbor-healthcare-ag.de",
-      "IPG ID": "IPG-000000090"
+      "IPG ID": "IPG-000000090",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00090"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000260",
@@ -5727,7 +5987,8 @@
       "Tax ID": "DE232471455",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.harbor-healthcare-ag.de",
-      "IPG ID": "IPG-000000090"
+      "IPG ID": "IPG-000000090",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00090"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000261",
@@ -5749,7 +6010,8 @@
       "Tax ID": "IT49E794633V",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000091"
+      "IPG ID": "IPG-000000091",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00091"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000262",
@@ -5771,7 +6033,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "jonas.ferri@mail.it",
-      "IPG ID": "IPG-000000091"
+      "IPG ID": "IPG-000000091",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00091"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000263",
@@ -5793,7 +6056,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-694831",
       "Electronic Address": "elena.ferri@mail.de",
-      "IPG ID": "IPG-000000092"
+      "IPG ID": "IPG-000000092",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00092"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000264",
@@ -5815,7 +6079,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-694831",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000092"
+      "IPG ID": "IPG-000000092",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00092"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000265",
@@ -5837,7 +6102,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "elena.ferri@mail.de",
-      "IPG ID": "IPG-000000092"
+      "IPG ID": "IPG-000000092",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00092"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000266",
@@ -5859,7 +6125,8 @@
       "Tax ID": "ES56Q644157L",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000093"
+      "IPG ID": "IPG-000000093",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00093"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000267",
@@ -5881,7 +6148,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "olivia_bianchi@mail.es",
-      "IPG ID": "IPG-000000093"
+      "IPG ID": "IPG-000000093",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00093"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000268",
@@ -5903,7 +6171,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CH-679559",
       "Electronic Address": "ethan.brown@mail.ch",
-      "IPG ID": "IPG-000000094"
+      "IPG ID": "IPG-000000094",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00094"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000269",
@@ -5925,7 +6194,8 @@
       "Tax ID": "CH34Q310854A",
       "idDocumentNumber": null,
       "Electronic Address": "ethan.brown@mail.ch",
-      "IPG ID": "IPG-000000094"
+      "IPG ID": "IPG-000000094",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00094"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000270",
@@ -5947,7 +6217,8 @@
       "Tax ID": "CH34Q310854A",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000094"
+      "IPG ID": "IPG-000000094",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00094"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000271",
@@ -5969,7 +6240,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000095"
+      "IPG ID": "IPG-000000095",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00095"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000272",
@@ -5991,7 +6263,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ana.rahman@mail.de",
-      "IPG ID": "IPG-000000095"
+      "IPG ID": "IPG-000000095",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00095"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000273",
@@ -6013,7 +6286,8 @@
       "Tax ID": "DE44K532915M",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000095"
+      "IPG ID": "IPG-000000095",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00095"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000274",
@@ -6035,7 +6309,8 @@
       "Tax ID": "SG254912692",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000096"
+      "IPG ID": "IPG-000000096",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00096"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000275",
@@ -6057,7 +6332,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000096"
+      "IPG ID": "IPG-000000096",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00096"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000276",
@@ -6079,7 +6355,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "contact@summit-networks-bv.sg",
-      "IPG ID": "IPG-000000096"
+      "IPG ID": "IPG-000000096",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00096"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000277",
@@ -6101,7 +6378,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000097"
+      "IPG ID": "IPG-000000097",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00097"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000278",
@@ -6123,7 +6401,8 @@
       "Tax ID": "GB441655883",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-advisory-llc.co.uk",
-      "IPG ID": "IPG-000000097"
+      "IPG ID": "IPG-000000097",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00097"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000279",
@@ -6145,7 +6424,8 @@
       "Tax ID": "GB441655883",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-advisory-llc.co.uk",
-      "IPG ID": "IPG-000000097"
+      "IPG ID": "IPG-000000097",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00097"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000280",
@@ -6167,7 +6447,8 @@
       "Tax ID": "DE698990044",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000098"
+      "IPG ID": "IPG-000000098",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00098"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000281",
@@ -6189,7 +6470,8 @@
       "Tax ID": "DE698990044",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.aurora-consulting-sa.de",
-      "IPG ID": "IPG-000000098"
+      "IPG ID": "IPG-000000098",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00098"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000282",
@@ -6211,7 +6493,8 @@
       "Tax ID": "DE698990044",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000098"
+      "IPG ID": "IPG-000000098",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00098"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000283",
@@ -6233,7 +6516,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-539392",
       "Electronic Address": "marta.schmidt@mail.sg",
-      "IPG ID": "IPG-000000099"
+      "IPG ID": "IPG-000000099",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00099"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000284",
@@ -6255,7 +6539,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000099"
+      "IPG ID": "IPG-000000099",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00099"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000285",
@@ -6277,7 +6562,8 @@
       "Tax ID": "SG23R194804L",
       "idDocumentNumber": "DOC-SG-539392",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000099"
+      "IPG ID": "IPG-000000099",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00099"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000286",
@@ -6299,7 +6585,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "marta.schmidt@mail.sg",
-      "IPG ID": "IPG-000000099"
+      "IPG ID": "IPG-000000099",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00099"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000287",
@@ -6321,7 +6608,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.global-consulting-ltd.sg",
-      "IPG ID": "IPG-000000100"
+      "IPG ID": "IPG-000000100",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00100"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000288",
@@ -6343,7 +6631,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.global-consulting-ltd.sg",
-      "IPG ID": "IPG-000000100"
+      "IPG ID": "IPG-000000100",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00100"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000289",
@@ -6365,7 +6654,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-739323",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000101"
+      "IPG ID": "IPG-000000101",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00101"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000290",
@@ -6387,7 +6677,8 @@
       "Tax ID": "SG25F721827I",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000101"
+      "IPG ID": "IPG-000000101",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00101"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000291",
@@ -6409,7 +6700,8 @@
       "Tax ID": "SG25F721827I",
       "idDocumentNumber": null,
       "Electronic Address": "emma.brown@mail.sg",
-      "IPG ID": "IPG-000000101"
+      "IPG ID": "IPG-000000101",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00101"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000292",
@@ -6431,7 +6723,8 @@
       "Tax ID": "SG25F721827I",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000101"
+      "IPG ID": "IPG-000000101",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00101"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000293",
@@ -6453,7 +6746,8 @@
       "Tax ID": "US94V791104Z",
       "idDocumentNumber": "DOC-US-502395",
       "Electronic Address": "aisha.johnson@mail.com",
-      "IPG ID": "IPG-000000102"
+      "IPG ID": "IPG-000000102",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00102"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000294",
@@ -6475,7 +6769,8 @@
       "Tax ID": "US94V791104Z",
       "idDocumentNumber": "DOC-US-502395",
       "Electronic Address": "aisha.johnson@mail.com",
-      "IPG ID": "IPG-000000102"
+      "IPG ID": "IPG-000000102",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00102"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000295",
@@ -6497,7 +6792,8 @@
       "Tax ID": "NL75J602881O",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000103"
+      "IPG ID": "IPG-000000103",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00103"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000296",
@@ -6519,7 +6815,8 @@
       "Tax ID": "NL75J602881O",
       "idDocumentNumber": "DOC-NL-563213",
       "Electronic Address": "elena.neri@mail.nl",
-      "IPG ID": "IPG-000000103"
+      "IPG ID": "IPG-000000103",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00103"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000297",
@@ -6541,7 +6838,8 @@
       "Tax ID": "NL75J602881O",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000103"
+      "IPG ID": "IPG-000000103",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00103"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000298",
@@ -6563,7 +6861,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "maya.ferri@mail.de",
-      "IPG ID": "IPG-000000104"
+      "IPG ID": "IPG-000000104",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00104"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000299",
@@ -6585,7 +6884,8 @@
       "Tax ID": "DE23N597876L",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000104"
+      "IPG ID": "IPG-000000104",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00104"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000300",
@@ -6607,7 +6907,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000104"
+      "IPG ID": "IPG-000000104",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00104"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000301",
@@ -6629,7 +6930,8 @@
       "Tax ID": "DE23N597876L",
       "idDocumentNumber": "DOC-DE-615859",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000104"
+      "IPG ID": "IPG-000000104",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00104"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000302",
@@ -6651,7 +6953,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "contact@helios-healthcare-llc.it",
-      "IPG ID": "IPG-000000105"
+      "IPG ID": "IPG-000000105",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00105"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000303",
@@ -6673,7 +6976,8 @@
       "Tax ID": "IT704440913",
       "idDocumentNumber": null,
       "Electronic Address": "contact@helios-healthcare-llc.it",
-      "IPG ID": "IPG-000000105"
+      "IPG ID": "IPG-000000105",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00105"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000304",
@@ -6695,7 +6999,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "yuki.sato@mail.ca",
-      "IPG ID": "IPG-000000106"
+      "IPG ID": "IPG-000000106",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00106"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000305",
@@ -6717,7 +7022,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CA-672888",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000106"
+      "IPG ID": "IPG-000000106",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00106"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000306",
@@ -6739,7 +7045,8 @@
       "Tax ID": "FR17H940520U",
       "idDocumentNumber": null,
       "Electronic Address": "sofia.dubois@mail.fr",
-      "IPG ID": "IPG-000000107"
+      "IPG ID": "IPG-000000107",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00107"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000307",
@@ -6761,7 +7068,8 @@
       "Tax ID": "FR17H940520U",
       "idDocumentNumber": null,
       "Electronic Address": "sofia_dubois@mail.fr",
-      "IPG ID": "IPG-000000107"
+      "IPG ID": "IPG-000000107",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00107"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000308",
@@ -6783,7 +7091,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "contact@artemis-logistics-plc.nl",
-      "IPG ID": "IPG-000000108"
+      "IPG ID": "IPG-000000108",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00108"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000309",
@@ -6805,7 +7114,8 @@
       "Tax ID": "NL105698997",
       "idDocumentNumber": null,
       "Electronic Address": "contact@artemis-logistics-plc.nl",
-      "IPG ID": "IPG-000000108"
+      "IPG ID": "IPG-000000108",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00108"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000310",
@@ -6827,7 +7137,8 @@
       "Tax ID": "NL180019961",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000109"
+      "IPG ID": "IPG-000000109",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00109"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000311",
@@ -6849,7 +7160,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-energy-sa.nl",
-      "IPG ID": "IPG-000000109"
+      "IPG ID": "IPG-000000109",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00109"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000312",
@@ -6871,7 +7183,8 @@
       "Tax ID": "DE53H512164E",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000110"
+      "IPG ID": "IPG-000000110",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00110"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000313",
@@ -6893,7 +7206,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-580696",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000110"
+      "IPG ID": "IPG-000000110",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00110"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000314",
@@ -6915,7 +7229,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-580696",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000110"
+      "IPG ID": "IPG-000000110",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00110"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000315",
@@ -6937,7 +7252,8 @@
       "Tax ID": "CA53Q891552P",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000111"
+      "IPG ID": "IPG-000000111",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00111"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000316",
@@ -6959,7 +7275,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CA-610649",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000111"
+      "IPG ID": "IPG-000000111",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00111"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000317",
@@ -6981,7 +7298,8 @@
       "Tax ID": "US60A849332I",
       "idDocumentNumber": "DOC-US-390963",
       "Electronic Address": "ari.tanaka@mail.com",
-      "IPG ID": "IPG-000000112"
+      "IPG ID": "IPG-000000112",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00112"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000318",
@@ -7003,7 +7321,8 @@
       "Tax ID": "US60A849332I",
       "idDocumentNumber": "DOC-US-390963",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000112"
+      "IPG ID": "IPG-000000112",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00112"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000319",
@@ -7025,7 +7344,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-FR-732156",
       "Electronic Address": "marta.martinez@mail.fr",
-      "IPG ID": "IPG-000000113"
+      "IPG ID": "IPG-000000113",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00113"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000320",
@@ -7047,7 +7367,8 @@
       "Tax ID": "FR20F467658K",
       "idDocumentNumber": null,
       "Electronic Address": "marta_martinez@mail.fr",
-      "IPG ID": "IPG-000000113"
+      "IPG ID": "IPG-000000113",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00113"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000321",
@@ -7069,7 +7390,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "marta.martinez@mail.fr",
-      "IPG ID": "IPG-000000113"
+      "IPG ID": "IPG-000000113",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00113"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000322",
@@ -7091,7 +7413,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000114"
+      "IPG ID": "IPG-000000114",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00114"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000323",
@@ -7113,7 +7436,8 @@
       "Tax ID": "FR68S904971D",
       "idDocumentNumber": null,
       "Electronic Address": "emma.bianchi@mail.fr",
-      "IPG ID": "IPG-000000114"
+      "IPG ID": "IPG-000000114",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00114"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000324",
@@ -7135,7 +7459,8 @@
       "Tax ID": "NL677558601",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000115"
+      "IPG ID": "IPG-000000115",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00115"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000325",
@@ -7157,7 +7482,8 @@
       "Tax ID": "NL677558601",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-maritime-sa.nl",
-      "IPG ID": "IPG-000000115"
+      "IPG ID": "IPG-000000115",
+      "SOURCE_TRUE_GROUP_ID": "TG_IPG_00115"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000326",
@@ -7179,7 +7505,8 @@
       "Tax ID": "CH47G795065C",
       "idDocumentNumber": null,
       "Electronic Address": "noah.hassan@mail.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00326"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000327",
@@ -7201,7 +7528,8 @@
       "Tax ID": "NL25C827576O",
       "idDocumentNumber": "DOC-NL-488281",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00327"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000328",
@@ -7223,7 +7551,8 @@
       "Tax ID": "US80O837860K",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00328"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000329",
@@ -7245,7 +7574,8 @@
       "Tax ID": "AE62Q417104M",
       "idDocumentNumber": null,
       "Electronic Address": "leon.taylor@mail.ae",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00329"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000330",
@@ -7267,7 +7597,8 @@
       "Tax ID": "FR25G665861K",
       "idDocumentNumber": null,
       "Electronic Address": "leila.ferri@mail.fr",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00330"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000331",
@@ -7289,7 +7620,8 @@
       "Tax ID": "IT63O688532D",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00331"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000332",
@@ -7311,7 +7643,8 @@
       "Tax ID": "ES55S656304H",
       "idDocumentNumber": "DOC-ES-532204",
       "Electronic Address": "sofia.keller@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00332"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000333",
@@ -7333,73 +7666,77 @@
       "Tax ID": "IT53S237892H",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00333"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000334",
       "partnerKeyDirBusRelExternalID": "BRL-000000334",
-      "PartnerClassCode": "C",
-      "PartnerName": "Bluewave Media Pte",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "2000-08-27",
-      "DomicileCountryCode": "SG",
-      "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Garden Boulevard",
-      "AddressResidenceIdentifier": "167",
-      "AddressPostalCode": null,
-      "AddressPostalCityName": "Singapore",
-      "LEI": null,
-      "LEM ID": null,
-      "CRN": "CRN-SG-203534",
-      "Tax ID": "SG982798290",
-      "idDocumentNumber": null,
-      "Electronic Address": "contact@bluewave-media-pte.sg",
-      "IPG ID": null
-    },
-    {
-      "externalPartnerKeyDirExternalID": "PTN-000000335",
-      "partnerKeyDirBusRelExternalID": "BRL-000000335",
       "PartnerClassCode": "I",
-      "PartnerName": "Giulia Johnson",
-      "LegalFirstName": "Giulia",
+      "PartnerName": "ANA KELLER",
+      "LegalFirstName": "Ana",
       "AdditionalName": null,
-      "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "ES",
-      "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Central Street",
-      "AddressResidenceIdentifier": "42",
-      "AddressPostalCode": null,
-      "AddressPostalCityName": "Seville",
-      "LEI": null,
-      "LEM ID": null,
-      "CRN": null,
-      "Tax ID": "ES25B633669Y",
-      "idDocumentNumber": null,
-      "Electronic Address": "giulia.johnson@mail.es",
-      "IPG ID": null
-    },
-    {
-      "externalPartnerKeyDirExternalID": "PTN-000000336",
-      "partnerKeyDirBusRelExternalID": "BRL-000000336",
-      "PartnerClassCode": "I",
-      "PartnerName": "Ethan Vitale",
-      "LegalFirstName": "Ethan",
-      "AdditionalName": "Vitale",
-      "BirthOrFoundationDate": "1956-12-26",
-      "DomicileCountryCode": "CH",
-      "PrimeNationalityCountryCode": null,
+      "BirthOrFoundationDate": "1990-07-11",
+      "DomicileCountryCode": "FR",
+      "PrimeNationalityCountryCode": "FR",
       "AddressStreetName": null,
-      "AddressResidenceIdentifier": "185",
-      "AddressPostalCode": "78555",
-      "AddressPostalCityName": null,
+      "AddressResidenceIdentifier": "106",
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Toulouse",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
       "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": "ethan.vitale@mail.ch",
-      "IPG ID": null
+      "Electronic Address": "ana.keller@mail.fr",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00006"
+    },
+    {
+      "externalPartnerKeyDirExternalID": "PTN-000000335",
+      "partnerKeyDirBusRelExternalID": "BRL-000000335",
+      "PartnerClassCode": "C",
+      "PartnerName": "Atlas Manufacturing Inc",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "1999-12-17",
+      "DomicileCountryCode": "IT",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Victoria Street",
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": "20565",
+      "AddressPostalCityName": "Rome",
+      "LEI": null,
+      "LEM ID": null,
+      "CRN": null,
+      "Tax ID": null,
+      "idDocumentNumber": null,
+      "Electronic Address": null,
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00020"
+    },
+    {
+      "externalPartnerKeyDirExternalID": "PTN-000000336",
+      "partnerKeyDirBusRelExternalID": "BRL-000000336",
+      "PartnerClassCode": "C",
+      "PartnerName": "orbit foods inc",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "2021-11-10",
+      "DomicileCountryCode": "CH",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Lake Boulevard",
+      "AddressResidenceIdentifier": "218",
+      "AddressPostalCode": "16724",
+      "AddressPostalCityName": null,
+      "LEI": "LEI-CH-911407",
+      "LEM ID": null,
+      "CRN": "CRN-CH-732594",
+      "Tax ID": null,
+      "idDocumentNumber": null,
+      "Electronic Address": "https://www.orbit-foods-inc.ch",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000337",
@@ -7421,29 +7758,31 @@
       "Tax ID": "FR113982012",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00337"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000338",
       "partnerKeyDirBusRelExternalID": "BRL-000000338",
-      "PartnerClassCode": "I",
-      "PartnerName": "Yuki Brown",
-      "LegalFirstName": "Yuki",
-      "AdditionalName": "Brown",
-      "BirthOrFoundationDate": "1957-08-01",
-      "DomicileCountryCode": "DE",
-      "PrimeNationalityCountryCode": "DE",
-      "AddressStreetName": "Cedar Road",
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": null,
+      "PartnerClassCode": "S",
+      "PartnerName": "aurora solutions gmbh",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Highland Boulevard",
+      "AddressResidenceIdentifier": "112",
+      "AddressPostalCode": "66608",
       "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "DE17T817484G",
-      "idDocumentNumber": "DOC-DE-984639",
-      "Electronic Address": "yuki.brown@mail.de",
-      "IPG ID": null
+      "Tax ID": "ES958108732",
+      "idDocumentNumber": null,
+      "Electronic Address": "https://www.aurora-solutions-gmbh.es",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00001"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000339",
@@ -7465,29 +7804,31 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00339"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000340",
       "partnerKeyDirBusRelExternalID": "BRL-000000340",
       "PartnerClassCode": "I",
-      "PartnerName": "Omar Miller",
-      "LegalFirstName": null,
-      "AdditionalName": "Miller",
-      "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "DE",
+      "PartnerName": "Ethan Costa",
+      "LegalFirstName": "Ethan",
+      "AdditionalName": "Costa",
+      "BirthOrFoundationDate": "1972-10-06",
+      "DomicileCountryCode": "CH",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Forest Road",
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": null,
+      "AddressStreetName": null,
+      "AddressResidenceIdentifier": "29",
+      "AddressPostalCode": "23914",
       "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": null,
-      "idDocumentNumber": "DOC-DE-603923",
-      "Electronic Address": null,
-      "IPG ID": null
+      "Tax ID": "CH12A124318T",
+      "idDocumentNumber": null,
+      "Electronic Address": "ethan.costa@mail.ch",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000341",
@@ -7509,51 +7850,54 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "olivia.moretti@mail.ae",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00341"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000342",
       "partnerKeyDirBusRelExternalID": "BRL-000000342",
       "PartnerClassCode": "I",
-      "PartnerName": "Nina Kovacs",
-      "LegalFirstName": "Nina",
-      "AdditionalName": "Kovacs",
-      "BirthOrFoundationDate": "1989-02-04",
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
+      "PartnerName": "Olivia Dubois",
+      "LegalFirstName": "Olivia",
+      "AdditionalName": null,
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": "ES",
       "AddressStreetName": null,
-      "AddressResidenceIdentifier": "182",
+      "AddressResidenceIdentifier": null,
       "AddressPostalCode": null,
       "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "FR19E103963A",
-      "idDocumentNumber": null,
+      "Tax ID": null,
+      "idDocumentNumber": "DOC-ES-623542",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00011"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000343",
       "partnerKeyDirBusRelExternalID": "BRL-000000343",
       "PartnerClassCode": "I",
-      "PartnerName": "Giulia Taylor",
-      "LegalFirstName": "Giulia",
-      "AdditionalName": "Taylor",
-      "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "SG",
-      "PrimeNationalityCountryCode": "SG",
-      "AddressStreetName": null,
-      "AddressResidenceIdentifier": "182",
-      "AddressPostalCode": "321224",
-      "AddressPostalCityName": null,
+      "PartnerName": "hiro lefevre",
+      "LegalFirstName": "Hiro",
+      "AdditionalName": "Lefevre",
+      "BirthOrFoundationDate": "1963-07-22",
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": "ES",
+      "AddressStreetName": "Maple Boulevard",
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Madrid",
       "LEI": null,
-      "LEM ID": "LEM-SG-275827",
+      "LEM ID": null,
       "CRN": null,
-      "Tax ID": "SG88X291365S",
-      "idDocumentNumber": null,
-      "Electronic Address": "giulia.taylor@mail.sg",
-      "IPG ID": null
+      "Tax ID": "ES36A332663W",
+      "idDocumentNumber": "DOC-ES-848638",
+      "Electronic Address": "hiro.lefevre@mail.es",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00009"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000344",
@@ -7575,7 +7919,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00344"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000345",
@@ -7597,7 +7942,8 @@
       "Tax ID": "IT212059240",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-trading-bv.it",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00345"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000346",
@@ -7619,7 +7965,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.orbit-foods-inc.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000347",
@@ -7641,29 +7988,31 @@
       "Tax ID": "ES31T485173S",
       "idDocumentNumber": "DOC-ES-366597",
       "Electronic Address": "mia.lopez@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00347"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000348",
       "partnerKeyDirBusRelExternalID": "BRL-000000348",
-      "PartnerClassCode": "S",
-      "PartnerName": "Global Analytics LLC",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "2001-06-20",
-      "DomicileCountryCode": "US",
+      "PartnerClassCode": "I",
+      "PartnerName": "elena schmidt",
+      "LegalFirstName": "Elena",
+      "AdditionalName": "Schmidt",
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "GB",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Main Avenue",
-      "AddressResidenceIdentifier": "128",
-      "AddressPostalCode": "65884",
-      "AddressPostalCityName": "Chicago",
+      "AddressStreetName": "River Lane",
+      "AddressResidenceIdentifier": "118",
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Leeds",
       "LEI": null,
       "LEM ID": null,
-      "CRN": "CRN-US-114787",
+      "CRN": null,
       "Tax ID": null,
-      "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "idDocumentNumber": "DOC-GB-130695",
+      "Electronic Address": "elena.schmidt@mail.co.uk",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000349",
@@ -7685,7 +8034,8 @@
       "Tax ID": "CA29P740435W",
       "idDocumentNumber": "DOC-CA-389356",
       "Electronic Address": "mia.ricci@mail.ca",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00349"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000350",
@@ -7707,7 +8057,8 @@
       "Tax ID": "AE98T937119C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00350"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000351",
@@ -7729,29 +8080,31 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-140405",
       "Electronic Address": "ethan.martinez@mail.com",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00351"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000352",
       "partnerKeyDirBusRelExternalID": "BRL-000000352",
       "PartnerClassCode": "I",
-      "PartnerName": "Marta Ferri",
-      "LegalFirstName": "Marta",
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "1979-06-16",
-      "DomicileCountryCode": "US",
-      "PrimeNationalityCountryCode": "US",
-      "AddressStreetName": null,
-      "AddressResidenceIdentifier": "108",
-      "AddressPostalCode": "65217",
-      "AddressPostalCityName": null,
+      "PartnerName": "Elena Schmidt",
+      "LegalFirstName": "Elena",
+      "AdditionalName": "Schmidt",
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "GB",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "River Lane",
+      "AddressResidenceIdentifier": "118",
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Leeds",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "US58B939846X",
-      "idDocumentNumber": "DOC-US-622413",
-      "Electronic Address": "marta.ferri@mail.com",
-      "IPG ID": null
+      "Tax ID": null,
+      "idDocumentNumber": "DOC-GB-130695",
+      "Electronic Address": "elena.schmidt@mail.co.uk",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000353",
@@ -7773,51 +8126,54 @@
       "Tax ID": "SG77N702866P",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00353"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000354",
       "partnerKeyDirBusRelExternalID": "BRL-000000354",
-      "PartnerClassCode": "I",
-      "PartnerName": "Noah Taylor",
-      "LegalFirstName": "Noah",
+      "PartnerClassCode": "S",
+      "PartnerName": "Aurora Solutions GmbH",
+      "LegalFirstName": null,
       "AdditionalName": null,
-      "BirthOrFoundationDate": "1977-09-22",
-      "DomicileCountryCode": "NL",
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "ES",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": null,
-      "AddressResidenceIdentifier": "169",
-      "AddressPostalCode": "19193",
-      "AddressPostalCityName": "Eindhoven",
+      "AddressStreetName": "Highland Boulevard",
+      "AddressResidenceIdentifier": "112",
+      "AddressPostalCode": "66608",
+      "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": null,
-      "idDocumentNumber": "DOC-NL-333023",
-      "Electronic Address": null,
-      "IPG ID": null
+      "Tax ID": "ES958108732",
+      "idDocumentNumber": null,
+      "Electronic Address": "https://www.aurora-solutions-gmbh.es",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00001"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000355",
       "partnerKeyDirBusRelExternalID": "BRL-000000355",
       "PartnerClassCode": "I",
-      "PartnerName": "Nina Novak",
-      "LegalFirstName": "Nina",
-      "AdditionalName": "Novak",
-      "BirthOrFoundationDate": "1999-11-06",
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
-      "AddressStreetName": "Bridge Lane",
+      "PartnerName": "Maya Brown",
+      "LegalFirstName": null,
+      "AdditionalName": "Brown",
+      "BirthOrFoundationDate": "1975-06-01",
+      "DomicileCountryCode": "IT",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Central Street",
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "38220",
-      "AddressPostalCityName": null,
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Rome",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "FR82K297827X",
-      "idDocumentNumber": "DOC-FR-391094",
-      "Electronic Address": "nina.novak@mail.fr",
-      "IPG ID": null
+      "Tax ID": "IT48P653966O",
+      "idDocumentNumber": null,
+      "Electronic Address": "maya.brown@mail.it",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000356",
@@ -7839,7 +8195,8 @@
       "Tax ID": "FR39N731637I",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00356"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000357",
@@ -7861,7 +8218,8 @@
       "Tax ID": "AU42Y196108L",
       "idDocumentNumber": "DOC-AU-325197",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00357"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000358",
@@ -7883,7 +8241,8 @@
       "Tax ID": "ES557565102",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.helios-media-inc.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00358"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000359",
@@ -7905,7 +8264,8 @@
       "Tax ID": "SG320353288",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00359"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000360",
@@ -7927,7 +8287,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "noah.ricci@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00360"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000361",
@@ -7949,7 +8310,8 @@
       "Tax ID": "SG218266753",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.cobalt-networks-inc.sg",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00361"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000362",
@@ -7971,7 +8333,8 @@
       "Tax ID": "NL356214523",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00362"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000363",
@@ -7993,7 +8356,8 @@
       "Tax ID": "GB58H460884T",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00363"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000364",
@@ -8015,7 +8379,8 @@
       "Tax ID": "AU239782175",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-advisory-ltd.au",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00364"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000365",
@@ -8037,7 +8402,8 @@
       "Tax ID": "CA880559503",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.cobalt-networks-inc.ca",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00365"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000366",
@@ -8059,7 +8425,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "contact@evergreen-maritime-pte.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00366"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000367",
@@ -8081,7 +8448,8 @@
       "Tax ID": "CH51R483763C",
       "idDocumentNumber": "DOC-CH-177255",
       "Electronic Address": "noah.keller@mail.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00367"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000368",
@@ -8103,7 +8471,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-GB-130695",
       "Electronic Address": "elena.schmidt@mail.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00013"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000369",
@@ -8125,7 +8494,8 @@
       "Tax ID": "IT12N582296V",
       "idDocumentNumber": "DOC-IT-668672",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00369"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000370",
@@ -8147,29 +8517,31 @@
       "Tax ID": "ES56T277950M",
       "idDocumentNumber": "DOC-ES-828919",
       "Electronic Address": "noah.martinez@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00370"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000371",
       "partnerKeyDirBusRelExternalID": "BRL-000000371",
-      "PartnerClassCode": "I",
-      "PartnerName": "Julia Johnson",
+      "PartnerClassCode": "C",
+      "PartnerName": "ORBIT FOODS INC",
       "LegalFirstName": null,
-      "AdditionalName": "Johnson",
-      "BirthOrFoundationDate": "1996-01-19",
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
-      "AddressStreetName": "King Street",
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "29015",
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "2021-11-10",
+      "DomicileCountryCode": "CH",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Lake Boulevard",
+      "AddressResidenceIdentifier": "218",
+      "AddressPostalCode": "16724",
       "AddressPostalCityName": null,
-      "LEI": null,
+      "LEI": "LEI-CH-911407",
       "LEM ID": null,
-      "CRN": null,
+      "CRN": "CRN-CH-732594",
       "Tax ID": null,
-      "idDocumentNumber": "DOC-FR-487931",
-      "Electronic Address": null,
-      "IPG ID": null
+      "idDocumentNumber": null,
+      "Electronic Address": "https://www.orbit-foods-inc.ch",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000372",
@@ -8191,7 +8563,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-623542",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00011"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000373",
@@ -8213,29 +8586,31 @@
       "Tax ID": "AU90U570598J",
       "idDocumentNumber": "DOC-AU-834154",
       "Electronic Address": "elena.smith@mail.au",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00373"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000374",
       "partnerKeyDirBusRelExternalID": "BRL-000000374",
       "PartnerClassCode": "I",
-      "PartnerName": "Miguel Lopez",
-      "LegalFirstName": "Miguel",
-      "AdditionalName": "Lopez",
-      "BirthOrFoundationDate": "1999-05-05",
-      "DomicileCountryCode": "US",
-      "PrimeNationalityCountryCode": "US",
+      "PartnerName": "ana keller",
+      "LegalFirstName": "Ana",
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "1990-07-11",
+      "DomicileCountryCode": "FR",
+      "PrimeNationalityCountryCode": "FR",
       "AddressStreetName": null,
-      "AddressResidenceIdentifier": null,
+      "AddressResidenceIdentifier": "106",
       "AddressPostalCode": null,
-      "AddressPostalCityName": "New York",
+      "AddressPostalCityName": "Toulouse",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
       "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Electronic Address": "ana.keller@mail.fr",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00006"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000375",
@@ -8257,7 +8632,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.orbit-engineering-pte.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00375"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000376",
@@ -8279,7 +8655,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00376"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000377",
@@ -8301,7 +8678,8 @@
       "Tax ID": "SG20X109247W",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00377"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000378",
@@ -8323,29 +8701,31 @@
       "Tax ID": "FR525406467",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00378"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000379",
       "partnerKeyDirBusRelExternalID": "BRL-000000379",
       "PartnerClassCode": "I",
-      "PartnerName": "Leon Gallo",
-      "LegalFirstName": "Leon",
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "1984-07-13",
-      "DomicileCountryCode": "GB",
+      "PartnerName": "Mia Keller",
+      "LegalFirstName": "Mia",
+      "AdditionalName": "Keller",
+      "BirthOrFoundationDate": "1988-10-02",
+      "DomicileCountryCode": "AU",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Forest Lane",
+      "AddressStreetName": "Park Street",
       "AddressResidenceIdentifier": null,
       "AddressPostalCode": null,
-      "AddressPostalCityName": "Bristol",
+      "AddressPostalCityName": "Sydney",
       "LEI": null,
-      "LEM ID": "LEM-GB-544743",
+      "LEM ID": null,
       "CRN": null,
       "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": "leon.gallo@mail.co.uk",
-      "IPG ID": null
+      "Electronic Address": null,
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000380",
@@ -8367,29 +8747,31 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-841435",
       "Electronic Address": "marta.schmidt@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00380"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000381",
       "partnerKeyDirBusRelExternalID": "BRL-000000381",
-      "PartnerClassCode": "I",
-      "PartnerName": "Luca Sato",
-      "LegalFirstName": "Luca",
-      "AdditionalName": "Sato",
-      "BirthOrFoundationDate": "1987-10-12",
-      "DomicileCountryCode": "CH",
-      "PrimeNationalityCountryCode": "CH",
-      "AddressStreetName": null,
-      "AddressResidenceIdentifier": "91",
-      "AddressPostalCode": "51590",
-      "AddressPostalCityName": "Basel",
+      "PartnerClassCode": "C",
+      "PartnerName": "Atlas Manufacturing Inc",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "1999-12-17",
+      "DomicileCountryCode": "IT",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Victoria Street",
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": "20565",
+      "AddressPostalCityName": "Rome",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "CH19M540706E",
-      "idDocumentNumber": "DOC-CH-662129",
+      "Tax ID": null,
+      "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00020"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000382",
@@ -8411,7 +8793,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00382"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000383",
@@ -8433,29 +8816,31 @@
       "Tax ID": "US34R914914L",
       "idDocumentNumber": "DOC-US-914576",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00383"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000384",
       "partnerKeyDirBusRelExternalID": "BRL-000000384",
       "PartnerClassCode": "I",
-      "PartnerName": "Elena Johnson",
-      "LegalFirstName": "Elena",
-      "AdditionalName": "Johnson",
-      "BirthOrFoundationDate": "1978-09-07",
-      "DomicileCountryCode": "GB",
-      "PrimeNationalityCountryCode": "GB",
-      "AddressStreetName": null,
+      "PartnerName": "Hiro Lefevre",
+      "LegalFirstName": "Hiro",
+      "AdditionalName": "Lefevre",
+      "BirthOrFoundationDate": "1963-07-22",
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": "ES",
+      "AddressStreetName": "Maple Boulevard",
       "AddressResidenceIdentifier": null,
       "AddressPostalCode": null,
-      "AddressPostalCityName": null,
+      "AddressPostalCityName": "Madrid",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "GB52S556662S",
-      "idDocumentNumber": "DOC-GB-396808",
-      "Electronic Address": null,
-      "IPG ID": null
+      "Tax ID": "ES36A332663W",
+      "idDocumentNumber": "DOC-ES-848638",
+      "Electronic Address": "hiro.lefevre@mail.es",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00009"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000385",
@@ -8477,51 +8862,54 @@
       "Tax ID": "AU852650523",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00385"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000386",
       "partnerKeyDirBusRelExternalID": "BRL-000000386",
-      "PartnerClassCode": "I",
-      "PartnerName": "Yuki Johnson",
-      "LegalFirstName": "Yuki",
-      "AdditionalName": "Johnson",
-      "BirthOrFoundationDate": "1955-05-25",
-      "DomicileCountryCode": "CA",
-      "PrimeNationalityCountryCode": "CA",
-      "AddressStreetName": "Highland Street",
-      "AddressResidenceIdentifier": "113",
-      "AddressPostalCode": "W6U 4Q9",
+      "PartnerClassCode": "C",
+      "PartnerName": "Prime Analytics Inc",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "2024-04-22",
+      "DomicileCountryCode": "AU",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Park Boulevard",
+      "AddressResidenceIdentifier": "149",
+      "AddressPostalCode": "78580",
       "AddressPostalCityName": null,
-      "LEI": null,
+      "LEI": "LEI-AU-934891",
       "LEM ID": null,
-      "CRN": null,
-      "Tax ID": "CA59B854907J",
+      "CRN": "CRN-AU-805072",
+      "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": "yuki.johnson@mail.ca",
-      "IPG ID": null
+      "Electronic Address": null,
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00004"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000387",
       "partnerKeyDirBusRelExternalID": "BRL-000000387",
-      "PartnerClassCode": "C",
-      "PartnerName": "Evergreen Solutions Group",
-      "LegalFirstName": null,
+      "PartnerClassCode": "I",
+      "PartnerName": "Olivia Dubois",
+      "LegalFirstName": "Olivia",
       "AdditionalName": null,
-      "BirthOrFoundationDate": "1986-09-19",
-      "DomicileCountryCode": "US",
-      "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Main Street",
-      "AddressResidenceIdentifier": "144",
-      "AddressPostalCode": "50903",
-      "AddressPostalCityName": "New York",
-      "LEI": "LEI-US-674594",
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": "ES",
+      "AddressStreetName": null,
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": null,
+      "AddressPostalCityName": null,
+      "LEI": null,
       "LEM ID": null,
       "CRN": null,
       "Tax ID": null,
-      "idDocumentNumber": null,
+      "idDocumentNumber": "DOC-ES-623542",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00011"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000388",
@@ -8543,29 +8931,31 @@
       "Tax ID": "DE19X439888I",
       "idDocumentNumber": "DOC-DE-716509",
       "Electronic Address": "samuel.dubois@mail.de",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00012"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000389",
       "partnerKeyDirBusRelExternalID": "BRL-000000389",
-      "PartnerClassCode": "I",
-      "PartnerName": "Samuel Dubois",
-      "LegalFirstName": "Samuel",
-      "AdditionalName": "Dubois",
-      "BirthOrFoundationDate": "1984-07-11",
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
+      "PartnerClassCode": "S",
+      "PartnerName": "Artemis Pharma Inc",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "2008-04-16",
+      "DomicileCountryCode": "CA",
+      "PrimeNationalityCountryCode": null,
       "AddressStreetName": null,
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "28936",
-      "AddressPostalCityName": null,
+      "AddressResidenceIdentifier": "24",
+      "AddressPostalCode": "K8F 8O4",
+      "AddressPostalCityName": "Calgary",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "FR91L871791U",
+      "Tax ID": "CA196114614",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00019"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000390",
@@ -8587,7 +8977,8 @@
       "Tax ID": "FR170491560",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.atlas-logistics-plc.fr",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00390"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000391",
@@ -8609,7 +9000,8 @@
       "Tax ID": "AE623686308",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.aurora-technology-ag.ae",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00391"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000392",
@@ -8631,29 +9023,31 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00392"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000393",
       "partnerKeyDirBusRelExternalID": "BRL-000000393",
       "PartnerClassCode": "I",
-      "PartnerName": "Julia Costa",
-      "LegalFirstName": "Julia",
-      "AdditionalName": "Costa",
-      "BirthOrFoundationDate": "1999-08-27",
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
-      "AddressStreetName": "Cedar Avenue",
-      "AddressResidenceIdentifier": "233",
-      "AddressPostalCode": "29966",
-      "AddressPostalCityName": null,
+      "PartnerName": "Maya Brown",
+      "LegalFirstName": null,
+      "AdditionalName": "Brown",
+      "BirthOrFoundationDate": "1975-06-01",
+      "DomicileCountryCode": "IT",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Central Street",
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Rome",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "FR86A811363J",
+      "Tax ID": "IT48P653966O",
       "idDocumentNumber": null,
-      "Electronic Address": "julia.costa@mail.fr",
-      "IPG ID": null
+      "Electronic Address": "maya.brown@mail.it",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000394",
@@ -8675,7 +9069,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "elena.keller@mail.ae",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00394"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000395",
@@ -8697,7 +9092,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00395"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000396",
@@ -8719,7 +9115,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00004"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000397",
@@ -8741,7 +9138,8 @@
       "Tax ID": "CH801930167",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.prime-manufacturing-ag.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00397"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000398",
@@ -8763,29 +9161,31 @@
       "Tax ID": "US47H917347O",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00398"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000399",
       "partnerKeyDirBusRelExternalID": "BRL-000000399",
       "PartnerClassCode": "I",
-      "PartnerName": "Sofia Lopez",
-      "LegalFirstName": null,
-      "AdditionalName": "Lopez",
-      "BirthOrFoundationDate": "1991-05-03",
-      "DomicileCountryCode": "CA",
-      "PrimeNationalityCountryCode": "CA",
-      "AddressStreetName": "Garden Boulevard",
+      "PartnerName": "Olivia Miller",
+      "LegalFirstName": "Olivia",
+      "AdditionalName": "Miller",
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": "ES",
+      "AddressStreetName": null,
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": null,
-      "AddressPostalCityName": "Toronto",
+      "AddressPostalCode": "33283",
+      "AddressPostalCityName": null,
       "LEI": null,
-      "LEM ID": "LEM-CA-896074",
+      "LEM ID": "LEM-ES-703839",
       "CRN": null,
-      "Tax ID": null,
+      "Tax ID": "ES63L375146Z",
       "idDocumentNumber": null,
-      "Electronic Address": "sofia.lopez@mail.ca",
-      "IPG ID": null
+      "Electronic Address": null,
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00005"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000400",
@@ -8807,7 +9207,8 @@
       "Tax ID": "IT81X496622G",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00400"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000401",
@@ -8829,7 +9230,8 @@
       "Tax ID": "DE262606048",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00401"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000402",
@@ -8851,7 +9253,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ethan.novak@mail.sg",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00402"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000403",
@@ -8873,7 +9276,8 @@
       "Tax ID": "SG667842359",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00403"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000404",
@@ -8895,7 +9299,8 @@
       "Tax ID": "NL97S544084U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00404"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000405",
@@ -8917,7 +9322,8 @@
       "Tax ID": "IT958504244",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00405"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000406",
@@ -8939,29 +9345,31 @@
       "Tax ID": "AE61C279877U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00406"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000407",
       "partnerKeyDirBusRelExternalID": "BRL-000000407",
-      "PartnerClassCode": "I",
-      "PartnerName": "Elena Moretti",
-      "LegalFirstName": "Elena",
+      "PartnerClassCode": "C",
+      "PartnerName": "orbit foods inc",
+      "LegalFirstName": null,
       "AdditionalName": null,
-      "BirthOrFoundationDate": "1972-02-14",
-      "DomicileCountryCode": "SG",
-      "PrimeNationalityCountryCode": "SG",
-      "AddressStreetName": null,
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "197451",
-      "AddressPostalCityName": "Singapore",
-      "LEI": null,
+      "BirthOrFoundationDate": "2021-11-10",
+      "DomicileCountryCode": "CH",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Lake Boulevard",
+      "AddressResidenceIdentifier": "218",
+      "AddressPostalCode": "16724",
+      "AddressPostalCityName": null,
+      "LEI": "LEI-CH-911407",
       "LEM ID": null,
-      "CRN": null,
-      "Tax ID": "SG71F740708Z",
+      "CRN": "CRN-CH-732594",
+      "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Electronic Address": "https://www.orbit-foods-inc.ch",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00015"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000408",
@@ -8983,7 +9391,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000409",
@@ -9005,7 +9414,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00409"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000410",
@@ -9027,7 +9437,8 @@
       "Tax ID": "CA18S835227B",
       "idDocumentNumber": "DOC-CA-758442",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00410"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000411",
@@ -9049,7 +9460,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00411"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000412",
@@ -9071,7 +9483,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00412"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000413",
@@ -9093,7 +9506,8 @@
       "Tax ID": "US11F447544G",
       "idDocumentNumber": null,
       "Electronic Address": "leila.smith@mail.com",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00016"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000414",
@@ -9115,7 +9529,8 @@
       "Tax ID": "CA15I884707Z",
       "idDocumentNumber": "DOC-CA-474306",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00414"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000415",
@@ -9137,7 +9552,8 @@
       "Tax ID": "DE424233761",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00415"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000416",
@@ -9159,7 +9575,8 @@
       "Tax ID": "IT630759659",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.terra-technology-inc.it",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00416"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000417",
@@ -9181,7 +9598,8 @@
       "Tax ID": "AU73C869462B",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00417"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000418",
@@ -9203,7 +9621,8 @@
       "Tax ID": "IT48P653966O",
       "idDocumentNumber": null,
       "Electronic Address": "maya.brown@mail.it",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000419",
@@ -9225,29 +9644,31 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00419"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000420",
       "partnerKeyDirBusRelExternalID": "BRL-000000420",
-      "PartnerClassCode": "C",
-      "PartnerName": "Evergreen Analytics AG",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "US",
-      "PrimeNationalityCountryCode": "US",
-      "AddressStreetName": "Bridge Lane",
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "67081",
+      "PartnerClassCode": "I",
+      "PartnerName": "Ethan Costa",
+      "LegalFirstName": "Ethan",
+      "AdditionalName": "Costa",
+      "BirthOrFoundationDate": "1972-10-06",
+      "DomicileCountryCode": "CH",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": null,
+      "AddressResidenceIdentifier": "29",
+      "AddressPostalCode": "23914",
       "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
-      "CRN": "CRN-US-974784",
-      "Tax ID": "US752434615",
+      "CRN": null,
+      "Tax ID": "CH12A124318T",
       "idDocumentNumber": null,
-      "Electronic Address": "https://www.evergreen-analytics-ag.com",
-      "IPG ID": null
+      "Electronic Address": "ethan.costa@mail.ch",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000421",
@@ -9269,7 +9690,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.pioneer-media-inc.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00421"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000422",
@@ -9291,7 +9713,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-108900",
       "Electronic Address": "luca.rossi@mail.nl",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00422"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000423",
@@ -9313,7 +9736,8 @@
       "Tax ID": "US21W867714H",
       "idDocumentNumber": "DOC-US-847589",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00423"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000424",
@@ -9335,29 +9759,31 @@
       "Tax ID": "GB50R101187G",
       "idDocumentNumber": null,
       "Electronic Address": "hiro.anderson@mail.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00424"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000425",
       "partnerKeyDirBusRelExternalID": "BRL-000000425",
-      "PartnerClassCode": "I",
-      "PartnerName": "Leon Brown",
-      "LegalFirstName": "Leon",
-      "AdditionalName": "Brown",
-      "BirthOrFoundationDate": "1983-10-23",
+      "PartnerClassCode": "C",
+      "PartnerName": "Lighthouse Healthcare Inc",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": null,
       "DomicileCountryCode": "ES",
-      "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Garden Avenue",
-      "AddressResidenceIdentifier": "125",
-      "AddressPostalCode": "80750",
-      "AddressPostalCityName": "Madrid",
+      "PrimeNationalityCountryCode": "ES",
+      "AddressStreetName": "Lake Avenue",
+      "AddressResidenceIdentifier": "40",
+      "AddressPostalCode": "57079",
+      "AddressPostalCityName": null,
       "LEI": null,
-      "LEM ID": "LEM-ES-463045",
+      "LEM ID": "LEM-ES-686953",
       "CRN": null,
-      "Tax ID": null,
+      "Tax ID": "ES869003308",
       "idDocumentNumber": null,
-      "Electronic Address": "leon.brown@mail.es",
-      "IPG ID": null
+      "Electronic Address": "https://www.lighthouse-healthcare-inc.es",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00002"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000426",
@@ -9379,7 +9805,8 @@
       "Tax ID": "DE68K271128B",
       "idDocumentNumber": "DOC-DE-964977",
       "Electronic Address": "giulia.sato@mail.de",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00426"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000427",
@@ -9401,7 +9828,8 @@
       "Tax ID": "US97F718931A",
       "idDocumentNumber": null,
       "Electronic Address": "hiro.taylor@mail.com",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00008"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000428",
@@ -9423,7 +9851,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "mia.ricci@mail.de",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00428"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000429",
@@ -9445,7 +9874,8 @@
       "Tax ID": "ES52T301776Q",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00429"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000430",
@@ -9467,7 +9897,8 @@
       "Tax ID": "CH36F409402V",
       "idDocumentNumber": null,
       "Electronic Address": "jonas.rahman@mail.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00430"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000431",
@@ -9489,7 +9920,8 @@
       "Tax ID": "US59Y547473C",
       "idDocumentNumber": "DOC-US-965186",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00431"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000432",
@@ -9511,29 +9943,31 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-943031",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00432"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000433",
       "partnerKeyDirBusRelExternalID": "BRL-000000433",
       "PartnerClassCode": "I",
-      "PartnerName": "Hiro Lopez",
-      "LegalFirstName": null,
-      "AdditionalName": "Lopez",
-      "BirthOrFoundationDate": "2000-07-08",
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
-      "AddressStreetName": "River Lane",
+      "PartnerName": "olivia miller",
+      "LegalFirstName": "Olivia",
+      "AdditionalName": "Miller",
+      "BirthOrFoundationDate": null,
+      "DomicileCountryCode": "ES",
+      "PrimeNationalityCountryCode": "ES",
+      "AddressStreetName": null,
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": null,
+      "AddressPostalCode": "33283",
       "AddressPostalCityName": null,
       "LEI": null,
-      "LEM ID": null,
+      "LEM ID": "LEM-ES-703839",
       "CRN": null,
-      "Tax ID": "FR30E870823P",
-      "idDocumentNumber": "DOC-FR-475743",
+      "Tax ID": "ES63L375146Z",
+      "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00005"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000434",
@@ -9555,7 +9989,8 @@
       "Tax ID": "SG81L524630C",
       "idDocumentNumber": "DOC-SG-787131",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00434"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000435",
@@ -9577,7 +10012,8 @@
       "Tax ID": "CA196114614",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00019"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000436",
@@ -9599,7 +10035,8 @@
       "Tax ID": "IT39N490822L",
       "idDocumentNumber": "DOC-IT-956633",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00436"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000437",
@@ -9621,7 +10058,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-751495",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00437"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000438",
@@ -9643,7 +10081,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.northbridge-foods-bv.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00438"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000439",
@@ -9665,7 +10104,8 @@
       "Tax ID": "FR79F134174M",
       "idDocumentNumber": "DOC-FR-435904",
       "Electronic Address": "liam.neri@mail.fr",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00439"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000440",
@@ -9687,29 +10127,31 @@
       "Tax ID": "SG18X908363U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00440"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000441",
       "partnerKeyDirBusRelExternalID": "BRL-000000441",
-      "PartnerClassCode": "I",
-      "PartnerName": "Hiro Kovacs",
+      "PartnerClassCode": "C",
+      "PartnerName": "Evergreen Retail Ltd",
       "LegalFirstName": null,
-      "AdditionalName": "Kovacs",
-      "BirthOrFoundationDate": "1967-03-25",
-      "DomicileCountryCode": "NL",
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "1979-05-11",
+      "DomicileCountryCode": "AU",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Garden Road",
-      "AddressResidenceIdentifier": "149",
-      "AddressPostalCode": null,
-      "AddressPostalCityName": "Rotterdam",
+      "AddressStreetName": "Market Road",
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": "99129",
+      "AddressPostalCityName": "Brisbane",
       "LEI": null,
-      "LEM ID": null,
-      "CRN": null,
-      "Tax ID": "NL52T317697M",
-      "idDocumentNumber": "DOC-NL-819393",
-      "Electronic Address": null,
-      "IPG ID": null
+      "LEM ID": "LEM-AU-782999",
+      "CRN": "CRN-AU-286195",
+      "Tax ID": null,
+      "idDocumentNumber": null,
+      "Electronic Address": "contact@evergreen-retail-ltd.au",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00010"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000442",
@@ -9731,29 +10173,31 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00442"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000443",
       "partnerKeyDirBusRelExternalID": "BRL-000000443",
       "PartnerClassCode": "I",
-      "PartnerName": "Ethan Neri",
-      "LegalFirstName": "Ethan",
-      "AdditionalName": "Neri",
-      "BirthOrFoundationDate": "1985-05-25",
-      "DomicileCountryCode": "NL",
-      "PrimeNationalityCountryCode": "NL",
-      "AddressStreetName": null,
+      "PartnerName": "Samuel Dubois",
+      "LegalFirstName": "Samuel",
+      "AdditionalName": "Dubois",
+      "BirthOrFoundationDate": "1989-08-11",
+      "DomicileCountryCode": "DE",
+      "PrimeNationalityCountryCode": "DE",
+      "AddressStreetName": "Victoria Boulevard",
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": null,
-      "AddressPostalCityName": "Eindhoven",
+      "AddressPostalCode": "18384",
+      "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": null,
-      "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Tax ID": "DE19X439888I",
+      "idDocumentNumber": "DOC-DE-716509",
+      "Electronic Address": "samuel.dubo@mail.de",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00012"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000444",
@@ -9775,29 +10219,31 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00444"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000445",
       "partnerKeyDirBusRelExternalID": "BRL-000000445",
-      "PartnerClassCode": "S",
-      "PartnerName": "Lighthouse Energy AG",
+      "PartnerClassCode": "I",
+      "PartnerName": "maya brown",
       "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "1979-11-06",
+      "AdditionalName": "Brown",
+      "BirthOrFoundationDate": "1975-06-01",
       "DomicileCountryCode": "IT",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Central Road",
-      "AddressResidenceIdentifier": "106",
+      "AddressStreetName": "Central Street",
+      "AddressResidenceIdentifier": null,
       "AddressPostalCode": null,
-      "AddressPostalCityName": "Bologna",
-      "LEI": "LEI-IT-240112",
+      "AddressPostalCityName": "Rome",
+      "LEI": null,
       "LEM ID": null,
-      "CRN": "CRN-IT-857253",
-      "Tax ID": null,
+      "CRN": null,
+      "Tax ID": "IT48P653966O",
       "idDocumentNumber": null,
-      "Electronic Address": "contact@lighthouse-energy-ag.it",
-      "IPG ID": null
+      "Electronic Address": "maya.brown@mail.it",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00017"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000446",
@@ -9819,29 +10265,31 @@
       "Tax ID": "GB66P570581Z",
       "idDocumentNumber": "DOC-GB-981775",
       "Electronic Address": "hiro.rossi@mail.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00446"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000447",
       "partnerKeyDirBusRelExternalID": "BRL-000000447",
-      "PartnerClassCode": "C",
-      "PartnerName": "Nimbus Capital BV",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "2005-04-06",
-      "DomicileCountryCode": "IT",
-      "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Harbor Boulevard",
-      "AddressResidenceIdentifier": "236",
-      "AddressPostalCode": "35127",
-      "AddressPostalCityName": null,
+      "PartnerClassCode": "I",
+      "PartnerName": "HIRO TAYLOR",
+      "LegalFirstName": "Hiro",
+      "AdditionalName": "Taylor",
+      "BirthOrFoundationDate": "1972-08-11",
+      "DomicileCountryCode": "US",
+      "PrimeNationalityCountryCode": "US",
+      "AddressStreetName": null,
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": "12513",
+      "AddressPostalCityName": "Chicago",
       "LEI": null,
       "LEM ID": null,
-      "CRN": "CRN-IT-711481",
-      "Tax ID": null,
+      "CRN": null,
+      "Tax ID": "US97F718931A",
       "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Electronic Address": "hiro.taylor@mail.com",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00008"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000448",
@@ -9863,7 +10311,8 @@
       "Tax ID": "US94I826409A",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00448"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000449",
@@ -9885,7 +10334,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CA-621748",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00449"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000450",
@@ -9907,51 +10357,54 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "elena.anderson@mail.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00450"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000451",
       "partnerKeyDirBusRelExternalID": "BRL-000000451",
-      "PartnerClassCode": "C",
-      "PartnerName": "Prime Analytics AG",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": null,
+      "PartnerClassCode": "I",
+      "PartnerName": "hiro taylor",
+      "LegalFirstName": "Hiro",
+      "AdditionalName": "Taylor",
+      "BirthOrFoundationDate": "1972-08-11",
       "DomicileCountryCode": "US",
       "PrimeNationalityCountryCode": "US",
       "AddressStreetName": null,
-      "AddressResidenceIdentifier": "76",
-      "AddressPostalCode": "35469",
-      "AddressPostalCityName": "Austin",
+      "AddressResidenceIdentifier": null,
+      "AddressPostalCode": "12513",
+      "AddressPostalCityName": "Chicago",
       "LEI": null,
       "LEM ID": null,
-      "CRN": "CRN-US-646088",
-      "Tax ID": "US375573347",
+      "CRN": null,
+      "Tax ID": "US97F718931A",
       "idDocumentNumber": null,
-      "Electronic Address": "https://www.prime-analytics-ag.com",
-      "IPG ID": null
+      "Electronic Address": "hiro.taylor@mail.com",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00008"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000452",
       "partnerKeyDirBusRelExternalID": "BRL-000000452",
-      "PartnerClassCode": "S",
-      "PartnerName": "Artemis Advisory Inc",
-      "LegalFirstName": null,
+      "PartnerClassCode": "I",
+      "PartnerName": "ana keller",
+      "LegalFirstName": "Ana",
       "AdditionalName": null,
-      "BirthOrFoundationDate": "1993-10-25",
-      "DomicileCountryCode": "CA",
-      "PrimeNationalityCountryCode": null,
+      "BirthOrFoundationDate": "1990-07-11",
+      "DomicileCountryCode": "FR",
+      "PrimeNationalityCountryCode": "FR",
       "AddressStreetName": null,
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "X1Z 6E1",
-      "AddressPostalCityName": null,
-      "LEI": "LEI-CA-514032",
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Toulouse",
+      "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "CA205133264",
+      "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Electronic Address": "ana.keller@mail.fr",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00006"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000453",
@@ -9973,7 +10426,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00453"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000454",
@@ -9995,7 +10449,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00020"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000455",
@@ -10017,7 +10472,8 @@
       "Tax ID": "NL295992171",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00455"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000456",
@@ -10039,29 +10495,31 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-187693",
       "Electronic Address": "samuel.bianchi@mail.nl",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00018"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000457",
       "partnerKeyDirBusRelExternalID": "BRL-000000457",
-      "PartnerClassCode": "S",
-      "PartnerName": "Helios Manufacturing PLC",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "US",
+      "PartnerClassCode": "I",
+      "PartnerName": "Mia Keller",
+      "LegalFirstName": "Mia",
+      "AdditionalName": "Keller",
+      "BirthOrFoundationDate": "1988-10-02",
+      "DomicileCountryCode": "AU",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Station Avenue",
+      "AddressStreetName": "Park Street",
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "27947",
-      "AddressPostalCityName": "New York",
-      "LEI": "LEI-US-818422",
+      "AddressPostalCode": null,
+      "AddressPostalCityName": "Sydney",
+      "LEI": null,
       "LEM ID": null,
-      "CRN": "CRN-US-543451",
-      "Tax ID": "US903510914",
+      "CRN": null,
+      "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000458",
@@ -10083,29 +10541,31 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-GB-268870",
       "Electronic Address": "miguel.thomas@mail.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00458"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000459",
       "partnerKeyDirBusRelExternalID": "BRL-000000459",
       "PartnerClassCode": "I",
-      "PartnerName": "Ana Ricci",
-      "LegalFirstName": null,
-      "AdditionalName": "Ricci",
+      "PartnerName": "NINA RAHMAN",
+      "LegalFirstName": "Nina",
+      "AdditionalName": "Rahman",
       "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "FR",
-      "PrimeNationalityCountryCode": "FR",
-      "AddressStreetName": null,
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": null,
-      "AddressPostalCityName": null,
+      "DomicileCountryCode": "AE",
+      "PrimeNationalityCountryCode": "AE",
+      "AddressStreetName": "Main Street",
+      "AddressResidenceIdentifier": "37",
+      "AddressPostalCode": "946120",
+      "AddressPostalCityName": "Abu Dhabi",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
       "Tax ID": null,
-      "idDocumentNumber": "DOC-FR-379559",
-      "Electronic Address": "ana.ricci@mail.fr",
-      "IPG ID": null
+      "idDocumentNumber": "DOC-AE-780662",
+      "Electronic Address": "nina.rahman@mail.ae",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00007"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000460",
@@ -10127,7 +10587,8 @@
       "Tax ID": "IT32K839669L",
       "idDocumentNumber": null,
       "Electronic Address": "noah.rossi@mail.it",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00460"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000461",
@@ -10149,7 +10610,8 @@
       "Tax ID": "ES869003308",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-healthcare-inc.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00002"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000462",
@@ -10171,7 +10633,8 @@
       "Tax ID": "SG16X762877G",
       "idDocumentNumber": "DOC-SG-970345",
       "Electronic Address": "omar.tanaka@mail.sg",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00462"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000463",
@@ -10193,7 +10656,8 @@
       "Tax ID": "US11X606321K",
       "idDocumentNumber": "DOC-US-434602",
       "Electronic Address": "carlos.rahman@mail.com",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00463"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000464",
@@ -10215,7 +10679,8 @@
       "Tax ID": "AU483912220",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.global-foods-ag.au",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00464"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000465",
@@ -10237,7 +10702,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-NL-437332",
       "Electronic Address": "liam.moretti@mail.nl",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00465"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000466",
@@ -10259,7 +10725,8 @@
       "Tax ID": "GB76W937674S",
       "idDocumentNumber": null,
       "Electronic Address": "jonas.novak@mail.co.uk",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00466"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000467",
@@ -10281,7 +10748,8 @@
       "Tax ID": "FR64U875860F",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00467"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000468",
@@ -10303,7 +10771,8 @@
       "Tax ID": "GB73O609418U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00468"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000469",
@@ -10325,7 +10794,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-302400",
       "Electronic Address": "carlos.neri@mail.com",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00469"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000470",
@@ -10347,51 +10817,54 @@
       "Tax ID": "ES958108732",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.aurora-solutions-gmbh.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00001"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000471",
       "partnerKeyDirBusRelExternalID": "BRL-000000471",
       "PartnerClassCode": "I",
-      "PartnerName": "Liam Rossi",
-      "LegalFirstName": "Liam",
-      "AdditionalName": "Rossi",
-      "BirthOrFoundationDate": "2000-11-23",
-      "DomicileCountryCode": "DE",
-      "PrimeNationalityCountryCode": "DE",
-      "AddressStreetName": null,
+      "PartnerName": "Leila Smith",
+      "LegalFirstName": "Leila",
+      "AdditionalName": "Smith",
+      "BirthOrFoundationDate": "1992-10-12",
+      "DomicileCountryCode": "US",
+      "PrimeNationalityCountryCode": "US",
+      "AddressStreetName": "Garden Lane",
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "33672",
+      "AddressPostalCode": "95070",
       "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "DE93Y459801D",
+      "Tax ID": "US11F447544G",
       "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Electronic Address": "leila.smith@mail.com",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00016"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000472",
       "partnerKeyDirBusRelExternalID": "BRL-000000472",
       "PartnerClassCode": "I",
-      "PartnerName": "Giulia Novak",
-      "LegalFirstName": "Giulia",
-      "AdditionalName": "Novak",
-      "BirthOrFoundationDate": "1998-06-07",
-      "DomicileCountryCode": "SG",
+      "PartnerName": "Mia Keller",
+      "LegalFirstName": "Mia",
+      "AdditionalName": "Keller",
+      "BirthOrFoundationDate": "1988-10-02",
+      "DomicileCountryCode": "AU",
       "PrimeNationalityCountryCode": null,
-      "AddressStreetName": "Garden Boulevard",
+      "AddressStreetName": "Park Street",
       "AddressResidenceIdentifier": null,
       "AddressPostalCode": null,
-      "AddressPostalCityName": "Singapore",
+      "AddressPostalCityName": "Sydney",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "SG60X356230A",
-      "idDocumentNumber": "DOC-SG-177500",
+      "Tax ID": null,
+      "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00014"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000473",
@@ -10413,7 +10886,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "contact@evergreen-retail-ltd.au",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00010"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000474",
@@ -10435,7 +10909,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00474"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000475",
@@ -10457,7 +10932,8 @@
       "Tax ID": "CH250202803",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00475"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000476",
@@ -10479,7 +10955,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CA-356141",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00476"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000477",
@@ -10501,7 +10978,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AE-780662",
       "Electronic Address": "nina.rahman@mail.ae",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00007"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000478",
@@ -10523,7 +11001,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00478"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000479",
@@ -10545,7 +11024,8 @@
       "Tax ID": "ES868675752",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-partners-ltd.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00479"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000480",
@@ -10567,7 +11047,8 @@
       "Tax ID": "SG640032116",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00480"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000481",
@@ -10589,7 +11070,8 @@
       "Tax ID": "ES63L375146Z",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00005"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000482",
@@ -10611,7 +11093,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00482"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000483",
@@ -10633,29 +11116,31 @@
       "Tax ID": "IT37D120312G",
       "idDocumentNumber": "DOC-IT-764262",
       "Electronic Address": "luca.sato@mail.it",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00483"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000484",
       "partnerKeyDirBusRelExternalID": "BRL-000000484",
-      "PartnerClassCode": "I",
-      "PartnerName": "Ari Gallo",
-      "LegalFirstName": "Ari",
-      "AdditionalName": "Gallo",
-      "BirthOrFoundationDate": null,
-      "DomicileCountryCode": "AE",
-      "PrimeNationalityCountryCode": "AE",
-      "AddressStreetName": "Central Street",
+      "PartnerClassCode": "C",
+      "PartnerName": "evergreen retail ltd",
+      "LegalFirstName": null,
+      "AdditionalName": null,
+      "BirthOrFoundationDate": "1979-05-11",
+      "DomicileCountryCode": "AU",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": "Market Road",
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "189984",
-      "AddressPostalCityName": null,
+      "AddressPostalCode": "99129",
+      "AddressPostalCityName": "Brisbane",
       "LEI": null,
-      "LEM ID": "LEM-AE-624991",
-      "CRN": null,
-      "Tax ID": "AE24U156769P",
+      "LEM ID": "LEM-AU-782999",
+      "CRN": "CRN-AU-286195",
+      "Tax ID": null,
       "idDocumentNumber": null,
-      "Electronic Address": null,
-      "IPG ID": null
+      "Electronic Address": "contact@evergreen-retail-ltd.au",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00010"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000485",
@@ -10677,7 +11162,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.evergreen-manufacturing-gmbh.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00485"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000486",
@@ -10699,7 +11185,8 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-CH-346803",
       "Electronic Address": "ethan.brown@mail.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00486"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000487",
@@ -10721,7 +11208,8 @@
       "Tax ID": "AE97U197873Y",
       "idDocumentNumber": null,
       "Electronic Address": "noah.gallo@mail.ae",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00487"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000488",
@@ -10743,7 +11231,8 @@
       "Tax ID": "CH52A325698X",
       "idDocumentNumber": "DOC-CH-760390",
       "Electronic Address": "leon.schmidt@mail.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00488"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000489",
@@ -10765,7 +11254,8 @@
       "Tax ID": "AU56Z767131Z",
       "idDocumentNumber": null,
       "Electronic Address": "miguel.taylor@mail.au",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00489"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000490",
@@ -10787,29 +11277,31 @@
       "Tax ID": "CA72E261886U",
       "idDocumentNumber": null,
       "Electronic Address": "hiro.moretti@mail.ca",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00490"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000491",
       "partnerKeyDirBusRelExternalID": "BRL-000000491",
       "PartnerClassCode": "I",
-      "PartnerName": "Marco Taylor",
-      "LegalFirstName": "Marco",
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "2004-12-22",
-      "DomicileCountryCode": "AE",
-      "PrimeNationalityCountryCode": "AE",
+      "PartnerName": "samuel bianchi",
+      "LegalFirstName": null,
+      "AdditionalName": "Bianchi",
+      "BirthOrFoundationDate": "1979-04-15",
+      "DomicileCountryCode": "NL",
+      "PrimeNationalityCountryCode": "NL",
       "AddressStreetName": null,
       "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "890648",
-      "AddressPostalCityName": null,
+      "AddressPostalCode": "35641",
+      "AddressPostalCityName": "Amsterdam",
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": "AE88B814868L",
-      "idDocumentNumber": "DOC-AE-795106",
-      "Electronic Address": null,
-      "IPG ID": null
+      "Tax ID": null,
+      "idDocumentNumber": "DOC-NL-187693",
+      "Electronic Address": "samuel.bianchi@mail.nl",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00018"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000492",
@@ -10831,7 +11323,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ana.keller@mail.fr",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00006"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000493",
@@ -10853,7 +11346,8 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "miguel.hassan@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00493"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000494",
@@ -10875,7 +11369,8 @@
       "Tax ID": "AU73L420920V",
       "idDocumentNumber": "DOC-AU-536689",
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00494"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000495",
@@ -10897,7 +11392,8 @@
       "Tax ID": "AU41Z526373E",
       "idDocumentNumber": null,
       "Electronic Address": "ari.tanaka@mail.au",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00495"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000496",
@@ -10919,7 +11415,8 @@
       "Tax ID": "GB312334852",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00496"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000497",
@@ -10941,29 +11438,31 @@
       "Tax ID": "CH12A124318T",
       "idDocumentNumber": null,
       "Electronic Address": "ethan.costa@mail.ch",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000498",
       "partnerKeyDirBusRelExternalID": "BRL-000000498",
-      "PartnerClassCode": "C",
-      "PartnerName": "Vertex Analytics GmbH",
-      "LegalFirstName": null,
-      "AdditionalName": null,
-      "BirthOrFoundationDate": "2002-07-12",
-      "DomicileCountryCode": "AE",
-      "PrimeNationalityCountryCode": "AE",
-      "AddressStreetName": "Garden Boulevard",
-      "AddressResidenceIdentifier": null,
-      "AddressPostalCode": "261314",
+      "PartnerClassCode": "I",
+      "PartnerName": "ETHAN COSTA",
+      "LegalFirstName": "Ethan",
+      "AdditionalName": "Costa",
+      "BirthOrFoundationDate": "1972-10-06",
+      "DomicileCountryCode": "CH",
+      "PrimeNationalityCountryCode": null,
+      "AddressStreetName": null,
+      "AddressResidenceIdentifier": "29",
+      "AddressPostalCode": "23914",
       "AddressPostalCityName": null,
       "LEI": null,
       "LEM ID": null,
       "CRN": null,
-      "Tax ID": null,
+      "Tax ID": "CH12A124318T",
       "idDocumentNumber": null,
-      "Electronic Address": "https://www.vertex-analytics-gmbh.ae",
-      "IPG ID": null
+      "Electronic Address": "ethan.costa@mail.ch",
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00003"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000499",
@@ -10985,7 +11484,8 @@
       "Tax ID": "AE21T807775U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00499"
     },
     {
       "externalPartnerKeyDirExternalID": "PTN-000000500",
@@ -11007,7 +11507,10 @@
       "Tax ID": "ES36A332663W",
       "idDocumentNumber": "DOC-ES-848638",
       "Electronic Address": "hiro.lefevre@mail.es",
-      "IPG ID": null
+      "IPG ID": null,
+      "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00009"
     }
-  ]
+  ],
+  "_hidden_truth_groups": 20,
+  "_hidden_truth_records": 58
 }

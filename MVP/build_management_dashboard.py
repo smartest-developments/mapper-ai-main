@@ -62,11 +62,27 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     ground_truth = read_json(technical_dir / "ground_truth_match_quality.json")
     run_summary = read_json(technical_dir / "run_summary.json")
     mapping_summary = read_json(technical_dir / "mapping_summary.json")
+    discovery_metrics = (
+        management_summary.get("discovery_metrics") if isinstance(management_summary.get("discovery_metrics"), dict) else {}
+    )
 
     pair_metrics = ground_truth.get("pair_metrics") if isinstance(ground_truth.get("pair_metrics"), dict) else {}
     distribution_metrics = (
         ground_truth.get("distribution_metrics") if isinstance(ground_truth.get("distribution_metrics"), dict) else {}
     )
+    baseline_match_coverage_raw = discovery_metrics.get("baseline_match_coverage")
+    if not isinstance(baseline_match_coverage_raw, (int, float)):
+        known_pairs = discovery_metrics.get("known_pairs_ipg")
+        true_pairs = discovery_metrics.get("true_pairs_total")
+        if isinstance(known_pairs, int) and isinstance(true_pairs, int) and true_pairs > 0:
+            baseline_match_coverage_raw = known_pairs / true_pairs
+
+    senzing_true_coverage_raw = discovery_metrics.get("senzing_true_coverage")
+    if not isinstance(senzing_true_coverage_raw, (int, float)):
+        true_found = discovery_metrics.get("overall_true_pairs_found")
+        true_pairs = discovery_metrics.get("true_pairs_total")
+        if isinstance(true_found, int) and isinstance(true_pairs, int) and true_pairs > 0:
+            senzing_true_coverage_raw = true_found / true_pairs
 
     mapping_input = str(mapping_summary.get("input_json") or "").strip()
     source_input_name = Path(mapping_input).name if mapping_input else None
@@ -128,6 +144,19 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
         "true_positive": pair_metrics.get("true_positive"),
         "false_positive": pair_metrics.get("false_positive"),
         "false_negative": pair_metrics.get("false_negative"),
+        "discovery_available": bool(discovery_metrics.get("available")),
+        "extra_true_matches_found": discovery_metrics.get("extra_true_matches_found"),
+        "extra_false_matches_found": discovery_metrics.get("extra_false_matches_found"),
+        "extra_match_precision_pct": pct(discovery_metrics.get("extra_match_precision")),
+        "extra_match_recall_pct": pct(discovery_metrics.get("extra_match_recall")),
+        "extra_gain_vs_known_pct": pct(discovery_metrics.get("extra_gain_vs_known")),
+        "discoverable_true_pairs": discovery_metrics.get("discoverable_true_pairs"),
+        "predicted_pairs_beyond_known": discovery_metrics.get("predicted_pairs_beyond_known"),
+        "net_extra_matches": discovery_metrics.get("net_extra_matches"),
+        "overall_false_positive_pct": pct(discovery_metrics.get("overall_false_positive_rate")),
+        "overall_match_correctness_pct": pct(discovery_metrics.get("overall_match_correctness")),
+        "our_match_coverage_pct": pct(baseline_match_coverage_raw),
+        "senzing_true_coverage_pct": pct(senzing_true_coverage_raw),
         "predicted_pairs_labeled": pair_metrics.get("predicted_pairs_labeled"),
         "ground_truth_pairs_labeled": pair_metrics.get("ground_truth_pairs_labeled"),
         "match_level_distribution": management_summary.get("match_level_distribution", {}),
