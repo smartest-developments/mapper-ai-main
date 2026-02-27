@@ -1015,6 +1015,7 @@ def build_ground_truth_match_quality(
 
     ipg_counts: Counter[str] = Counter()
     entity_ipg_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    entity_record_counts: Counter[str] = Counter()
     labeled_records_in_export = 0
 
     for key, source_ipg_id in labels.items():
@@ -1024,6 +1025,7 @@ def build_ground_truth_match_quality(
         labeled_records_in_export += 1
         ipg_counts[source_ipg_id] += 1
         entity_ipg_counts[entity_id][source_ipg_id] += 1
+        entity_record_counts[entity_id] += 1
 
     true_pairs = sum(comb2(count) for count in ipg_counts.values())
     predicted_pairs = sum(comb2(sum(counter.values())) for counter in entity_ipg_counts.values())
@@ -1033,45 +1035,15 @@ def build_ground_truth_match_quality(
 
     pair_precision = safe_ratio(true_positive, true_positive + false_positive)
     pair_recall = safe_ratio(true_positive, true_positive + false_negative)
-    pair_f1 = None
-    if pair_precision is not None and pair_recall is not None and (pair_precision + pair_recall) > 0:
-        pair_f1 = 2 * pair_precision * pair_recall / (pair_precision + pair_recall)
+    entity_size_distribution: Counter[int] = Counter(entity_record_counts.values())
+    entity_pairings_distribution: Counter[int] = Counter()
+    record_pairing_degree_distribution: Counter[int] = Counter()
+    for size, entities_count in entity_size_distribution.items():
+        entity_pairings_distribution[comb2(size)] += entities_count
+        record_pairing_degree_distribution[max(0, size - 1)] += size * entities_count
 
-    entities_with_labels = len(entity_ipg_counts)
-    pure_entities = sum(1 for counter in entity_ipg_counts.values() if len(counter) == 1)
-    mixed_entities = entities_with_labels - pure_entities
-    entity_purity = safe_ratio(pure_entities, entities_with_labels)
-
-    ipg_to_entities: dict[str, set[str]] = defaultdict(set)
-    for entity_id, counter in entity_ipg_counts.items():
-        for source_ipg_id in counter.keys():
-            ipg_to_entities[source_ipg_id].add(entity_id)
-
-    ipg_groups_size_ge_2 = sum(1 for count in ipg_counts.values() if count >= 2)
-    ipg_groups_single_entity = sum(
-        1
-        for source_ipg_id, count in ipg_counts.items()
-        if count >= 2 and len(ipg_to_entities.get(source_ipg_id, set())) == 1
-    )
-    ipg_groups_split = ipg_groups_size_ge_2 - ipg_groups_single_entity
-    ipg_group_concentration = safe_ratio(ipg_groups_single_entity, ipg_groups_size_ge_2)
-
-    mixed_entity_examples: list[dict[str, Any]] = []
-    for entity_id, counter in sorted(
-        entity_ipg_counts.items(),
-        key=lambda item: (-sum(item[1].values()), item[0]),
-    ):
-        if len(counter) <= 1:
-            continue
-        mixed_entity_examples.append(
-            {
-                "resolved_entity_id": entity_id,
-                "labeled_records": sum(counter.values()),
-                "source_ipg_id_counts": dict(counter),
-            }
-        )
-        if len(mixed_entity_examples) >= 10:
-            break
+    entities_with_labeled_records = sum(entity_size_distribution.values())
+    largest_labeled_entity_size = max(entity_size_distribution.keys(), default=0)
 
     return {
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
@@ -1086,26 +1058,19 @@ def build_ground_truth_match_quality(
         "pair_metrics": {
             "pair_precision": pair_precision,
             "pair_recall": pair_recall,
-            "pair_f1": pair_f1,
             "true_positive": true_positive,
             "false_positive": false_positive,
             "false_negative": false_negative,
             "predicted_pairs_labeled": predicted_pairs,
             "ground_truth_pairs_labeled": true_pairs,
         },
-        "entity_metrics": {
-            "entities_with_labeled_records": entities_with_labels,
-            "pure_entities": pure_entities,
-            "mixed_entities": mixed_entities,
-            "entity_purity": entity_purity,
+        "distribution_metrics": {
+            "entities_with_labeled_records": entities_with_labeled_records,
+            "largest_labeled_entity_size": largest_labeled_entity_size,
+            "entity_size_distribution": {str(k): v for k, v in sorted(entity_size_distribution.items())},
+            "entity_pairings_distribution": {str(k): v for k, v in sorted(entity_pairings_distribution.items())},
+            "record_pairing_degree_distribution": {str(k): v for k, v in sorted(record_pairing_degree_distribution.items())},
         },
-        "group_metrics": {
-            "ipg_groups_size_ge_2": ipg_groups_size_ge_2,
-            "ipg_groups_single_entity": ipg_groups_single_entity,
-            "ipg_groups_split": ipg_groups_split,
-            "ipg_group_concentration": ipg_group_concentration,
-        },
-        "mixed_entity_examples": mixed_entity_examples,
     }
 
 
@@ -1120,8 +1085,7 @@ def write_ground_truth_match_quality_reports(
     quality_json.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     pair_metrics = payload.get("pair_metrics", {})
-    entity_metrics = payload.get("entity_metrics", {})
-    group_metrics = payload.get("group_metrics", {})
+    distribution_metrics = payload.get("distribution_metrics", {})
     data_quality = payload.get("data_quality", {})
 
     lines: list[str] = []
@@ -1132,84 +1096,62 @@ def write_ground_truth_match_quality_reports(
     lines.append("")
     lines.append("## Pair Quality")
     lines.append("")
-    lines.append(
-        f"- Pair precision: {format_percent(pair_metrics.get('pair_precision'))} "
-        "(tra i match trovati da Senzing, quanti sono corretti)."
-    )
-    lines.append(
-        f"- Pair recall: {format_percent(pair_metrics.get('pair_recall'))} "
-        "(tra i match reali, quanti ne abbiamo trovati)."
-    )
-    lines.append(
-        f"- Pair F1: {format_percent(pair_metrics.get('pair_f1'))} "
-        "(indice unico che combina precision e recall)."
-    )
-    lines.append(
-        f"- True positive: {pair_metrics.get('true_positive', 0)} "
-        "(match trovati e davvero corretti)."
-    )
-    lines.append(
-        f"- False positive: {pair_metrics.get('false_positive', 0)} "
-        "(match trovati ma sbagliati)."
-    )
-    lines.append(
-        f"- False negative: {pair_metrics.get('false_negative', 0)} "
-        "(match reali che il sistema non ha trovato)."
-    )
+    lines.append(f"- Pair precision: {format_percent(pair_metrics.get('pair_precision'))} (Out of all predicted matches, how many are correct.)")
+    lines.append(f"- Pair recall: {format_percent(pair_metrics.get('pair_recall'))} (Out of all real matches, how many were found.)")
+    lines.append(f"- True positive: {pair_metrics.get('true_positive', 0)} (Predicted match and truly a match.)")
+    lines.append(f"- False positive: {pair_metrics.get('false_positive', 0)} (Predicted match but actually wrong.)")
+    lines.append(f"- False negative: {pair_metrics.get('false_negative', 0)} (Real match that was missed.)")
     lines.append("")
-    lines.append("## Extra Metrics")
+    lines.append("## Supporting Counts")
     lines.append("")
-    lines.append(
-        f"- Predicted pairs (labeled): {pair_metrics.get('predicted_pairs_labeled', 0)} "
-        "(coppie che Senzing ha marcato come match nel perimetro con label)."
-    )
-    lines.append(
-        f"- Ground-truth pairs (labeled): {pair_metrics.get('ground_truth_pairs_labeled', 0)} "
-        "(coppie realmente corrette secondo la verita' a terra del sample)."
-    )
-    lines.append(
-        f"- Labeled records in export: {data_quality.get('labeled_records_in_export', 0)} "
-        "(record esportati che hanno `SOURCE_IPG_ID`)."
-    )
-    lines.append(
-        f"- Rows with SOURCE_IPG_ID in input: {data_quality.get('rows_with_source_ipg_id', 0)} "
-        "(record input con label disponibile per confronto)."
-    )
-    lines.append(
-        f"- Entity purity (labeled): {format_percent(entity_metrics.get('entity_purity'))} "
-        "(quanto le entita' sono pulite, senza mischiare label diverse)."
-    )
-    lines.append(
-        f"- Pure entities (labeled): {entity_metrics.get('pure_entities', 0)} "
-        "(entita' con una sola label coerente)."
-    )
-    lines.append(
-        f"- Mixed entities (labeled): {entity_metrics.get('mixed_entities', 0)} "
-        "(entita' dove si sono mescolate label diverse)."
-    )
-    lines.append(
-        "- IPG group concentration (size>=2): "
-        f"{format_percent(group_metrics.get('ipg_group_concentration'))} "
-        "(gruppi IPG con almeno 2 record rimasti uniti nella stessa entita')."
-    )
-    lines.append(
-        f"- Split IPG groups (size>=2): {group_metrics.get('ipg_groups_split', 0)}"
-        f"/{group_metrics.get('ipg_groups_size_ge_2', 0)} "
-        "(gruppi IPG spezzati su piu' entita')."
-    )
+    lines.append(f"- Predicted pairs (labeled): {pair_metrics.get('predicted_pairs_labeled', 0)} (Pairs marked as matches by Senzing.)")
+    lines.append(f"- Ground-truth pairs (labeled): {pair_metrics.get('ground_truth_pairs_labeled', 0)} (Pairs that are truly correct in sample labels.)")
+    lines.append(f"- Labeled records in export: {data_quality.get('labeled_records_in_export', 0)} (Exported records that include `SOURCE_IPG_ID`.)")
+    lines.append(f"- Rows with SOURCE_IPG_ID in input: {data_quality.get('rows_with_source_ipg_id', 0)} (Input rows usable for labeled-quality evaluation.)")
+    lines.append("")
+    lines.append("## Cluster Size Distribution (Labeled Records)")
+    lines.append("")
+    lines.append("Shows how many resolved entities were built with 1, 2, 3, 4... labeled records.")
+    lines.append("")
+    lines.append(f"- Entities with labeled records: {distribution_metrics.get('entities_with_labeled_records', 0)}")
+    lines.append(f"- Largest labeled entity size: {distribution_metrics.get('largest_labeled_entity_size', 0)}")
+    lines.append("")
+    lines.append("| Entity Size (records) | Entities Count |")
+    lines.append("| ---: | ---: |")
+    size_dist = distribution_metrics.get("entity_size_distribution", {}) or {}
+    if size_dist:
+        for size, count in sorted(size_dist.items(), key=lambda item: int(item[0])):
+            lines.append(f"| {size} | {count} |")
+    else:
+        lines.append("| 0 | 0 |")
 
-    mixed_examples = payload.get("mixed_entity_examples", [])
-    if mixed_examples:
-        lines.append("")
-        lines.append("## Mixed Entity Examples")
-        lines.append("")
-        lines.append("| Entity | Labeled Records | SOURCE_IPG_ID Counts |")
-        lines.append("| --- | ---: | --- |")
-        for item in mixed_examples:
-            lines.append(
-                f"| {item.get('resolved_entity_id')} | {item.get('labeled_records', 0)} | "
-                f"{json.dumps(item.get('source_ipg_id_counts', {}), ensure_ascii=False)} |"
-            )
+    lines.append("")
+    lines.append("## Pairings Distribution by Entity")
+    lines.append("")
+    lines.append("Shows how many entities generated 1 pairing (size 2), 3 pairings (size 3), 6 pairings (size 4), etc.")
+    lines.append("")
+    lines.append("| Pairings Inside Entity | Entities Count |")
+    lines.append("| ---: | ---: |")
+    pairings_dist = distribution_metrics.get("entity_pairings_distribution", {}) or {}
+    if pairings_dist:
+        for pairings, count in sorted(pairings_dist.items(), key=lambda item: int(item[0])):
+            lines.append(f"| {pairings} | {count} |")
+    else:
+        lines.append("| 0 | 0 |")
+
+    lines.append("")
+    lines.append("## Per-Record Pairing Degree Distribution")
+    lines.append("")
+    lines.append("For each record, degree means how many other records it is grouped with in the same resolved entity.")
+    lines.append("")
+    lines.append("| Pairings Per Record | Records Count |")
+    lines.append("| ---: | ---: |")
+    degree_dist = distribution_metrics.get("record_pairing_degree_distribution", {}) or {}
+    if degree_dist:
+        for degree, count in sorted(degree_dist.items(), key=lambda item: int(item[0])):
+            lines.append(f"| {degree} | {count} |")
+    else:
+        lines.append("| 0 | 0 |")
 
     quality_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return quality_json, quality_md
@@ -1513,25 +1455,25 @@ def make_comparison_outputs(
     lines: list[str] = []
     lines.append("# Senzing Matching Summary")
     lines.append("")
-    lines.append(f"- Generated at: {summary_obj['generated_at']} (orario di generazione report).")
-    lines.append(f"- Records input: {records_input_count} (record letti dal file di input).")
+    lines.append(f"- Generated at: {summary_obj['generated_at']} (report generation time).")
+    lines.append(f"- Records input: {records_input_count} (records read from input file).")
     lines.append(
         f"- Records exported: {len(export_rows)} "
-        "(righe prodotte da `sz_export`; possono essere piu' dell'input per via della struttura export)."
+        "(rows produced by `sz_export`; can be higher than input due to export row structure)."
     )
-    lines.append(f"- Resolved entities: {len(entity_ids)} (entita' finali create dal motore).")
-    lines.append(f"- Matched records: {len(matched_records)} (record che hanno almeno un match).")
-    lines.append(f"- Matched pairs: {len(matched_pairs)} (coppie di record matchate).")
+    lines.append(f"- Resolved entities: {len(entity_ids)} (final entities resolved by Senzing).")
+    lines.append(f"- Matched records: {len(matched_records)} (records that have at least one match).")
+    lines.append(f"- Matched pairs: {len(matched_pairs)} (matched record pairs).")
     lines.append(
         "- Explain coverage: "
         f"whyEntity {summary_obj['explain_coverage']['why_entity_ok']}/{summary_obj['explain_coverage']['why_entity_total']}, "
         f"whyRecords {summary_obj['explain_coverage']['why_records_ok']}/{summary_obj['explain_coverage']['why_records_total']} "
-        "(quanti explain sono stati richiesti e prodotti con successo)."
+        "(how many explain requests succeeded)."
     )
     lines.append("")
     lines.append("## Top Match Keys")
     lines.append("")
-    lines.append("Mostra quali combinazioni di segnali (es. NAME+DOB) hanno generato piu' match.")
+    lines.append("Shows which signal combinations (for example `NAME+DOB`) generated the most matches.")
     lines.append("")
     lines.append("| Match Key | Count |")
     lines.append("| --- | ---: |")
@@ -1544,7 +1486,7 @@ def make_comparison_outputs(
     lines.append("")
     lines.append("## Match Level Distribution")
     lines.append("")
-    lines.append("Distribuzione dei livelli di match prodotti da Senzing (livello numerico di confidenza/relazione).")
+    lines.append("Distribution of numeric match levels produced by Senzing.")
     lines.append("")
     lines.append("| Match Level | Count |")
     lines.append("| --- | ---: |")
@@ -1553,30 +1495,6 @@ def make_comparison_outputs(
             lines.append(f"| {level} | {count} |")
     else:
         lines.append("| 0 | 0 |")
-
-    lines.append("")
-    lines.append("## First 20 Matched Pairs")
-    lines.append("")
-    lines.append("Prime 20 coppie matchate per controllo rapido.")
-    lines.append("- `Entity`: id entita' risolta.")
-    lines.append("- `Anchor`: record principale del cluster.")
-    lines.append("- `Matched`: record collegato all'anchor.")
-    lines.append("- `Match Key`: segnali usati per il match.")
-    lines.append("- `Level`: livello numerico del match.")
-    lines.append("- `Explain`: motivo testuale (se explain attivo).")
-    lines.append("")
-    lines.append("| Entity | Anchor | Matched | Match Key | Level | Explain |")
-    lines.append("| --- | --- | --- | --- | ---: | --- |")
-    for row in pair_rows[:20]:
-        anchor = f"{row['anchor_data_source']}:{row['anchor_record_id']}"
-        matched = f"{row['matched_data_source']}:{row['matched_record_id']}"
-        explain_text = str(row["why_records_reason_summary"] or "").replace("\n", " ")
-        lines.append(
-            f"| {row['resolved_entity_id']} | {anchor} | {matched} | "
-            f"{row['match_key']} | {row['match_level']} | {explain_text} |"
-        )
-    if not pair_rows:
-        lines.append("| - | - | - | - | - | No matched pairs detected |")
 
     management_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
