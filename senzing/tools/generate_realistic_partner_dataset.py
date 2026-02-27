@@ -356,7 +356,7 @@ def generate_dataset(
     ipg_counter = 0
 
     with output_path.open("w", encoding="utf-8") as out:
-        out.write("[\n")
+        out.write("[")
 
         def write_record(payload: dict[str, Any], is_first: bool) -> None:
             if not is_first:
