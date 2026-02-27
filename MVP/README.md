@@ -1,19 +1,22 @@
 # MVP Pipeline
 
-Script e input restano nella root di `MVP`.  
+Script restano nella root di `MVP`.  
+Sample input JSON restano in `sample_input/`.  
 Gli output finali vengono scritti in `output/<timestamp>/`.
 
 ## File inclusi
 
 - `run_mvp_pipeline.py`: wrapper unico (mapping + run Senzing + comparison/report)
+- `run_samples_batch.py`: esegue il pipeline su tutti i JSON in `sample_input/`
+- `generate_sample_inputs.py`: rigenera 10 sample curati (500 record ciascuno) con metadati descrittivi in testa
 - `partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
 - `run_senzing_end_to_end.py`: runner E2E Senzing
 - `build_management_dashboard.py`: builds dashboard data from all `output/<timestamp>/` runs
-- `management_dashboard.html`: local dashboard UI for management
-- `management_dashboard.js`: dashboard logic
-- `management_dashboard.css`: dashboard styling
-- `tabler.min.css`, `tabler.min.js`, `chart.umd.js`: local dashboard assets (no CDN)
-- `partner_input_realistic_500.json`: sample pronto (500 record)
+- `dashboard/management_dashboard.html`: local dashboard UI for management
+- `dashboard/management_dashboard.js`: dashboard logic
+- `dashboard/management_dashboard.css`: dashboard styling
+- `dashboard/tabler.min.css`, `dashboard/tabler.min.js`, `dashboard/chart.umd.js`: local dashboard assets (no CDN)
+- `sample_input/sample_01_legacy_baseline_500.json`: sample pronto (500 record)
 
 ## Prerequisiti
 
@@ -45,7 +48,19 @@ python3 run_mvp_pipeline.py \
 ## Esempio con sample incluso
 
 ```bash
-python3 run_mvp_pipeline.py --input-json partner_input_realistic_500.json
+python3 run_mvp_pipeline.py --input-json sample_input/sample_01_legacy_baseline_500.json
+```
+
+## Batch su tutti i sample input
+
+```bash
+python3 run_samples_batch.py --execution-mode auto
+```
+
+Con ambiente locale (senza Docker):
+
+```bash
+python3 run_samples_batch.py --execution-mode local --senzing-env /opt/senzing/er/setupEnv
 ```
 
 ## Input annidato
@@ -55,6 +70,20 @@ Se il JSON e' del tipo `{"records":[...]}`:
 ```bash
 python3 run_mvp_pipeline.py --input-json /path/to/input.json --input-array-key records
 ```
+
+Nota: il wrapper ora prova automaticamente `records`, `data`, `items` quando `--input-array-key` non e' passato.
+
+## Rigenerare sample curati
+
+```bash
+python3 generate_sample_inputs.py --records 500
+```
+
+Ogni file in `sample_input/` viene scritto con metadati iniziali:
+
+- `_sample_comment`: descrizione breve del caso
+- `_sample_special_features`: elenco delle caratteristiche del sample
+- `records`: array di 500 record usato dal pipeline
 
 ## WHY (opzionale)
 
@@ -111,7 +140,7 @@ Nota: `--execution-mode auto` (default) usa Docker se disponibile, altrimenti pa
 The dashboard is fully local (no CDN).
 
 - It reads only local artifacts generated in `output/<timestamp>/`.
-- It is published in `output/dashboard/` (all dashboard files are there).
+- UI files are in `dashboard/`.
 - It is refreshed automatically after each `run_mvp_pipeline.py` execution.
 
 You can also rebuild it manually:
@@ -128,7 +157,7 @@ python3 -m http.server 8080
 
 Then browse:
 
-- `http://localhost:8080/output/dashboard/management_dashboard.html`
+- `http://localhost:8080/dashboard/management_dashboard.html`
 
 Third-party assets included locally:
 

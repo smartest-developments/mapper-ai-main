@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quality Dashboard</title>
+    <link rel="stylesheet" href="./tabler.min.css">
+    <link rel="stylesheet" href="./management_dashboard.css">
+  </head>
+  <body>
+    <div class="page">
+      <header class="navbar navbar-expand-md main-nav">
+        <div class="container-xl">
+          <div class="navbar-brand pe-3 text-white fw-bold">Quality Dashboard</div>
+        </div>
+      </header>
+
+      <div class="page-wrapper">
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-cards mb-3" id="selectedRunCards"></div>
+
+            <div class="row row-cards mb-3">
+              <div class="col-xl-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Entity Size Distribution</h3>
+                  </div>
+                  <div class="card-body chart-md">
+                    <canvas id="entitySizeChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-8">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Top Match Keys</h3>
+                  </div>
+                  <div class="card-body match-keys-body">
+                    <div id="matchKeyList" class="match-key-list"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row row-cards mb-3">
+              <div class="col-sm-12 col-md-6 col-xl-4">
+                <div class="card controls-card">
+                  <div class="card-body">
+                    <label class="form-label">Select output</label>
+                    <select class="form-select mb-3" id="runSelector"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./tabler.min.js"></script>
+    <script src="./chart.umd.js"></script>
+    <script src="./management_dashboard_data.js"></script>
+    <script src="./management_dashboard.js"></script>
+  </body>
+</html>

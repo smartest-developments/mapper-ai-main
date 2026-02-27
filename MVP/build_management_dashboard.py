@@ -7,24 +7,15 @@ import argparse
 import datetime as dt
 import json
 import re
-import shutil
 from pathlib import Path
 
-RUN_DIR_RE = re.compile(r"^\d{8}_\d{6}$")
-DASHBOARD_STATIC_FILES = [
-    "management_dashboard.html",
-    "management_dashboard.css",
-    "management_dashboard.js",
-    "tabler.min.css",
-    "tabler.min.js",
-    "chart.umd.js",
-]
+RUN_DIR_RE = re.compile(r"^(?P<ts>\d{8}_\d{6})(?:__(?P<label>[A-Za-z0-9._-]+))?$")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build management dashboard data from MVP outputs")
     parser.add_argument("--output-root", default="output", help="Output root containing timestamped run folders")
-    parser.add_argument("--dashboard-subdir", default="dashboard", help="Dashboard directory under output root")
+    parser.add_argument("--dashboard-dir", default="dashboard", help="Dashboard directory under MVP root")
     return parser.parse_args()
 
 
@@ -39,8 +30,10 @@ def read_json(path: Path) -> dict:
 
 
 def parse_run_datetime(run_id: str) -> str | None:
+    match = RUN_DIR_RE.match(run_id)
+    timestamp = match.group("ts") if match else run_id
     try:
-        return dt.datetime.strptime(run_id, "%Y%m%d_%H%M%S").isoformat(timespec="seconds")
+        return dt.datetime.strptime(timestamp, "%Y%m%d_%H%M%S").isoformat(timespec="seconds")
     except ValueError:
         return None
 
@@ -60,6 +53,9 @@ def pct(value: object) -> float | None:
 
 def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     run_id = run_dir.name
+    match = RUN_DIR_RE.match(run_id)
+    run_timestamp = match.group("ts") if match else run_id
+    run_folder_label = match.group("label") if match else None
     technical_dir = run_dir / "technical output"
 
     management_summary = read_json(technical_dir / "management_summary.json")
@@ -71,6 +67,10 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     distribution_metrics = (
         ground_truth.get("distribution_metrics") if isinstance(ground_truth.get("distribution_metrics"), dict) else {}
     )
+
+    mapping_input = str(mapping_summary.get("input_json") or "").strip()
+    source_input_name = Path(mapping_input).name if mapping_input else None
+    output_label = str(mapping_summary.get("output_label") or "").strip() or run_folder_label
 
     artifact_entries: list[dict[str, object]] = []
     for file_path in sorted(path for path in run_dir.rglob("*") if path.is_file()):
@@ -85,9 +85,36 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
             }
         )
 
+    has_management_summary = bool(management_summary)
+    has_ground_truth = bool(ground_truth)
+    has_run_summary = bool(run_summary)
+    overall_ok = run_summary.get("overall_ok") if isinstance(run_summary.get("overall_ok"), bool) else None
+    quality_available = (
+        isinstance(pair_metrics.get("pair_precision"), (int, float))
+        and isinstance(pair_metrics.get("pair_recall"), (int, float))
+        and isinstance(pair_metrics.get("true_positive"), int)
+        and isinstance(pair_metrics.get("false_positive"), int)
+        and isinstance(pair_metrics.get("false_negative"), int)
+    )
+    if has_run_summary and overall_ok is False:
+        run_status = "failed"
+    elif has_management_summary and has_ground_truth:
+        run_status = "success"
+    else:
+        run_status = "incomplete"
+
     return {
         "run_id": run_id,
+        "run_timestamp": run_timestamp,
         "run_datetime": parse_run_datetime(run_id),
+        "run_label": output_label,
+        "source_input_name": source_input_name,
+        "run_status": run_status,
+        "has_management_summary": has_management_summary,
+        "has_ground_truth_summary": has_ground_truth,
+        "has_run_summary": has_run_summary,
+        "overall_ok": overall_ok,
+        "quality_available": quality_available,
         "generated_at": management_summary.get("generated_at")
         or ground_truth.get("generated_at")
         or run_summary.get("generated_at"),
@@ -146,14 +173,22 @@ def aggregate(runs: list[dict]) -> dict:
             return None
         return round(sum(values) / len(values), 2)
 
-    precision_values = [float(run["pair_precision_pct"]) for run in runs if isinstance(run.get("pair_precision_pct"), (int, float))]
-    recall_values = [float(run["pair_recall_pct"]) for run in runs if isinstance(run.get("pair_recall_pct"), (int, float))]
+    quality_runs = [run for run in runs if bool(run.get("quality_available"))]
+    precision_values = [float(run["pair_precision_pct"]) for run in quality_runs if isinstance(run.get("pair_precision_pct"), (int, float))]
+    recall_values = [float(run["pair_recall_pct"]) for run in quality_runs if isinstance(run.get("pair_recall_pct"), (int, float))]
 
-    total_input = sum(int(run.get("records_input")) for run in runs if isinstance(run.get("records_input"), int))
-    total_pairs = sum(int(run.get("matched_pairs")) for run in runs if isinstance(run.get("matched_pairs"), int))
+    total_input = sum(int(run.get("records_input")) for run in quality_runs if isinstance(run.get("records_input"), int))
+    total_pairs = sum(int(run.get("matched_pairs")) for run in quality_runs if isinstance(run.get("matched_pairs"), int))
+    successful_runs = sum(1 for run in runs if run.get("run_status") == "success")
+    failed_runs = sum(1 for run in runs if run.get("run_status") == "failed")
+    incomplete_runs = sum(1 for run in runs if run.get("run_status") == "incomplete")
 
     return {
         "runs_total": len(runs),
+        "quality_runs_total": len(quality_runs),
+        "successful_runs": successful_runs,
+        "failed_runs": failed_runs,
+        "incomplete_runs": incomplete_runs,
         "latest_run_id": runs[0]["run_id"] if runs else None,
         "avg_pair_precision_pct": mean(precision_values),
         "avg_pair_recall_pct": mean(recall_values),
@@ -167,25 +202,16 @@ def write_data_js(path: Path, payload: dict) -> None:
     path.write_text(js, encoding="utf-8")
 
 
-def copy_static_dashboard_assets(mvp_root: Path, dashboard_dir: Path) -> None:
-    for name in DASHBOARD_STATIC_FILES:
-        source = mvp_root / name
-        if not source.exists():
-            raise FileNotFoundError(f"Dashboard static asset missing: {source}")
-        shutil.copy2(source, dashboard_dir / name)
-
-
 def main() -> int:
     args = parse_args()
     mvp_root = Path(__file__).resolve().parent
     output_root = (mvp_root / args.output_root).resolve()
-    dashboard_dir = (output_root / args.dashboard_subdir).resolve()
+    dashboard_dir = (mvp_root / args.dashboard_dir).resolve()
     data_js_path = dashboard_dir / "management_dashboard_data.js"
 
     if not output_root.exists():
         output_root.mkdir(parents=True, exist_ok=True)
     dashboard_dir.mkdir(parents=True, exist_ok=True)
-    copy_static_dashboard_assets(mvp_root, dashboard_dir)
 
     runs = collect_runs(output_root)
     payload = {

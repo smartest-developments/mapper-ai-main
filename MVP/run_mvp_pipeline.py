@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -71,6 +72,11 @@ def parse_args() -> argparse.Namespace:
         help="Optional runtime directory (default: temporary directory outside MVP)",
     )
     parser.add_argument(
+        "--output-label",
+        default=None,
+        help="Optional friendly label appended to output folder name",
+    )
+    parser.add_argument(
         "--keep-runtime-dir",
         action="store_true",
         help="Do not delete runtime directory after completion",
@@ -80,6 +86,11 @@ def parse_args() -> argparse.Namespace:
 
 def run_command(command: list[str], cwd: Path) -> None:
     subprocess.run(command, cwd=str(cwd), check=True)
+
+
+def sanitize_output_label(raw_label: str) -> str:
+    safe = re.sub(r"[^A-Za-z0-9._-]+", "_", raw_label).strip("._-")
+    return safe[:48]
 
 
 def check_docker_ready() -> tuple[bool, str]:
@@ -98,6 +109,20 @@ def check_docker_ready() -> tuple[bool, str]:
         return True, "docker ready"
     detail = (probe.stderr or probe.stdout or "").strip().splitlines()
     return False, detail[-1] if detail else "docker not available"
+
+
+def detect_input_array_key(input_json: Path) -> str | None:
+    try:
+        payload = json.loads(input_json.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if isinstance(payload, list):
+        return None
+    if isinstance(payload, dict):
+        for candidate in ["records", "data", "items"]:
+            if isinstance(payload.get(candidate), list):
+                return candidate
+    return None
 
 
 def find_new_run_dir(runs_root: Path, prefix: str) -> Path:
@@ -128,7 +153,7 @@ def refresh_dashboard_data(mvp_root: Path, output_root: Path) -> None:
         str(dashboard_builder),
         "--output-root",
         str(output_root),
-        "--dashboard-subdir",
+        "--dashboard-dir",
         "dashboard",
     ]
     try:
@@ -214,10 +239,11 @@ def main() -> int:
         return 2
 
     ts = now_timestamp()
+    derived_label = sanitize_output_label(args.output_label or input_json.stem)
+    output_folder_name = f"{ts}__{derived_label}" if derived_label else ts
     output_root = (mvp_root / args.output_root).resolve()
     output_root.mkdir(parents=True, exist_ok=True)
-    output_run_dir = output_root / ts
-    output_run_dir.mkdir(parents=True, exist_ok=True)
+    output_run_dir = output_root / output_folder_name
 
     if args.runtime_dir:
         runtime_dir = Path(args.runtime_dir).expanduser().resolve()
@@ -250,8 +276,9 @@ def main() -> int:
         "--write-field-map",
         str(field_map_json),
     ]
-    if args.input_array_key:
-        mapper_cmd.extend(["--array-key", args.input_array_key])
+    effective_input_array_key = args.input_array_key or detect_input_array_key(input_json)
+    if effective_input_array_key:
+        mapper_cmd.extend(["--array-key", effective_input_array_key])
     if args.include_unmapped_source_fields:
         mapper_cmd.append("--include-unmapped-source-fields")
     run_command(mapper_cmd, mvp_root)
@@ -260,11 +287,14 @@ def main() -> int:
         "mode": "input_json",
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
         "input_json": str(input_json),
+        "source_input_name": input_json.name,
         "mapped_output_jsonl": str(mapped_output_jsonl),
         "field_map_json": str(field_map_json),
         "data_source": args.data_source,
         "tax_id_type": args.tax_id_type,
-        "input_array_key": args.input_array_key,
+        "input_array_key": effective_input_array_key,
+        "output_folder_name": output_folder_name,
+        "output_label": derived_label or None,
         "include_unmapped_source_fields": bool(args.include_unmapped_source_fields),
         "runtime_dir": str(runtime_dir),
     }
@@ -347,44 +377,46 @@ def main() -> int:
     if execution_mode == "local" and docker_note != "docker ready":
         print(f"Docker note: {docker_note}")
 
-    run_command(e2e_cmd, mvp_root)
-
-    run_dir = find_new_run_dir(runtime_runs, args.run_name_prefix)
-    run_summary_json = run_dir / "run_summary.json"
-    if not run_summary_json.exists():
-        print(f"ERROR: run summary not found: {run_summary_json}", file=sys.stderr)
-        return 2
-
-    copied = copy_artifacts_to_output(
-        output_run_dir=output_run_dir,
-        mvp_root=mvp_root,
-        runtime_dir=runtime_dir,
-        source_input_json=input_json,
-        run_dir=run_dir,
-        mapped_output_jsonl=mapped_output_jsonl,
-        field_map_json=field_map_json,
-        mapping_summary_json=mapping_summary_json,
-        run_summary_json=run_summary_json,
-    )
-    refresh_dashboard_data(mvp_root=mvp_root, output_root=output_root)
-
     keep_runtime = args.keep_runtime_dir or not runtime_created
-    if not keep_runtime:
-        shutil.rmtree(runtime_dir, ignore_errors=True)
+    try:
+        run_command(e2e_cmd, mvp_root)
 
-    print("\nMVP pipeline completed.")
-    print(f"Input JSON: {input_json}")
-    print(f"Output directory: {output_run_dir}")
-    print(f"Technical directory: {output_run_dir / 'technical output'}")
-    print(f"Artifacts copied: {len(copied)}")
-    print(f"Mapped JSONL: {copied.get('mapped_output.jsonl')}")
-    print(f"Management summary (md): {copied.get('management_summary.md')}")
-    print(f"Ground truth quality (md): {copied.get('ground_truth_match_quality.md')}")
-    print(f"Run summary (technical): {copied.get('run_summary.json')}")
-    print(f"Run registry CSV: {copied.get('run_registry.csv')}")
-    if keep_runtime:
-        print(f"Runtime directory kept: {runtime_dir}")
-    return 0
+        run_dir = find_new_run_dir(runtime_runs, args.run_name_prefix)
+        run_summary_json = run_dir / "run_summary.json"
+        if not run_summary_json.exists():
+            print(f"ERROR: run summary not found: {run_summary_json}", file=sys.stderr)
+            return 2
+
+        output_run_dir.mkdir(parents=True, exist_ok=True)
+        copied = copy_artifacts_to_output(
+            output_run_dir=output_run_dir,
+            mvp_root=mvp_root,
+            runtime_dir=runtime_dir,
+            source_input_json=input_json,
+            run_dir=run_dir,
+            mapped_output_jsonl=mapped_output_jsonl,
+            field_map_json=field_map_json,
+            mapping_summary_json=mapping_summary_json,
+            run_summary_json=run_summary_json,
+        )
+        refresh_dashboard_data(mvp_root=mvp_root, output_root=output_root)
+
+        print("\nMVP pipeline completed.")
+        print(f"Input JSON: {input_json}")
+        print(f"Output directory: {output_run_dir}")
+        print(f"Technical directory: {output_run_dir / 'technical output'}")
+        print(f"Artifacts copied: {len(copied)}")
+        print(f"Mapped JSONL: {copied.get('mapped_output.jsonl')}")
+        print(f"Management summary (md): {copied.get('management_summary.md')}")
+        print(f"Ground truth quality (md): {copied.get('ground_truth_match_quality.md')}")
+        print(f"Run summary (technical): {copied.get('run_summary.json')}")
+        print(f"Run registry CSV: {copied.get('run_registry.csv')}")
+        if keep_runtime:
+            print(f"Runtime directory kept: {runtime_dir}")
+        return 0
+    finally:
+        if not keep_runtime:
+            shutil.rmtree(runtime_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":
