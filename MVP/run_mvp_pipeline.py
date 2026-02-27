@@ -118,6 +118,56 @@ def copy_if_exists(source: Path, destination: Path) -> bool:
     return True
 
 
+def write_glossary(output_run_dir: Path) -> Path:
+    """Write a glossary with all key reporting terms."""
+    lines = [
+        "# Glossary",
+        "",
+        "Spiegazione dei termini usati nei report (`management_summary.*` e `ground_truth_match_quality.*`).",
+        "",
+        "## Metriche Match (coppie)",
+        "",
+        "- `Predicted pairs`: numero di coppie che Senzing ha previsto come match.",
+        "- `Ground-truth pairs`: numero di coppie realmente match nel dataset di riferimento (`SOURCE_IPG_ID`).",
+        "- `True positive (TP)`: coppie previste match e realmente match.",
+        "- `False positive (FP)`: coppie previste match ma non realmente match.",
+        "- `False negative (FN)`: coppie realmente match ma non trovate da Senzing.",
+        "- `Pair precision`: quota di coppie previste corrette. Formula: `TP / (TP + FP)`.",
+        "- `Pair recall`: quota di coppie reali trovate. Formula: `TP / (TP + FN)`.",
+        "- `Pair F1`: equilibrio tra precision e recall. Formula: `2 * precision * recall / (precision + recall)`.",
+        "",
+        "## Metriche Entita'/Label",
+        "",
+        "- `Labeled records in export`: record esportati che hanno `SOURCE_IPG_ID` valorizzato.",
+        "- `Rows with SOURCE_IPG_ID in input`: record in input con `SOURCE_IPG_ID` valorizzato.",
+        "- `Entity purity (labeled)`: quota di entita' con label coerente (nessun mixing).",
+        "- `Pure entities (labeled)`: numero di entita' con record tutti dello stesso gruppo label.",
+        "- `Mixed entities (labeled)`: numero di entita' con record provenienti da gruppi label diversi.",
+        "- `IPG group concentration (size>=2)`: quota di gruppi label (dimensione >=2) concentrati in una sola entita'.",
+        "- `Split IPG groups (size>=2)`: quanti gruppi label (>=2) sono spezzati in piu' entita'.",
+        "",
+        "## Termini Operativi del Report",
+        "",
+        "- `Records input`: numero record letti in input.",
+        "- `Records exported`: righe prodotte in export da Senzing.",
+        "- `Resolved entities`: numero entita' risolte dal motore.",
+        "- `Matched records`: numero record che hanno almeno un match.",
+        "- `Matched pairs`: numero coppie match trovate.",
+        "- `Match key`: combinazione di segnali usata per spiegare il match (es. `NAME+DOB`).",
+        "- `Match level`: livello numerico di match assegnato da Senzing.",
+        "- `Explain coverage`: quanti explain `whyEntity/whyRecords` sono stati realmente prodotti.",
+        "",
+        "## Identificativi",
+        "",
+        "- `DATA_SOURCE`: sorgente logica del record in Senzing (es. `PARTNERS`).",
+        "- `RECORD_ID`: identificativo record interno al `DATA_SOURCE`.",
+        "- `SOURCE_IPG_ID`: etichetta di riferimento usata per valutare la qualita' dei match nel sample.",
+    ]
+    glossary_path = output_run_dir / "glossary.md"
+    glossary_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return glossary_path
+
+
 def copy_artifacts_to_output(
     output_run_dir: Path,
     mvp_root: Path,
@@ -128,6 +178,8 @@ def copy_artifacts_to_output(
     run_summary_json: Path,
 ) -> dict[str, str]:
     copied: dict[str, str] = {}
+    technical_dir = output_run_dir / "technical output"
+    technical_dir.mkdir(parents=True, exist_ok=True)
 
     def to_host_path(raw_path: Path) -> Path:
         raw = str(raw_path)
@@ -138,43 +190,37 @@ def copy_artifacts_to_output(
         return raw_path
 
     targets = {
-        mapped_output_jsonl: output_run_dir / "mapped_output.jsonl",
-        field_map_json: output_run_dir / "field_map.json",
-        mapping_summary_json: output_run_dir / "mapping_summary.json",
-        run_summary_json: output_run_dir / "run_summary.json",
+        mapped_output_jsonl: technical_dir / "mapped_output.jsonl",
+        field_map_json: technical_dir / "field_map.json",
+        mapping_summary_json: technical_dir / "mapping_summary.json",
+        run_summary_json: technical_dir / "run_summary.json",
     }
     run_summary_payload = json.loads(run_summary_json.read_text(encoding="utf-8"))
     artifacts = run_summary_payload.get("artifacts", {}) if isinstance(run_summary_payload.get("artifacts"), dict) else {}
-    for key, suffix in [
-        ("management_summary_md", "management_summary.md"),
-        ("management_summary_json", "management_summary.json"),
-        ("ground_truth_match_quality_md", "ground_truth_match_quality.md"),
-        ("ground_truth_match_quality_json", "ground_truth_match_quality.json"),
-        ("matched_pairs_csv", "matched_pairs.csv"),
-        ("match_stats_csv", "match_stats.csv"),
-        ("entity_records_csv", "entity_records.csv"),
+    for key, destination in [
+        ("management_summary_md", output_run_dir / "management_summary.md"),
+        ("ground_truth_match_quality_md", output_run_dir / "ground_truth_match_quality.md"),
+        ("management_summary_json", technical_dir / "management_summary.json"),
+        ("ground_truth_match_quality_json", technical_dir / "ground_truth_match_quality.json"),
+        ("matched_pairs_csv", technical_dir / "matched_pairs.csv"),
+        ("match_stats_csv", technical_dir / "match_stats.csv"),
+        ("entity_records_csv", technical_dir / "entity_records.csv"),
     ]:
         value = artifacts.get(key)
         if not value:
             continue
-        targets[to_host_path(Path(str(value)))] = output_run_dir / suffix
+        targets[to_host_path(Path(str(value)))] = destination
 
     run_registry_candidate = mvp_root / "output" / "run_registry.csv"
     if run_registry_candidate.exists():
-        targets[run_registry_candidate] = output_run_dir / "run_registry.csv"
+        targets[run_registry_candidate] = technical_dir / "run_registry.csv"
 
     for source, destination in targets.items():
         if copy_if_exists(source, destination):
             copied[destination.name] = str(destination.resolve())
 
-    manifest_path = output_run_dir / "execution_manifest.json"
-    manifest = {
-        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
-        "output_directory": str(output_run_dir),
-        "copied_artifacts": copied,
-    }
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    copied[manifest_path.name] = str(manifest_path.resolve())
+    glossary_path = write_glossary(output_run_dir)
+    copied[glossary_path.name] = str(glossary_path.resolve())
     return copied
 
 
@@ -355,11 +401,13 @@ def main() -> int:
     print("\nMVP pipeline completed.")
     print(f"Input JSON: {input_json}")
     print(f"Output directory: {output_run_dir}")
+    print(f"Technical directory: {output_run_dir / 'technical output'}")
     print(f"Artifacts copied: {len(copied)}")
     print(f"Mapped JSONL: {copied.get('mapped_output.jsonl')}")
-    print(f"Run summary: {copied.get('run_summary.json')}")
     print(f"Management summary (md): {copied.get('management_summary.md')}")
     print(f"Ground truth quality (md): {copied.get('ground_truth_match_quality.md')}")
+    print(f"Glossary (md): {copied.get('glossary.md')}")
+    print(f"Run summary (technical): {copied.get('run_summary.json')}")
     print(f"Run registry CSV: {copied.get('run_registry.csv')}")
     if keep_runtime:
         print(f"Runtime directory kept: {runtime_dir}")

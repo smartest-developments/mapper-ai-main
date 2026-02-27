@@ -70,20 +70,23 @@ Ogni esecuzione crea una cartella dedicata:
 
 - `output/<timestamp>/`
 
-Dentro trovi:
+Dentro `output/<timestamp>/` (management-friendly) trovi:
+
+- `management_summary.md`
+- `ground_truth_match_quality.md`
+- `glossary.md` (spiegazione di tutti i termini usati nei report)
+
+Dentro `output/<timestamp>/technical output/` trovi gli artifact tecnici:
 
 - `mapped_output.jsonl`
 - `field_map.json`
 - `mapping_summary.json`
 - `run_summary.json`
-- `management_summary.md`
 - `management_summary.json`
-- `ground_truth_match_quality.md`
 - `ground_truth_match_quality.json`
 - `matched_pairs.csv`
 - `match_stats.csv`
 - `entity_records.csv`
-- `execution_manifest.json`
 - `run_registry.csv` (snapshot della registry del run)
 
 ## Runtime
