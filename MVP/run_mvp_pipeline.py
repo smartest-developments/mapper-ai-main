@@ -122,6 +122,8 @@ def copy_artifacts_to_output(
     output_run_dir: Path,
     mvp_root: Path,
     runtime_dir: Path,
+    source_input_json: Path,
+    run_dir: Path,
     mapped_output_jsonl: Path,
     field_map_json: Path,
     mapping_summary_json: Path,
@@ -140,10 +142,12 @@ def copy_artifacts_to_output(
         return raw_path
 
     targets = {
+        source_input_json: output_run_dir / "input_source.json",
         mapped_output_jsonl: technical_dir / "mapped_output.jsonl",
         field_map_json: technical_dir / "field_map.json",
         mapping_summary_json: technical_dir / "mapping_summary.json",
         run_summary_json: technical_dir / "run_summary.json",
+        run_dir / "input_normalized.jsonl": technical_dir / "input_normalized.jsonl",
     }
     run_summary_payload = json.loads(run_summary_json.read_text(encoding="utf-8"))
     artifacts = run_summary_payload.get("artifacts", {}) if isinstance(run_summary_payload.get("artifacts"), dict) else {}
@@ -336,6 +340,8 @@ def main() -> int:
         output_run_dir=output_run_dir,
         mvp_root=mvp_root,
         runtime_dir=runtime_dir,
+        source_input_json=input_json,
+        run_dir=run_dir,
         mapped_output_jsonl=mapped_output_jsonl,
         field_map_json=field_map_json,
         mapping_summary_json=mapping_summary_json,

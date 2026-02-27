@@ -72,6 +72,7 @@ Ogni esecuzione crea una cartella dedicata:
 
 Dentro `output/<timestamp>/` (management-friendly) trovi:
 
+- `input_source.json` (exact source JSON used for that run)
 - `management_summary.md`
 - `ground_truth_match_quality.md`
 
@@ -81,6 +82,7 @@ Dentro `output/<timestamp>/technical output/` trovi gli artifact tecnici:
 - `field_map.json`
 - `mapping_summary.json`
 - `run_summary.json`
+- `input_normalized.jsonl` (exact JSONL consumed by Senzing in that run)
 - `management_summary.json`
 - `ground_truth_match_quality.json`
 - `matched_pairs.csv`
