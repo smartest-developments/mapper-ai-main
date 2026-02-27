@@ -1132,29 +1132,70 @@ def write_ground_truth_match_quality_reports(
     lines.append("")
     lines.append("## Pair Quality")
     lines.append("")
-    lines.append(f"- Pair precision: {format_percent(pair_metrics.get('pair_precision'))}")
-    lines.append(f"- Pair recall: {format_percent(pair_metrics.get('pair_recall'))}")
-    lines.append(f"- Pair F1: {format_percent(pair_metrics.get('pair_f1'))}")
-    lines.append(f"- True positive: {pair_metrics.get('true_positive', 0)}")
-    lines.append(f"- False positive: {pair_metrics.get('false_positive', 0)}")
-    lines.append(f"- False negative: {pair_metrics.get('false_negative', 0)}")
+    lines.append(
+        f"- Pair precision: {format_percent(pair_metrics.get('pair_precision'))} "
+        "(tra i match trovati da Senzing, quanti sono corretti)."
+    )
+    lines.append(
+        f"- Pair recall: {format_percent(pair_metrics.get('pair_recall'))} "
+        "(tra i match reali, quanti ne abbiamo trovati)."
+    )
+    lines.append(
+        f"- Pair F1: {format_percent(pair_metrics.get('pair_f1'))} "
+        "(indice unico che combina precision e recall)."
+    )
+    lines.append(
+        f"- True positive: {pair_metrics.get('true_positive', 0)} "
+        "(match trovati e davvero corretti)."
+    )
+    lines.append(
+        f"- False positive: {pair_metrics.get('false_positive', 0)} "
+        "(match trovati ma sbagliati)."
+    )
+    lines.append(
+        f"- False negative: {pair_metrics.get('false_negative', 0)} "
+        "(match reali che il sistema non ha trovato)."
+    )
     lines.append("")
     lines.append("## Extra Metrics")
     lines.append("")
-    lines.append(f"- Predicted pairs (labeled): {pair_metrics.get('predicted_pairs_labeled', 0)}")
-    lines.append(f"- Ground-truth pairs (labeled): {pair_metrics.get('ground_truth_pairs_labeled', 0)}")
-    lines.append(f"- Labeled records in export: {data_quality.get('labeled_records_in_export', 0)}")
-    lines.append(f"- Rows with SOURCE_IPG_ID in input: {data_quality.get('rows_with_source_ipg_id', 0)}")
-    lines.append(f"- Entity purity (labeled): {format_percent(entity_metrics.get('entity_purity'))}")
-    lines.append(f"- Pure entities (labeled): {entity_metrics.get('pure_entities', 0)}")
-    lines.append(f"- Mixed entities (labeled): {entity_metrics.get('mixed_entities', 0)}")
+    lines.append(
+        f"- Predicted pairs (labeled): {pair_metrics.get('predicted_pairs_labeled', 0)} "
+        "(coppie che Senzing ha marcato come match nel perimetro con label)."
+    )
+    lines.append(
+        f"- Ground-truth pairs (labeled): {pair_metrics.get('ground_truth_pairs_labeled', 0)} "
+        "(coppie realmente corrette secondo la verita' a terra del sample)."
+    )
+    lines.append(
+        f"- Labeled records in export: {data_quality.get('labeled_records_in_export', 0)} "
+        "(record esportati che hanno `SOURCE_IPG_ID`)."
+    )
+    lines.append(
+        f"- Rows with SOURCE_IPG_ID in input: {data_quality.get('rows_with_source_ipg_id', 0)} "
+        "(record input con label disponibile per confronto)."
+    )
+    lines.append(
+        f"- Entity purity (labeled): {format_percent(entity_metrics.get('entity_purity'))} "
+        "(quanto le entita' sono pulite, senza mischiare label diverse)."
+    )
+    lines.append(
+        f"- Pure entities (labeled): {entity_metrics.get('pure_entities', 0)} "
+        "(entita' con una sola label coerente)."
+    )
+    lines.append(
+        f"- Mixed entities (labeled): {entity_metrics.get('mixed_entities', 0)} "
+        "(entita' dove si sono mescolate label diverse)."
+    )
     lines.append(
         "- IPG group concentration (size>=2): "
-        f"{format_percent(group_metrics.get('ipg_group_concentration'))}"
+        f"{format_percent(group_metrics.get('ipg_group_concentration'))} "
+        "(gruppi IPG con almeno 2 record rimasti uniti nella stessa entita')."
     )
     lines.append(
         f"- Split IPG groups (size>=2): {group_metrics.get('ipg_groups_split', 0)}"
-        f"/{group_metrics.get('ipg_groups_size_ge_2', 0)}"
+        f"/{group_metrics.get('ipg_groups_size_ge_2', 0)} "
+        "(gruppi IPG spezzati su piu' entita')."
     )
 
     mixed_examples = payload.get("mixed_entity_examples", [])
@@ -1472,19 +1513,25 @@ def make_comparison_outputs(
     lines: list[str] = []
     lines.append("# Senzing Matching Summary")
     lines.append("")
-    lines.append(f"- Generated at: {summary_obj['generated_at']}")
-    lines.append(f"- Records input: {records_input_count}")
-    lines.append(f"- Records exported: {len(export_rows)}")
-    lines.append(f"- Resolved entities: {len(entity_ids)}")
-    lines.append(f"- Matched records: {len(matched_records)}")
-    lines.append(f"- Matched pairs: {len(matched_pairs)}")
+    lines.append(f"- Generated at: {summary_obj['generated_at']} (orario di generazione report).")
+    lines.append(f"- Records input: {records_input_count} (record letti dal file di input).")
+    lines.append(
+        f"- Records exported: {len(export_rows)} "
+        "(righe prodotte da `sz_export`; possono essere piu' dell'input per via della struttura export)."
+    )
+    lines.append(f"- Resolved entities: {len(entity_ids)} (entita' finali create dal motore).")
+    lines.append(f"- Matched records: {len(matched_records)} (record che hanno almeno un match).")
+    lines.append(f"- Matched pairs: {len(matched_pairs)} (coppie di record matchate).")
     lines.append(
         "- Explain coverage: "
         f"whyEntity {summary_obj['explain_coverage']['why_entity_ok']}/{summary_obj['explain_coverage']['why_entity_total']}, "
-        f"whyRecords {summary_obj['explain_coverage']['why_records_ok']}/{summary_obj['explain_coverage']['why_records_total']}"
+        f"whyRecords {summary_obj['explain_coverage']['why_records_ok']}/{summary_obj['explain_coverage']['why_records_total']} "
+        "(quanti explain sono stati richiesti e prodotti con successo)."
     )
     lines.append("")
     lines.append("## Top Match Keys")
+    lines.append("")
+    lines.append("Mostra quali combinazioni di segnali (es. NAME+DOB) hanno generato piu' match.")
     lines.append("")
     lines.append("| Match Key | Count |")
     lines.append("| --- | ---: |")
@@ -1497,6 +1544,8 @@ def make_comparison_outputs(
     lines.append("")
     lines.append("## Match Level Distribution")
     lines.append("")
+    lines.append("Distribuzione dei livelli di match prodotti da Senzing (livello numerico di confidenza/relazione).")
+    lines.append("")
     lines.append("| Match Level | Count |")
     lines.append("| --- | ---: |")
     if match_level_counts:
@@ -1507,6 +1556,14 @@ def make_comparison_outputs(
 
     lines.append("")
     lines.append("## First 20 Matched Pairs")
+    lines.append("")
+    lines.append("Prime 20 coppie matchate per controllo rapido.")
+    lines.append("- `Entity`: id entita' risolta.")
+    lines.append("- `Anchor`: record principale del cluster.")
+    lines.append("- `Matched`: record collegato all'anchor.")
+    lines.append("- `Match Key`: segnali usati per il match.")
+    lines.append("- `Level`: livello numerico del match.")
+    lines.append("- `Explain`: motivo testuale (se explain attivo).")
     lines.append("")
     lines.append("| Entity | Anchor | Matched | Match Key | Level | Explain |")
     lines.append("| --- | --- | --- | --- | ---: | --- |")

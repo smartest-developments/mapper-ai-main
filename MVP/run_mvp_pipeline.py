@@ -118,56 +118,6 @@ def copy_if_exists(source: Path, destination: Path) -> bool:
     return True
 
 
-def write_glossary(output_run_dir: Path) -> Path:
-    """Write a glossary with all key reporting terms."""
-    lines = [
-        "# Glossary",
-        "",
-        "Spiegazione dei termini usati nei report (`management_summary.*` e `ground_truth_match_quality.*`).",
-        "",
-        "## Metriche Match (coppie)",
-        "",
-        "- `Predicted pairs`: numero di coppie che Senzing ha previsto come match.",
-        "- `Ground-truth pairs`: numero di coppie realmente match nel dataset di riferimento (`SOURCE_IPG_ID`).",
-        "- `True positive (TP)`: coppie previste match e realmente match.",
-        "- `False positive (FP)`: coppie previste match ma non realmente match.",
-        "- `False negative (FN)`: coppie realmente match ma non trovate da Senzing.",
-        "- `Pair precision`: quota di coppie previste corrette. Formula: `TP / (TP + FP)`.",
-        "- `Pair recall`: quota di coppie reali trovate. Formula: `TP / (TP + FN)`.",
-        "- `Pair F1`: equilibrio tra precision e recall. Formula: `2 * precision * recall / (precision + recall)`.",
-        "",
-        "## Metriche Entita'/Label",
-        "",
-        "- `Labeled records in export`: record esportati che hanno `SOURCE_IPG_ID` valorizzato.",
-        "- `Rows with SOURCE_IPG_ID in input`: record in input con `SOURCE_IPG_ID` valorizzato.",
-        "- `Entity purity (labeled)`: quota di entita' con label coerente (nessun mixing).",
-        "- `Pure entities (labeled)`: numero di entita' con record tutti dello stesso gruppo label.",
-        "- `Mixed entities (labeled)`: numero di entita' con record provenienti da gruppi label diversi.",
-        "- `IPG group concentration (size>=2)`: quota di gruppi label (dimensione >=2) concentrati in una sola entita'.",
-        "- `Split IPG groups (size>=2)`: quanti gruppi label (>=2) sono spezzati in piu' entita'.",
-        "",
-        "## Termini Operativi del Report",
-        "",
-        "- `Records input`: numero record letti in input.",
-        "- `Records exported`: righe prodotte in export da Senzing.",
-        "- `Resolved entities`: numero entita' risolte dal motore.",
-        "- `Matched records`: numero record che hanno almeno un match.",
-        "- `Matched pairs`: numero coppie match trovate.",
-        "- `Match key`: combinazione di segnali usata per spiegare il match (es. `NAME+DOB`).",
-        "- `Match level`: livello numerico di match assegnato da Senzing.",
-        "- `Explain coverage`: quanti explain `whyEntity/whyRecords` sono stati realmente prodotti.",
-        "",
-        "## Identificativi",
-        "",
-        "- `DATA_SOURCE`: sorgente logica del record in Senzing (es. `PARTNERS`).",
-        "- `RECORD_ID`: identificativo record interno al `DATA_SOURCE`.",
-        "- `SOURCE_IPG_ID`: etichetta di riferimento usata per valutare la qualita' dei match nel sample.",
-    ]
-    glossary_path = output_run_dir / "glossary.md"
-    glossary_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    return glossary_path
-
-
 def copy_artifacts_to_output(
     output_run_dir: Path,
     mvp_root: Path,
@@ -219,8 +169,6 @@ def copy_artifacts_to_output(
         if copy_if_exists(source, destination):
             copied[destination.name] = str(destination.resolve())
 
-    glossary_path = write_glossary(output_run_dir)
-    copied[glossary_path.name] = str(glossary_path.resolve())
     return copied
 
 
@@ -406,7 +354,6 @@ def main() -> int:
     print(f"Mapped JSONL: {copied.get('mapped_output.jsonl')}")
     print(f"Management summary (md): {copied.get('management_summary.md')}")
     print(f"Ground truth quality (md): {copied.get('ground_truth_match_quality.md')}")
-    print(f"Glossary (md): {copied.get('glossary.md')}")
     print(f"Run summary (technical): {copied.get('run_summary.json')}")
     print(f"Run registry CSV: {copied.get('run_registry.csv')}")
     if keep_runtime:

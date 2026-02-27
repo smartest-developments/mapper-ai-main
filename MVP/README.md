@@ -74,7 +74,6 @@ Dentro `output/<timestamp>/` (management-friendly) trovi:
 
 - `management_summary.md`
 - `ground_truth_match_quality.md`
-- `glossary.md` (spiegazione di tutti i termini usati nei report)
 
 Dentro `output/<timestamp>/technical output/` trovi gli artifact tecnici:
 
