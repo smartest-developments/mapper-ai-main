@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flat MVP pipeline: JSON -> Senzing JSONL -> Senzing E2E -> flat artifacts."""
+"""MVP pipeline: JSON -> Senzing JSONL -> Senzing E2E -> output/<timestamp> artifacts."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ def now_timestamp() -> str:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run MVP pipeline from source JSON to flat management outputs.")
+    parser = argparse.ArgumentParser(description="Run MVP pipeline from source JSON to timestamped output artifacts.")
     parser.add_argument("--input-json", required=True, help="Source JSON path (array of records)")
     parser.add_argument("--input-array-key", default=None, help="Optional key if JSON root is an object containing array")
     parser.add_argument("--data-source", default="PARTNERS", help="Senzing DATA_SOURCE (default: PARTNERS)")
@@ -59,6 +59,11 @@ def parse_args() -> argparse.Namespace:
         "--senzing-env",
         default=None,
         help="Optional setupEnv path for local mode (passed to run_senzing_end_to_end.py)",
+    )
+    parser.add_argument(
+        "--output-root",
+        default="output",
+        help="Root directory for final artifacts (default: output)",
     )
     parser.add_argument(
         "--runtime-dir",
@@ -113,10 +118,10 @@ def copy_if_exists(source: Path, destination: Path) -> bool:
     return True
 
 
-def copy_artifacts_flat(
+def copy_artifacts_to_output(
+    output_run_dir: Path,
     mvp_root: Path,
     runtime_dir: Path,
-    ts: str,
     mapped_output_jsonl: Path,
     field_map_json: Path,
     mapping_summary_json: Path,
@@ -133,34 +138,39 @@ def copy_artifacts_flat(
         return raw_path
 
     targets = {
-        mapped_output_jsonl: mvp_root / f"mapped_output_{ts}.jsonl",
-        field_map_json: mvp_root / f"field_map_{ts}.json",
-        mapping_summary_json: mvp_root / f"mapping_summary_{ts}.json",
-        run_summary_json: mvp_root / f"run_summary_{ts}.json",
+        mapped_output_jsonl: output_run_dir / "mapped_output.jsonl",
+        field_map_json: output_run_dir / "field_map.json",
+        mapping_summary_json: output_run_dir / "mapping_summary.json",
+        run_summary_json: output_run_dir / "run_summary.json",
     }
     run_summary_payload = json.loads(run_summary_json.read_text(encoding="utf-8"))
     artifacts = run_summary_payload.get("artifacts", {}) if isinstance(run_summary_payload.get("artifacts"), dict) else {}
     for key, suffix in [
-        ("management_summary_md", f"management_summary_{ts}.md"),
-        ("management_summary_json", f"management_summary_{ts}.json"),
-        ("ground_truth_match_quality_md", f"ground_truth_match_quality_{ts}.md"),
-        ("ground_truth_match_quality_json", f"ground_truth_match_quality_{ts}.json"),
-        ("matched_pairs_csv", f"matched_pairs_{ts}.csv"),
-        ("match_stats_csv", f"match_stats_{ts}.csv"),
-        ("entity_records_csv", f"entity_records_{ts}.csv"),
+        ("management_summary_md", "management_summary.md"),
+        ("management_summary_json", "management_summary.json"),
+        ("ground_truth_match_quality_md", "ground_truth_match_quality.md"),
+        ("ground_truth_match_quality_json", "ground_truth_match_quality.json"),
+        ("matched_pairs_csv", "matched_pairs.csv"),
+        ("match_stats_csv", "match_stats.csv"),
+        ("entity_records_csv", "entity_records.csv"),
     ]:
         value = artifacts.get(key)
         if not value:
             continue
-        targets[to_host_path(Path(str(value)))] = mvp_root / suffix
+        targets[to_host_path(Path(str(value)))] = output_run_dir / suffix
+
+    run_registry_candidate = mvp_root / "output" / "run_registry.csv"
+    if run_registry_candidate.exists():
+        targets[run_registry_candidate] = output_run_dir / "run_registry.csv"
 
     for source, destination in targets.items():
         if copy_if_exists(source, destination):
             copied[destination.name] = str(destination.resolve())
 
-    manifest_path = mvp_root / f"execution_manifest_{ts}.json"
+    manifest_path = output_run_dir / "execution_manifest.json"
     manifest = {
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "output_directory": str(output_run_dir),
         "copied_artifacts": copied,
     }
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -187,6 +197,11 @@ def main() -> int:
         return 2
 
     ts = now_timestamp()
+    output_root = (mvp_root / args.output_root).resolve()
+    output_root.mkdir(parents=True, exist_ok=True)
+    output_run_dir = output_root / ts
+    output_run_dir.mkdir(parents=True, exist_ok=True)
+
     if args.runtime_dir:
         runtime_dir = Path(args.runtime_dir).expanduser().resolve()
         runtime_dir.mkdir(parents=True, exist_ok=True)
@@ -323,10 +338,10 @@ def main() -> int:
         print(f"ERROR: run summary not found: {run_summary_json}", file=sys.stderr)
         return 2
 
-    copied = copy_artifacts_flat(
+    copied = copy_artifacts_to_output(
+        output_run_dir=output_run_dir,
         mvp_root=mvp_root,
         runtime_dir=runtime_dir,
-        ts=ts,
         mapped_output_jsonl=mapped_output_jsonl,
         field_map_json=field_map_json,
         mapping_summary_json=mapping_summary_json,
@@ -339,12 +354,13 @@ def main() -> int:
 
     print("\nMVP pipeline completed.")
     print(f"Input JSON: {input_json}")
-    print(f"Artifacts copied (flat): {len(copied)}")
-    print(f"Mapped JSONL: {copied.get(f'mapped_output_{ts}.jsonl')}")
-    print(f"Run summary: {copied.get(f'run_summary_{ts}.json')}")
-    print(f"Management summary (md): {copied.get(f'management_summary_{ts}.md')}")
-    print(f"Ground truth quality (md): {copied.get(f'ground_truth_match_quality_{ts}.md')}")
-    print(f"Run registry CSV: {(mvp_root / 'run_registry.csv').resolve() if (mvp_root / 'run_registry.csv').exists() else None}")
+    print(f"Output directory: {output_run_dir}")
+    print(f"Artifacts copied: {len(copied)}")
+    print(f"Mapped JSONL: {copied.get('mapped_output.jsonl')}")
+    print(f"Run summary: {copied.get('run_summary.json')}")
+    print(f"Management summary (md): {copied.get('management_summary.md')}")
+    print(f"Ground truth quality (md): {copied.get('ground_truth_match_quality.md')}")
+    print(f"Run registry CSV: {copied.get('run_registry.csv')}")
     if keep_runtime:
         print(f"Runtime directory kept: {runtime_dir}")
     return 0

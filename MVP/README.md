@@ -1,6 +1,7 @@
-# MVP Pipeline (Flat)
+# MVP Pipeline
 
-Questa cartella e' completamente flat: solo file nella root, nessuna sottocartella.
+Script e input restano nella root di `MVP`.  
+Gli output finali vengono scritti in `output/<timestamp>/`.
 
 ## File inclusi
 
@@ -63,23 +64,31 @@ python3 run_mvp_pipeline.py \
   --max-explain-pairs 0
 ```
 
-## Output (sempre flat in root)
+## Output
 
-Dopo ogni run trovi file timestampati, ad esempio:
+Ogni esecuzione crea una cartella dedicata:
 
-- `mapped_output_<timestamp>.jsonl`
-- `field_map_<timestamp>.json`
-- `mapping_summary_<timestamp>.json`
-- `run_summary_<timestamp>.json`
-- `management_summary_<timestamp>.md`
-- `ground_truth_match_quality_<timestamp>.md`
-- `ground_truth_match_quality_<timestamp>.json`
-- `execution_manifest_<timestamp>.json`
-- `run_registry.csv`
+- `output/<timestamp>/`
+
+Dentro trovi:
+
+- `mapped_output.jsonl`
+- `field_map.json`
+- `mapping_summary.json`
+- `run_summary.json`
+- `management_summary.md`
+- `management_summary.json`
+- `ground_truth_match_quality.md`
+- `ground_truth_match_quality.json`
+- `matched_pairs.csv`
+- `match_stats.csv`
+- `entity_records.csv`
+- `execution_manifest.json`
+- `run_registry.csv` (snapshot della registry del run)
 
 ## Runtime
 
-Il wrapper usa una directory temporanea esterna a `MVP` per i file intermedi e poi copia gli artifact finali nella root di `MVP`.  
+Il wrapper usa una directory temporanea esterna a `MVP` per i file intermedi e poi copia gli artifact finali in `output/<timestamp>/`.  
 Per mantenere la directory runtime:
 
 ```bash
