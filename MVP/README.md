@@ -21,6 +21,21 @@ Questa cartella e' completamente flat: solo file nella root, nessuna sottocartel
 python3 run_mvp_pipeline.py --input-json /path/to/real_input.json
 ```
 
+In ambiente Ubuntu con Senzing gia' installato (senza Docker), usa:
+
+```bash
+python3 run_mvp_pipeline.py --input-json /path/to/real_input.json --execution-mode local
+```
+
+Se ti serve forzare il setup base di Senzing:
+
+```bash
+python3 run_mvp_pipeline.py \
+  --input-json /path/to/real_input.json \
+  --execution-mode local \
+  --senzing-env /opt/senzing/er/setupEnv
+```
+
 ## Esempio con sample incluso
 
 ```bash
@@ -70,3 +85,5 @@ Per mantenere la directory runtime:
 ```bash
 python3 run_mvp_pipeline.py --input-json /path/to/real_input.json --keep-runtime-dir
 ```
+
+Nota: `--execution-mode auto` (default) usa Docker se disponibile, altrimenti passa automaticamente a `local`.

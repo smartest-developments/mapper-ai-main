@@ -50,6 +50,17 @@ def parse_args() -> argparse.Namespace:
         help="Keep sz_file_loader temporary shuffle files",
     )
     parser.add_argument(
+        "--execution-mode",
+        choices=["auto", "docker", "local"],
+        default="auto",
+        help="Execution mode for E2E runner (default: auto)",
+    )
+    parser.add_argument(
+        "--senzing-env",
+        default=None,
+        help="Optional setupEnv path for local mode (passed to run_senzing_end_to_end.py)",
+    )
+    parser.add_argument(
         "--runtime-dir",
         default=None,
         help="Optional runtime directory (default: temporary directory outside MVP)",
@@ -64,6 +75,24 @@ def parse_args() -> argparse.Namespace:
 
 def run_command(command: list[str], cwd: Path) -> None:
     subprocess.run(command, cwd=str(cwd), check=True)
+
+
+def check_docker_ready() -> tuple[bool, str]:
+    """Return Docker availability and a short diagnostic string."""
+    if shutil.which("docker") is None:
+        return False, "docker command not found"
+    probe = subprocess.run(
+        ["docker", "info"],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    if probe.returncode == 0:
+        return True, "docker ready"
+    detail = (probe.stderr or probe.stdout or "").strip().splitlines()
+    return False, detail[-1] if detail else "docker not available"
 
 
 def find_new_run_dir(runs_root: Path, prefix: str) -> Path:
@@ -209,45 +238,84 @@ def main() -> int:
     }
     mapping_summary_json.write_text(json.dumps(mapping_summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    docker_cmd = [
-        "docker",
-        "run",
-        "--rm",
-        "--platform",
-        args.docker_platform,
-        "-v",
-        f"{mvp_root}:/workspace",
-        "-v",
-        f"{runtime_dir}:/runtime",
-        "-w",
-        "/workspace",
-        args.docker_image,
-        "python3",
-        "/workspace/run_senzing_end_to_end.py",
-        f"/runtime/output/{mapped_output_jsonl.name}",
-        "--output-root",
-        "/runtime/runs",
-        "--run-name-prefix",
-        args.run_name_prefix,
-        "--project-parent-dir",
-        "/runtime/projects",
-        "--project-name-prefix",
-        args.project_name_prefix,
-        "--use-input-jsonl-directly",
-        "--data-sources",
-        args.data_source,
-        "--step-timeout-seconds",
-        str(args.step_timeout_seconds),
-    ]
-    if args.with_why:
-        docker_cmd.extend(["--max-explain-records", str(args.max_explain_records)])
-        docker_cmd.extend(["--max-explain-pairs", str(args.max_explain_pairs)])
-    else:
-        docker_cmd.append("--skip-explain")
-    if args.keep_loader_temp_files:
-        docker_cmd.append("--keep-loader-temp-files")
+    docker_ready, docker_note = check_docker_ready()
+    execution_mode = args.execution_mode
+    if execution_mode == "docker" and not docker_ready:
+        print(f"ERROR: --execution-mode docker requested but Docker is not available ({docker_note})", file=sys.stderr)
+        return 2
+    if execution_mode == "auto":
+        execution_mode = "docker" if docker_ready else "local"
 
-    run_command(docker_cmd, mvp_root)
+    e2e_cmd: list[str]
+    if execution_mode == "docker":
+        e2e_cmd = [
+            "docker",
+            "run",
+            "--rm",
+            "--platform",
+            args.docker_platform,
+            "-v",
+            f"{mvp_root}:/workspace",
+            "-v",
+            f"{runtime_dir}:/runtime",
+            "-w",
+            "/workspace",
+            args.docker_image,
+            "python3",
+            "/workspace/run_senzing_end_to_end.py",
+            f"/runtime/output/{mapped_output_jsonl.name}",
+            "--output-root",
+            "/runtime/runs",
+            "--run-name-prefix",
+            args.run_name_prefix,
+            "--project-parent-dir",
+            "/runtime/projects",
+            "--project-name-prefix",
+            args.project_name_prefix,
+            "--use-input-jsonl-directly",
+            "--data-sources",
+            args.data_source,
+            "--step-timeout-seconds",
+            str(args.step_timeout_seconds),
+        ]
+    else:
+        e2e_cmd = [
+            sys.executable,
+            str(e2e_script),
+            str(mapped_output_jsonl),
+            "--output-root",
+            str(runtime_runs),
+            "--run-name-prefix",
+            args.run_name_prefix,
+            "--project-parent-dir",
+            str(runtime_projects),
+            "--project-name-prefix",
+            args.project_name_prefix,
+            "--use-input-jsonl-directly",
+            "--data-sources",
+            args.data_source,
+            "--step-timeout-seconds",
+            str(args.step_timeout_seconds),
+        ]
+        if args.senzing_env:
+            e2e_cmd.extend(["--senzing-env", str(Path(args.senzing_env).expanduser().resolve())])
+
+    if args.with_why:
+        e2e_cmd.extend(["--max-explain-records", str(args.max_explain_records)])
+        e2e_cmd.extend(["--max-explain-pairs", str(args.max_explain_pairs)])
+    else:
+        e2e_cmd.append("--skip-explain")
+    if args.keep_loader_temp_files:
+        e2e_cmd.append("--keep-loader-temp-files")
+
+    mapping_summary["execution_mode"] = execution_mode
+    mapping_summary["docker_probe"] = docker_note
+    mapping_summary_json.write_text(json.dumps(mapping_summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"E2E execution mode: {execution_mode}")
+    if execution_mode == "local" and docker_note != "docker ready":
+        print(f"Docker note: {docker_note}")
+
+    run_command(e2e_cmd, mvp_root)
 
     run_dir = find_new_run_dir(runtime_runs, args.run_name_prefix)
     run_summary_json = run_dir / "run_summary.json"
