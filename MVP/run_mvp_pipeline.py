@@ -118,6 +118,25 @@ def copy_if_exists(source: Path, destination: Path) -> bool:
     return True
 
 
+def refresh_dashboard_data(mvp_root: Path, output_root: Path) -> None:
+    dashboard_builder = mvp_root / "build_management_dashboard.py"
+    if not dashboard_builder.exists():
+        print(f"WARNING: dashboard builder not found: {dashboard_builder}")
+        return
+    command = [
+        sys.executable,
+        str(dashboard_builder),
+        "--output-root",
+        str(output_root),
+        "--dashboard-subdir",
+        "dashboard",
+    ]
+    try:
+        run_command(command, mvp_root)
+    except subprocess.CalledProcessError as exc:
+        print(f"WARNING: dashboard refresh failed (exit code {exc.returncode})")
+
+
 def copy_artifacts_to_output(
     output_run_dir: Path,
     mvp_root: Path,
@@ -347,6 +366,7 @@ def main() -> int:
         mapping_summary_json=mapping_summary_json,
         run_summary_json=run_summary_json,
     )
+    refresh_dashboard_data(mvp_root=mvp_root, output_root=output_root)
 
     keep_runtime = args.keep_runtime_dir or not runtime_created
     if not keep_runtime:

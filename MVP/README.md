@@ -8,6 +8,11 @@ Gli output finali vengono scritti in `output/<timestamp>/`.
 - `run_mvp_pipeline.py`: wrapper unico (mapping + run Senzing + comparison/report)
 - `partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
 - `run_senzing_end_to_end.py`: runner E2E Senzing
+- `build_management_dashboard.py`: builds dashboard data from all `output/<timestamp>/` runs
+- `management_dashboard.html`: local dashboard UI for management
+- `management_dashboard.js`: dashboard logic
+- `management_dashboard.css`: dashboard styling
+- `tabler.min.css`, `tabler.min.js`, `chart.umd.js`: local dashboard assets (no CDN)
 - `partner_input_realistic_500.json`: sample pronto (500 record)
 
 ## Prerequisiti
@@ -100,3 +105,32 @@ python3 run_mvp_pipeline.py --input-json /path/to/real_input.json --keep-runtime
 ```
 
 Nota: `--execution-mode auto` (default) usa Docker se disponibile, altrimenti passa automaticamente a `local`.
+
+## Management dashboard (local, offline)
+
+The dashboard is fully local (no CDN).
+
+- It reads only local artifacts generated in `output/<timestamp>/`.
+- It is published in `output/dashboard/` (all dashboard files are there).
+- It is refreshed automatically after each `run_mvp_pipeline.py` execution.
+
+You can also rebuild it manually:
+
+```bash
+python3 build_management_dashboard.py
+```
+
+Open dashboard:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then browse:
+
+- `http://localhost:8080/output/dashboard/management_dashboard.html`
+
+Third-party assets included locally:
+
+- `tabler.min.css`, `tabler.min.js` from `@tabler/core@1.4.0`
+- `chart.umd.js` from `chart.js@4.4.1`
