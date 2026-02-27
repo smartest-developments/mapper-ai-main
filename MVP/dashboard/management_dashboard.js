@@ -115,10 +115,8 @@
       { label: 'Match Correctness', value: fmtPct(run.pair_precision_pct) },
       { label: 'Match Missed', value: fmtPct(matchMissed) },
       { label: 'False Positive %', value: fmtPct(fpPct) },
-      { label: 'Extra True Matches Found', value: fmtInt(run.extra_true_matches_found) },
-      { label: 'Senzing Gain vs Our Matches', value: fmtPct(extraGain) },
-      { label: 'Selected False Negative', value: fmtInt(run.false_negative) },
-      { label: 'Selected Resolved Entities', value: fmtInt(run.resolved_entities) },
+      { label: 'Extra Pairs', value: fmtInt(run.extra_true_matches_found) },
+      { label: 'Senzing Gain', value: fmtPct(extraGain) },
     ];
 
     byId('selectedRunCards').innerHTML = cards
@@ -135,6 +133,17 @@
         `
       )
       .join('');
+  }
+
+  function renderSecondaryCards(run) {
+    const falseNegativeEl = byId('selectedFalseNegativeValue');
+    const resolvedEntitiesEl = byId('selectedResolvedEntitiesValue');
+    if (falseNegativeEl) {
+      falseNegativeEl.textContent = fmtInt(run.false_negative);
+    }
+    if (resolvedEntitiesEl) {
+      resolvedEntitiesEl.textContent = fmtInt(run.resolved_entities);
+    }
   }
 
   function renderSelector() {
@@ -257,9 +266,11 @@
     if (!run) {
       byId('selectedRunCards').innerHTML =
         '<div class="col-12"><div class="alert alert-warning">No data available for selected run.</div></div>';
+      renderSecondaryCards({});
       return;
     }
     renderSelectedRunCards(run);
+    renderSecondaryCards(run);
     renderSelectedCharts(run);
   }
 

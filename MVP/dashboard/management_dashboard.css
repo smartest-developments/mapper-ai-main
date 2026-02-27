@@ -31,25 +31,34 @@ body {
 }
 
 .background-title {
-  position: fixed;
-  top: 18px;
-  left: clamp(18px, 4vw, 56px);
-  z-index: 0;
+  position: relative;
+  top: 0;
+  left: auto;
+  transform: none;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0.5rem auto 0;
+  z-index: 1;
   pointer-events: none;
-  font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
   font-weight: 900;
   color: #cbd5e1;
   letter-spacing: 0.02em;
   text-shadow: 0 2px 10px rgba(15, 23, 42, 0.18);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .page-wrapper {
   position: relative;
   z-index: 1;
+  margin: 0 !important;
 }
 
 .page-body {
-  padding-top: 6.2rem;
+  padding-top: 0;
+  margin-top: 0 !important;
 }
 
 .page-pretitle {
@@ -318,7 +327,7 @@ body {
 
 @media (max-width: 768px) {
   .page-body {
-    padding-top: 5.4rem;
+    padding-top: 0;
   }
 
   .spotlight-grid {

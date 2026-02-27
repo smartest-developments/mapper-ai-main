@@ -17,6 +17,33 @@
             <div class="row row-cards mb-3" id="selectedRunCards"></div>
 
             <div class="row row-cards mb-3">
+              <div class="col-sm-6 col-lg-4 col-xl-3">
+                <div class="card metric-card">
+                  <div class="card-body">
+                    <div class="metric-label">Selected False Negative</div>
+                    <div class="metric-value" id="selectedFalseNegativeValue">n/a</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-4 col-xl-3">
+                <div class="card metric-card">
+                  <div class="card-body">
+                    <div class="metric-label">Selected Resolved Entities</div>
+                    <div class="metric-value" id="selectedResolvedEntitiesValue">n/a</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-6">
+                <div class="card controls-card">
+                  <div class="card-body">
+                    <label class="form-label">Select output</label>
+                    <select class="form-select" id="runSelector"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row row-cards mb-3">
               <div class="col-xl-4">
                 <div class="card">
                   <div class="card-header">
@@ -34,17 +61,6 @@
                   </div>
                   <div class="card-body match-keys-body">
                     <div id="matchKeyList" class="match-key-list"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row row-cards mb-3">
-              <div class="col-sm-12 col-md-6 col-xl-4">
-                <div class="card controls-card">
-                  <div class="card-body">
-                    <label class="form-label">Select output</label>
-                    <select class="form-select mb-3" id="runSelector"></select>
                   </div>
                 </div>
               </div>
