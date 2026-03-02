@@ -1,7 +1,6 @@
 # Generated artifacts
 output/*
 !output/.gitkeep
-dashboard/management_dashboard_data.js
 
 # Python cache
 __pycache__/
