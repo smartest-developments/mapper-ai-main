@@ -9,6 +9,8 @@ import json
 import re
 import shutil
 import csv
+import subprocess
+import sys
 from pathlib import Path
 
 RUN_DIR_RE = re.compile(r"^(?P<ts>\d{8}_\d{6})(?:__(?P<label>[A-Za-z0-9._-]+))?$")
@@ -30,6 +32,11 @@ def parse_args() -> argparse.Namespace:
         "--dashboard-dir",
         default="dashboard",
         help="Dashboard directory under MVP root (self-contained, ready to open)",
+    )
+    parser.add_argument(
+        "--skip-tests",
+        action="store_true",
+        help="Skip automated dashboard metric test suite after rebuild",
     )
     return parser.parse_args()
 
@@ -589,6 +596,26 @@ def write_index_html(target_dir: Path) -> None:
     (target_dir / "index.html").write_text(index_html, encoding="utf-8")
 
 
+def run_dashboard_test_suite(mvp_root: Path, output_root: Path, dashboard_dir: Path) -> None:
+    test_runner = mvp_root / "testing" / "run_dashboard_tests.py"
+    if not test_runner.exists():
+        raise FileNotFoundError(f"Missing test runner: {test_runner}")
+
+    command = [
+        sys.executable,
+        str(test_runner),
+        "--output-root",
+        str(output_root),
+        "--dashboard-data",
+        str(dashboard_dir / "management_dashboard_data.js"),
+        "--report-json",
+        str(dashboard_dir / "dashboard_test_suite_report.json"),
+        "--report-md",
+        str(dashboard_dir / "dashboard_test_suite_report.md"),
+    ]
+    subprocess.run(command, cwd=str(mvp_root), check=True)
+
+
 def main() -> int:
     args = parse_args()
     mvp_root = Path(__file__).resolve().parent
@@ -615,6 +642,21 @@ def main() -> int:
     print(f"Dashboard data generated: {data_js_path}")
     print(f"Runs indexed: {len(runs)}")
     print(f"Dashboard directory: {dashboard_dir}")
+
+    if not args.skip_tests:
+        try:
+            run_dashboard_test_suite(mvp_root=mvp_root, output_root=output_root, dashboard_dir=dashboard_dir)
+            print("Dashboard test suite: PASS")
+        except FileNotFoundError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+        except subprocess.CalledProcessError as exc:
+            print(
+                f"ERROR: dashboard test suite failed (exit code {exc.returncode}). "
+                "Check dashboard_test_suite_report.md for details.",
+                file=sys.stderr,
+            )
+            return exc.returncode or 1
     return 0
 
 
