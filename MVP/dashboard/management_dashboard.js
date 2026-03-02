@@ -180,12 +180,59 @@
     return null;
   }
 
+  function prettifySourceName(sourceName) {
+    if (typeof sourceName !== 'string') {
+      return '';
+    }
+    const base = sourceName.replace(/\.json$/i, '');
+    const tokens = base
+      .split('_')
+      .map((token) => token.trim())
+      .filter(Boolean);
+    if (!tokens.length) {
+      return sourceName;
+    }
+
+    // Keep a compact, user-friendly label (few words) from filename only.
+    let start = 0;
+    let labelPrefix = '';
+    if (tokens[0].toLowerCase() === 'sample' && tokens[1]) {
+      const num = tokens[1].padStart(2, '0');
+      labelPrefix = `Sample ${num}`;
+      start = 2;
+    }
+    const stopWords = new Set(['json', 'records', 'record']);
+    const core = [];
+    for (let i = start; i < tokens.length; i += 1) {
+      const token = tokens[i];
+      if (/^\d+$/.test(token)) {
+        continue;
+      }
+      if (stopWords.has(token.toLowerCase())) {
+        continue;
+      }
+      core.push(token);
+      if (core.length >= 3) {
+        break;
+      }
+    }
+
+    const phrase = core
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+    if (labelPrefix && phrase) {
+      return `${labelPrefix} ${phrase}`;
+    }
+    return labelPrefix || phrase || sourceName;
+  }
+
   function formatRunLabel(run) {
     const date = parseRunDate(run);
-    const sourceName =
+    const sourceNameRaw =
       (typeof run?.source_input_name === 'string' && run.source_input_name.trim()) ||
       (typeof run?.run_label === 'string' && run.run_label.trim()) ||
       '';
+    const sourceName = prettifySourceName(sourceNameRaw);
     if (!date || Number.isNaN(date.getTime())) {
       return sourceName || run.run_id;
     }
@@ -229,25 +276,25 @@
     const knownPairs = asNumber(run.known_pairs_ipg);
     const gainPct = asNumber(run.extra_gain_vs_known_pct) ?? ratioPct(extraPairs, knownPairs) ?? 0;
     const ourCards = [
-      { label: 'Input Records', value: fmtInt(run.records_input) },
-      { label: 'Resolved Entities', value: fmtInt(run.our_resolved_entities) },
-      { label: 'Match Found', value: fmtPct(ourCoverage) },
-      { label: 'Match Missed', value: fmtPct(ourMatchMissed) },
+      { label: 'Entities', value: fmtInt(run.our_resolved_entities) },
       { label: 'Matched Pairs', value: fmtInt(run.our_true_positive) },
+      { label: 'Match Found', value: fmtPct(ourCoverage) },
+      { label: 'Miss-Matched', value: fmtPct(ourMatchMissed) },
       { label: 'False Positive', value: fmtInt(run.our_false_positive) },
       { label: 'False Negative', value: fmtInt(run.our_false_negative) },
+      { label: 'Input Records', value: fmtInt(run.records_input) },
     ];
 
     const theirCards = [
+      { label: 'Entities', value: fmtInt(run.resolved_entities) },
       { label: 'Matched Pairs', value: fmtInt(run.matched_pairs) },
       { label: 'Match Found', value: fmtPct(precisionPct) },
-      { label: 'Match Missed', value: fmtPct(matchMissed) },
+      { label: 'Miss-Matched', value: fmtPct(matchMissed) },
+      { label: 'False Positive', value: fmtInt(run.false_positive) },
+      { label: 'False Negative', value: fmtInt(run.false_negative) },
       { label: 'False Positive %', value: fmtPct(fpPct) },
       { label: 'Extra Pairs', value: fmtInt(extraPairs) },
       { label: 'Match Gain', value: fmtPct(gainPct) },
-      { label: 'False Positive', value: fmtInt(run.false_positive) },
-      { label: 'False Negative', value: fmtInt(run.false_negative) },
-      { label: 'Resolved Entities', value: fmtInt(run.resolved_entities) },
     ];
 
     byId('ourMetricCards').innerHTML = ourCards

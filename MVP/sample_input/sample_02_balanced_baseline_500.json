@@ -8,7 +8,7 @@
     "includes hidden true matches without IPG labels"
   ],
   "_records_count": 500,
-  "_generated_at": "2026-02-27T23:02:50",
+  "_generated_at": "2026-03-02T13:54:33",
   "records": [
     {
       "externalPartnerKeyDirExternalID": "PTN-000000001",
@@ -122,7 +122,7 @@
       "Tax ID": "CA82R450755X",
       "idDocumentNumber": null,
       "Electronic Address": "liam.johnson@mail.ca",
-      "IPG ID": "IPG-000000002",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00002"
     },
     {
@@ -145,7 +145,7 @@
       "Tax ID": "CH15J984220Y",
       "idDocumentNumber": null,
       "Electronic Address": "sofia.ricci@mail.ch",
-      "IPG ID": "IPG-000000003",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00003"
     },
     {
@@ -168,7 +168,7 @@
       "Tax ID": "CH15J984220Y",
       "idDocumentNumber": "DOC-CH-353878",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000003",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00003"
     },
     {
@@ -329,7 +329,7 @@
       "Tax ID": "AU518122350",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.northbridge-manufacturing-plc.au",
-      "IPG ID": "IPG-000000006",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
@@ -352,7 +352,7 @@
       "Tax ID": "AU518122350",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.northbridge-manufacturing-plc.au",
-      "IPG ID": "IPG-000000006",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
@@ -398,7 +398,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-220969",
       "Electronic Address": "marta.neri@mail.sg",
-      "IPG ID": "IPG-000000007",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00007"
     },
     {
@@ -467,7 +467,7 @@
       "Tax ID": "NL703393738",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.orbit-energy-llc.nl",
-      "IPG ID": "IPG-000000009",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00009"
     },
     {
@@ -559,7 +559,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.aurora-advisory-group.fr",
-      "IPG ID": "IPG-000000010",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00010"
     },
     {
@@ -697,7 +697,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000012",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
@@ -720,7 +720,7 @@
       "Tax ID": "CA415866148",
       "idDocumentNumber": null,
       "Electronic Address": "contact@helios-engineering-bv.ca",
-      "IPG ID": "IPG-000000012",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
@@ -835,7 +835,7 @@
       "Tax ID": "ES21Z595242J",
       "idDocumentNumber": null,
       "Electronic Address": "marta.moretti@mail.es",
-      "IPG ID": "IPG-000000014",
+      "IPG ID": "IPG-000000053",
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
@@ -904,7 +904,7 @@
       "Tax ID": "CH80S148648J",
       "idDocumentNumber": "DOC-CH-167381",
       "Electronic Address": "jonas.vitale@mail.ch",
-      "IPG ID": "IPG-000000016",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
@@ -927,7 +927,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000016",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
@@ -1203,7 +1203,7 @@
       "Tax ID": "SG736223603",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000020",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
@@ -1272,7 +1272,7 @@
       "Tax ID": "IT69Y919798R",
       "idDocumentNumber": null,
       "Electronic Address": "davide.neri@mail.it",
-      "IPG ID": "IPG-000000022",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
@@ -1548,7 +1548,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-advisory-gmbh.it",
-      "IPG ID": "IPG-000000026",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00026"
     },
     {
@@ -1571,7 +1571,7 @@
       "Tax ID": "IT767667919",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-advisory-gmbh.it",
-      "IPG ID": "IPG-000000026",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00026"
     },
     {
@@ -1617,7 +1617,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.lighthouse-advisory-gmbh.it",
-      "IPG ID": "IPG-000000026",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00026"
     },
     {
@@ -1663,7 +1663,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-369138",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000027",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00027"
     },
     {
@@ -1709,7 +1709,7 @@
       "Tax ID": "SG85E135009B",
       "idDocumentNumber": null,
       "Electronic Address": "hiro.anderson@mail.sg",
-      "IPG ID": "IPG-000000028",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00028"
     },
     {
@@ -1801,7 +1801,7 @@
       "Tax ID": "AU612630127",
       "idDocumentNumber": null,
       "Electronic Address": "contact@sterling-energy-pte.au",
-      "IPG ID": "IPG-000000029",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00029"
     },
     {
@@ -1847,7 +1847,7 @@
       "Tax ID": "GB968707153",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.evergreen-advisory-llc.co.uk",
-      "IPG ID": "IPG-000000030",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00030"
     },
     {
@@ -1870,7 +1870,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000030",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00030"
     },
     {
@@ -1962,7 +1962,7 @@
       "Tax ID": "ES98I145241Y",
       "idDocumentNumber": "DOC-ES-417124",
       "Electronic Address": "ana.ricci@mail.es",
-      "IPG ID": "IPG-000000032",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00032"
     },
     {
@@ -1985,7 +1985,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000032",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00032"
     },
     {
@@ -2146,7 +2146,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-GB-137539",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000035",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00035"
     },
     {
@@ -2215,7 +2215,7 @@
       "Tax ID": "GB12X621653M",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000036",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00036"
     },
     {
@@ -2422,7 +2422,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-manufacturing-inc.nl",
-      "IPG ID": "IPG-000000040",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
@@ -2445,7 +2445,7 @@
       "Tax ID": "NL983343695",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-manufacturing-inc.nl",
-      "IPG ID": "IPG-000000040",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
@@ -2468,7 +2468,7 @@
       "Tax ID": "NL983343695",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-manufacturing-inc.nl",
-      "IPG ID": "IPG-000000040",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
@@ -2491,7 +2491,7 @@
       "Tax ID": "NL983343695",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.sterling-manufacturing-inc.nl",
-      "IPG ID": "IPG-000000040",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00040"
     },
     {
@@ -2537,7 +2537,7 @@
       "Tax ID": "ES55A358083R",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000041",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00041"
     },
     {
@@ -2606,7 +2606,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ethan.gallo@mail.nl",
-      "IPG ID": "IPG-000000042",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00042"
     },
     {
@@ -2652,7 +2652,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ethan.gallo@mail.nl",
-      "IPG ID": "IPG-000000042",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00042"
     },
     {
@@ -2790,7 +2790,7 @@
       "Tax ID": "SG26I199793M",
       "idDocumentNumber": null,
       "Electronic Address": "olivia.costa@mail.sg",
-      "IPG ID": "IPG-000000044",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00044"
     },
     {
@@ -2813,7 +2813,7 @@
       "Tax ID": "SG26I199793M",
       "idDocumentNumber": null,
       "Electronic Address": "olivia.costa@mail.sg",
-      "IPG ID": "IPG-000000044",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00044"
     },
     {
@@ -2928,7 +2928,7 @@
       "Tax ID": "IT89Y588486D",
       "idDocumentNumber": "DOC-IT-148919",
       "Electronic Address": "aisha_taylor@mail.it",
-      "IPG ID": "IPG-000000046",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00046"
     },
     {
@@ -3135,7 +3135,7 @@
       "Tax ID": "CA225566647",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000050",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00050"
     },
     {
@@ -3158,7 +3158,7 @@
       "Tax ID": "CA225566647",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.artemis-media-sa.ca",
-      "IPG ID": "IPG-000000050",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00050"
     },
     {
@@ -3227,7 +3227,7 @@
       "Tax ID": "GB41A238912B",
       "idDocumentNumber": "DOC-GB-139739",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000051",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00051"
     },
     {
@@ -3273,7 +3273,7 @@
       "Tax ID": "DE850185587",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.harbor-media-inc.de",
-      "IPG ID": "IPG-000000052",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00052"
     },
     {
@@ -3319,7 +3319,7 @@
       "Tax ID": "AE369894358",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000053",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00053"
     },
     {
@@ -3365,7 +3365,7 @@
       "Tax ID": "FR94N337900A",
       "idDocumentNumber": null,
       "Electronic Address": "ethan.martinez@mail.fr",
-      "IPG ID": "IPG-000000054",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00054"
     },
     {
@@ -3388,7 +3388,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-FR-777531",
       "Electronic Address": "ethan.martinez@mail.fr",
-      "IPG ID": "IPG-000000054",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00054"
     },
     {
@@ -3434,7 +3434,7 @@
       "Tax ID": "GB16L437898J",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000055",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00055"
     },
     {
@@ -3664,7 +3664,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-229853",
       "Electronic Address": "ari.rahman@mail.it",
-      "IPG ID": "IPG-000000058",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00058"
     },
     {
@@ -3687,7 +3687,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "marta.gallo@mail.co.uk",
-      "IPG ID": "IPG-000000059",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00059"
     },
     {
@@ -3733,7 +3733,7 @@
       "Tax ID": "GB64A919253N",
       "idDocumentNumber": "DOC-GB-217605",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000059",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00059"
     },
     {
@@ -3779,7 +3779,7 @@
       "Tax ID": "US526329797",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000060",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00060"
     },
     {
@@ -3848,7 +3848,7 @@
       "Tax ID": "AU29C160514B",
       "idDocumentNumber": "DOC-AU-990299",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000061",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00061"
     },
     {
@@ -3917,7 +3917,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-207088",
       "Electronic Address": "julia.bianchi@mail.de",
-      "IPG ID": "IPG-000000062",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00062"
     },
     {
@@ -3940,7 +3940,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-DE-207088",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000062",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00062"
     },
     {
@@ -3963,7 +3963,7 @@
       "Tax ID": "DE21T657594Q",
       "idDocumentNumber": "DOC-DE-207088",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000062",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00062"
     },
     {
@@ -3986,7 +3986,7 @@
       "Tax ID": "CA87N907714C",
       "idDocumentNumber": null,
       "Electronic Address": "liam.keller@mail.ca",
-      "IPG ID": "IPG-000000063",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00063"
     },
     {
@@ -4009,7 +4009,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "liam.keller@mail.ca",
-      "IPG ID": "IPG-000000063",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00063"
     },
     {
@@ -4032,7 +4032,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000063",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00063"
     },
     {
@@ -4124,7 +4124,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.global-maritime-ltd.au",
-      "IPG ID": null,
+      "IPG ID": "IPG-000000031",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00179"
     },
     {
@@ -5228,7 +5228,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null,
+      "IPG ID": "IPG-000000045",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00227"
     },
     {
@@ -7183,7 +7183,7 @@
       "Tax ID": "GB30P314922B",
       "idDocumentNumber": null,
       "Electronic Address": "mia.sato@mail.co.uk",
-      "IPG ID": null,
+      "IPG ID": "IPG-000000010",
       "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00016"
     },
     {
@@ -7275,7 +7275,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null,
+      "IPG ID": "IPG-000000015",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00316"
     },
     {
@@ -8448,7 +8448,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-AU-321619",
       "Electronic Address": null,
-      "IPG ID": null,
+      "IPG ID": "IPG-000000042",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00367"
     },
     {
@@ -8563,7 +8563,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.summit-analytics-plc.es",
-      "IPG ID": null,
+      "IPG ID": "IPG-000000057",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00372"
     },
     {
@@ -8701,7 +8701,7 @@
       "Tax ID": "AE69U329419L",
       "idDocumentNumber": null,
       "Electronic Address": "yuki.lopez@mail.ae",
-      "IPG ID": null,
+      "IPG ID": "IPG-000000024",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00378"
     },
     {
@@ -9046,7 +9046,7 @@
       "Tax ID": "FR152019222",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": null,
+      "IPG ID": "IPG-000000050",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00393"
     },
     {
@@ -9391,7 +9391,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "elena.smith@mail.au",
-      "IPG ID": null,
+      "IPG ID": "IPG-000000036",
       "SOURCE_TRUE_GROUP_ID": "TG_SINGLE_00408"
     },
     {
@@ -11512,5 +11512,11 @@
     }
   ],
   "_hidden_truth_groups": 39,
-  "_hidden_truth_records": 108
+  "_hidden_truth_records": 108,
+  "_ipg_label_noise": {
+    "collision_rate": 0.0345,
+    "drop_rate": 0.118,
+    "collisions_applied": 17,
+    "drops_applied": 59
+  }
 }

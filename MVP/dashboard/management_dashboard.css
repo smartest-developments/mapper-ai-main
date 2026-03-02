@@ -68,6 +68,10 @@ body {
   height: 100%;
 }
 
+.controls-row {
+  margin-top: 0.35rem;
+}
+
 .metric-card {
   min-height: 86px;
 }

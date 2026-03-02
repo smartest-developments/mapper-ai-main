@@ -8,7 +8,7 @@ Gli output finali vengono scritti in `output/<timestamp>__<input_label>/`.
 
 - `run_mvp_pipeline.py`: wrapper unico (mapping + run Senzing + comparison/report)
 - `run_samples_batch.py`: esegue il pipeline su tutti i JSON in `sample_input/`
-- `generate_sample_inputs.py`: rigenera 10 sample curati (500 record ciascuno) con metadati descrittivi in testa
+- `generate_sample_inputs.py`: rigenera 50 sample curati (500 record ciascuno, default) con metadati descrittivi in testa
   e hidden true groups (`SOURCE_TRUE_GROUP_ID`) per misurare match reali non etichettati con IPG
 - `partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
 - `run_senzing_end_to_end.py`: runner E2E Senzing
@@ -74,7 +74,7 @@ Nota: il wrapper ora prova automaticamente `records`, `data`, `items` quando `--
 ## Rigenerare sample curati
 
 ```bash
-python3 generate_sample_inputs.py --records 500
+python3 generate_sample_inputs.py --records 500 --samples 50
 ```
 
 Ogni file in `sample_input/` viene scritto con metadati iniziali:
@@ -83,6 +83,7 @@ Ogni file in `sample_input/` viene scritto con metadati iniziali:
 - `_sample_special_features`: elenco delle caratteristiche del sample
 - `_hidden_truth_groups`: quanti gruppi true match senza IPG label sono stati introdotti
 - `_hidden_truth_records`: quanti record partecipano a questi gruppi hidden
+- `_ipg_label_noise`: rumore IPG applicato (collisioni e drop) per generare anche baseline false positive/false negative
 - `records`: array di 500 record usato dal pipeline
 
 ## WHY (opzionale)
@@ -168,3 +169,22 @@ Output della rigenerazione:
 - `dashboard/management_dashboard_data.js`
 - `dashboard/metrics_validation_guide.html` (manual cross-check page for KPI validation)
 - `dashboard/tabler.min.css`, `dashboard/tabler.min.js`, `dashboard/chart.umd.js`
+
+## Data audit for management (proof of KPI correctness)
+
+Per una verifica oggettiva dei KPI mostrati in dashboard:
+
+```bash
+python3 build_management_dashboard.py
+python3 verify_dashboard_metrics.py
+```
+
+Lo script `verify_dashboard_metrics.py` ricalcola i KPI direttamente dagli artifact tecnici
+(`input_normalized.jsonl`, `matched_pairs.csv`, `entity_records.csv`,
+`ground_truth_match_quality.json`, `management_summary.json`) e li confronta con i valori
+esposti in `dashboard/management_dashboard_data.js`.
+
+Genera due report:
+
+- `dashboard/dashboard_data_audit_report.json` (dettaglio machine-readable)
+- `dashboard/dashboard_data_audit_report.md` (report leggibile per management con PASS/FAIL per run)

@@ -7,7 +7,7 @@
     "includes hidden true matches without IPG labels"
   ],
   "_records_count": 500,
-  "_generated_at": "2026-02-27T23:02:51",
+  "_generated_at": "2026-03-02T13:54:33",
   "records": [
     {
       "externalPartnerKeyDirExternalID": "PTN-000000001",
@@ -52,7 +52,7 @@
       "Tax ID": "IT69U282436V",
       "idDocumentNumber": "DOC-IT-913993",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000001",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00001"
     },
     {
@@ -75,7 +75,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.evergreen-energy-sa.es",
-      "IPG ID": "IPG-000000002",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00002"
     },
     {
@@ -98,7 +98,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000002",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00002"
     },
     {
@@ -144,7 +144,7 @@
       "Tax ID": "US90K776618Z",
       "idDocumentNumber": "DOC-US-359098",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000003",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00003"
     },
     {
@@ -167,7 +167,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000004",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00004"
     },
     {
@@ -190,7 +190,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.atlas-partners-bv.ae",
-      "IPG ID": "IPG-000000004",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00004"
     },
     {
@@ -213,7 +213,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "https://www.atlas-partners-bv.ae",
-      "IPG ID": "IPG-000000004",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00004"
     },
     {
@@ -236,7 +236,7 @@
       "Tax ID": "CH71U604891Q",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000005",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00005"
     },
     {
@@ -282,7 +282,7 @@
       "Tax ID": "SG92U801332G",
       "idDocumentNumber": "DOC-SG-365137",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000006",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
@@ -305,7 +305,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ana.rahman@mail.sg",
-      "IPG ID": "IPG-000000006",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
@@ -328,7 +328,7 @@
       "Tax ID": "SG92U801332G",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000006",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00006"
     },
     {
@@ -351,7 +351,7 @@
       "Tax ID": "NL282963002",
       "idDocumentNumber": null,
       "Electronic Address": "https://www.vertex-pharma-group.nl",
-      "IPG ID": "IPG-000000007",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00007"
     },
     {
@@ -374,7 +374,7 @@
       "Tax ID": "NL282963002",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000007",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00007"
     },
     {
@@ -420,7 +420,7 @@
       "Tax ID": "GB14Z466661U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000008",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00008"
     },
     {
@@ -466,7 +466,7 @@
       "Tax ID": "GB14Z466661U",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000008",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00008"
     },
     {
@@ -512,7 +512,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000009",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00009"
     },
     {
@@ -535,7 +535,7 @@
       "Tax ID": "AU75M263799P",
       "idDocumentNumber": null,
       "Electronic Address": "luca.miller@mail.au",
-      "IPG ID": "IPG-000000009",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00009"
     },
     {
@@ -558,7 +558,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000010",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00010"
     },
     {
@@ -581,7 +581,7 @@
       "Tax ID": "DE86D148687I",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000010",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00010"
     },
     {
@@ -604,7 +604,7 @@
       "Tax ID": "DE86D148687I",
       "idDocumentNumber": null,
       "Electronic Address": "noah.johnson@mail.de",
-      "IPG ID": "IPG-000000010",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00010"
     },
     {
@@ -627,7 +627,7 @@
       "Tax ID": "DE84Y238881E",
       "idDocumentNumber": "DOC-DE-116199",
       "Electronic Address": "ethan.kovacs@mail.de",
-      "IPG ID": "IPG-000000011",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00011"
     },
     {
@@ -650,7 +650,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "ethan.kovacs@mail.de",
-      "IPG ID": "IPG-000000011",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00011"
     },
     {
@@ -673,7 +673,7 @@
       "Tax ID": "DE84Y238881E",
       "idDocumentNumber": "DOC-DE-116199",
       "Electronic Address": "ethan_kovacs@mail.de",
-      "IPG ID": "IPG-000000011",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00011"
     },
     {
@@ -719,7 +719,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-739426",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000012",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
@@ -742,7 +742,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-IT-739426",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000012",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00012"
     },
     {
@@ -811,7 +811,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "giulia.tanaka@mail.es",
-      "IPG ID": "IPG-000000013",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
@@ -834,7 +834,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-ES-494496",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000013",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
@@ -857,7 +857,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "giulia.tanaka@mail.es",
-      "IPG ID": "IPG-000000013",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00013"
     },
     {
@@ -880,7 +880,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000014",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
@@ -903,7 +903,7 @@
       "Tax ID": "FR51Z678443X",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000014",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
@@ -926,7 +926,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-FR-494908",
       "Electronic Address": "maya.bianchi@mail.fr",
-      "IPG ID": "IPG-000000014",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00014"
     },
     {
@@ -949,7 +949,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "marco.hassan@mail.sg",
-      "IPG ID": "IPG-000000015",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00015"
     },
     {
@@ -972,7 +972,7 @@
       "Tax ID": "SG99Y903925S",
       "idDocumentNumber": null,
       "Electronic Address": "marco.hassan@mail.sg",
-      "IPG ID": "IPG-000000015",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00015"
     },
     {
@@ -1018,7 +1018,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-FR-447895",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000016",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
@@ -1041,7 +1041,7 @@
       "Tax ID": "FR15M467317K",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000016",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
@@ -1064,7 +1064,7 @@
       "Tax ID": "FR15M467317K",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000016",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00016"
     },
     {
@@ -1133,7 +1133,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-US-807303",
       "Electronic Address": "ari.anderson@mail.com",
-      "IPG ID": "IPG-000000017",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00017"
     },
     {
@@ -1156,7 +1156,7 @@
       "Tax ID": "US37W399698A",
       "idDocumentNumber": "DOC-US-807303",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000017",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00017"
     },
     {
@@ -1179,7 +1179,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": "jonas.lefevre@mail.co.uk",
-      "IPG ID": "IPG-000000018",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
@@ -1202,7 +1202,7 @@
       "Tax ID": "GB97I869264N",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000018",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
@@ -1225,7 +1225,7 @@
       "Tax ID": "GB97I869264N",
       "idDocumentNumber": null,
       "Electronic Address": "jonas.lefevre@mail.co.uk",
-      "IPG ID": "IPG-000000018",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00018"
     },
     {
@@ -1248,7 +1248,7 @@
       "Tax ID": null,
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000019",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
@@ -1271,7 +1271,7 @@
       "Tax ID": "AE39G719184Y",
       "idDocumentNumber": null,
       "Electronic Address": "samuel.hassan@mail.ae",
-      "IPG ID": "IPG-000000019",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
@@ -1294,7 +1294,7 @@
       "Tax ID": "AE39G719184Y",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000019",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00019"
     },
     {
@@ -1317,7 +1317,7 @@
       "Tax ID": "SG58E903722C",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000020",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
@@ -1340,7 +1340,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-593324",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000020",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
@@ -1363,7 +1363,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-SG-593324",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000020",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00020"
     },
     {
@@ -1386,7 +1386,7 @@
       "Tax ID": null,
       "idDocumentNumber": "DOC-FR-403786",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000021",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00021"
     },
     {
@@ -1432,7 +1432,7 @@
       "Tax ID": "FR60L143547L",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000021",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00021"
     },
     {
@@ -1455,7 +1455,7 @@
       "Tax ID": "NL70F793956P",
       "idDocumentNumber": "DOC-NL-524518",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000022",
+      "IPG ID": "IPG-000000006",
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
@@ -1478,7 +1478,7 @@
       "Tax ID": "NL70F793956P",
       "idDocumentNumber": "DOC-NL-524518",
       "Electronic Address": "maya.miller@mail.nl",
-      "IPG ID": "IPG-000000022",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00022"
     },
     {
@@ -1547,7 +1547,7 @@
       "Tax ID": "CH66O818719L",
       "idDocumentNumber": "DOC-CH-793984",
       "Electronic Address": null,
-      "IPG ID": "IPG-000000023",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00023"
     },
     {
@@ -1570,7 +1570,7 @@
       "Tax ID": "AU80U452291U",
       "idDocumentNumber": null,
       "Electronic Address": "giulia.vitale@mail.au",
-      "IPG ID": "IPG-000000024",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00024"
     },
     {
@@ -1593,7 +1593,7 @@
       "Tax ID": "AU80U452291U",
       "idDocumentNumber": null,
       "Electronic Address": "giulia.vitale@mail.au",
-      "IPG ID": "IPG-000000024",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00024"
     },
     {
@@ -1639,7 +1639,7 @@
       "Tax ID": "NL30O615544N",
       "idDocumentNumber": "DOC-NL-389653",
       "Electronic Address": "nina.novak@mail.nl",
-      "IPG ID": "IPG-000000025",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00025"
     },
     {
@@ -1662,7 +1662,7 @@
       "Tax ID": "NL30O615544N",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000025",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00025"
     },
     {
@@ -1685,7 +1685,7 @@
       "Tax ID": "NL30O615544N",
       "idDocumentNumber": "DOC-NL-389653",
       "Electronic Address": "nina.novak@mail.nl",
-      "IPG ID": "IPG-000000025",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00025"
     },
     {
@@ -1731,7 +1731,7 @@
       "Tax ID": "NL30O615544N",
       "idDocumentNumber": null,
       "Electronic Address": null,
-      "IPG ID": "IPG-000000025",
+      "IPG ID": null,
       "SOURCE_TRUE_GROUP_ID": "TG_IPG_00025"
     },
     {
@@ -10701,7 +10701,7 @@
       "Tax ID": "IT10L673832R",
       "idDocumentNumber": null,
       "Electronic Address": "olivia.rossi@mail.it",
-      "IPG ID": null,
+      "IPG ID": "IPG-000000015",
       "SOURCE_TRUE_GROUP_ID": "TG_HIDDEN_00031"
     },
     {
@@ -11511,5 +11511,11 @@
     }
   ],
   "_hidden_truth_groups": 53,
-  "_hidden_truth_records": 140
+  "_hidden_truth_records": 140,
+  "_ipg_label_noise": {
+    "collision_rate": 0.0405,
+    "drop_rate": 0.142,
+    "collisions_applied": 20,
+    "drops_applied": 71
+  }
 }

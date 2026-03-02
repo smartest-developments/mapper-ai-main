@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate curated MVP sample_input JSON files (all 500 records, with top-level comment metadata)."""
+"""Generate curated MVP sample_input JSON files with top-level comment metadata."""
 
 from __future__ import annotations
 
@@ -146,13 +146,133 @@ PROFILES: list[dict[str, Any]] = [
     },
 ]
 
+EXTRA_SCENARIO_TEMPLATES: list[dict[str, Any]] = [
+    {
+        "slug": "compound_noise",
+        "description": "Compound noise on names and addresses with moderate sparsity.",
+        "features": ["combined name/address noise", "moderate missing fields", "hidden true matches without IPG labels"],
+        "person_ratio": 0.68,
+        "ipg_rate": 0.30,
+        "mutations": ["name_noise", "address_noise", "sparse"],
+    },
+    {
+        "slug": "id_disruption",
+        "description": "Identifier disruption with malformed tax IDs and duplicate pressure.",
+        "features": ["identifier degradation", "duplicate pressure", "higher ambiguity on deterministic keys"],
+        "person_ratio": 0.66,
+        "ipg_rate": 0.32,
+        "mutations": ["tax_noise", "duplicate_pressure"],
+    },
+    {
+        "slug": "org_sparse_mix",
+        "description": "Organization-heavy sparse mix with reduced field completeness.",
+        "features": ["organization-heavy", "aggressive sparsity", "address inconsistency"],
+        "person_ratio": 0.42,
+        "ipg_rate": 0.28,
+        "mutations": ["sparse", "address_noise"],
+    },
+    {
+        "slug": "person_chaos_low_ipg",
+        "description": "Person-heavy sample with low IPG labels and multi-signal noise.",
+        "features": ["person-heavy", "low IPG coverage", "name+tax noise"],
+        "person_ratio": 0.86,
+        "ipg_rate": 0.14,
+        "mutations": ["name_noise", "tax_noise"],
+    },
+    {
+        "slug": "high_ipg_collision",
+        "description": "High IPG label coverage with deliberate duplicate pressure stress.",
+        "features": ["high IPG labels", "collision pressure", "match precision stress"],
+        "person_ratio": 0.70,
+        "ipg_rate": 0.68,
+        "mutations": ["duplicate_pressure"],
+    },
+    {
+        "slug": "full_stress_mix",
+        "description": "Full stress profile combining sparse fields and multi-attribute noise.",
+        "features": ["multi-noise profile", "high ambiguity", "hidden true clusters"],
+        "person_ratio": 0.64,
+        "ipg_rate": 0.27,
+        "mutations": ["sparse", "name_noise", "tax_noise", "address_noise", "duplicate_pressure"],
+    },
+]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate curated sample_input files for MVP")
     parser.add_argument("--records", type=int, default=500, help="Records per sample (default: 500)")
+    parser.add_argument("--samples", type=int, default=50, help="Number of curated samples to generate (default: 50)")
     parser.add_argument("--sample-dir", default="sample_input", help="Sample input directory under MVP")
     parser.add_argument("--output-dir", default="output", help="Output directory for generator metadata")
     return parser.parse_args()
+
+
+def clamp(value: float, min_value: float, max_value: float) -> float:
+    return max(min_value, min(max_value, value))
+
+
+def filename_for_records(filename: str, records: int) -> str:
+    marker = "_500.json"
+    if filename.endswith(marker):
+        return filename.removesuffix(marker) + f"_{records}.json"
+    return filename
+
+
+def build_profiles(samples: int, records: int) -> list[dict[str, Any]]:
+    profiles: list[dict[str, Any]] = []
+    if samples <= 0:
+        return profiles
+
+    for idx, base in enumerate(PROFILES, start=1):
+        if idx > samples:
+            break
+        clone = dict(base)
+        clone["filename"] = filename_for_records(str(base["filename"]), records)
+        profiles.append(clone)
+
+    if samples <= len(PROFILES):
+        return profiles
+
+    extra_count = samples - len(PROFILES)
+    for offset in range(extra_count):
+        sample_idx = len(PROFILES) + offset + 1
+        template = EXTRA_SCENARIO_TEMPLATES[offset % len(EXTRA_SCENARIO_TEMPLATES)]
+        seed = 2028000 + sample_idx
+        person_jitter = ((offset % 7) - 3) * 0.03
+        ipg_jitter = ((offset % 5) - 2) * 0.035
+        person_ratio = clamp(float(template["person_ratio"]) + person_jitter, 0.25, 0.92)
+        ipg_rate = clamp(float(template["ipg_rate"]) + ipg_jitter, 0.08, 0.78)
+
+        mutations = list(template["mutations"])
+        if offset % 4 == 0 and "duplicate_pressure" not in mutations:
+            mutations.append("duplicate_pressure")
+        if offset % 6 == 0 and "sparse" not in mutations:
+            mutations.append("sparse")
+        if offset % 8 == 0 and "name_noise" not in mutations:
+            mutations.append("name_noise")
+
+        filename = f"sample_{sample_idx:02d}_{template['slug']}_{records}.json"
+        description = (
+            f"Extended stress scenario {sample_idx}: {template['description']} "
+            f"(person_ratio={person_ratio:.2f}, ipg_rate={ipg_rate:.2f})."
+        )
+        features = list(template["features"]) + [
+            "extended hard-case set for Senzing stress testing",
+            f"seed={seed}",
+        ]
+        profiles.append(
+            {
+                "filename": filename,
+                "description": description,
+                "features": features,
+                "seed": seed,
+                "person_ratio": round(person_ratio, 4),
+                "ipg_rate": round(ipg_rate, 4),
+                "mutations": mutations,
+            }
+        )
+
+    return profiles
 
 
 def run_generator(repo_root: Path, sample_dir_arg: str, output_dir_arg: str, records: int, seed: int, person_ratio: float, ipg_rate: float) -> Path:
@@ -304,6 +424,73 @@ def impose_hidden_truth_clusters(records: list[dict[str, Any]], rng: random.Rand
     return {"hidden_groups": hidden_group_counter, "hidden_records": consumed}
 
 
+def apply_ipg_label_noise(
+    records: list[dict[str, Any]],
+    rng: random.Random,
+    collision_rate: float,
+    drop_rate: float,
+) -> dict[str, int | float]:
+    """Inject controlled IPG label noise to create baseline FP/FN variability."""
+    ipg_key = "IPG ID"
+    true_key = "SOURCE_TRUE_GROUP_ID"
+
+    group_by_index: dict[int, str] = {}
+    ipg_owner_group: dict[str, str] = {}
+    for idx, record in enumerate(records):
+        true_group = str(record.get(true_key) or "").strip()
+        if not true_group:
+            continue
+        group_by_index[idx] = true_group
+        ipg_id = str(record.get(ipg_key) or "").strip()
+        if ipg_id and ipg_id not in ipg_owner_group:
+            ipg_owner_group[ipg_id] = true_group
+
+    if not group_by_index:
+        return {
+            "collision_rate": round(collision_rate, 4),
+            "drop_rate": round(drop_rate, 4),
+            "collisions_applied": 0,
+            "drops_applied": 0,
+        }
+
+    ipg_candidates = list(ipg_owner_group.items())
+    target_collisions = max(0, int(len(group_by_index) * collision_rate))
+    target_drops = max(0, int(len(group_by_index) * drop_rate))
+
+    collision_indices = list(group_by_index.keys())
+    rng.shuffle(collision_indices)
+    collisions_applied = 0
+    for idx in collision_indices:
+        if collisions_applied >= target_collisions:
+            break
+        true_group = group_by_index[idx]
+        possible_ipg = [ipg for ipg, owner in ipg_candidates if owner != true_group]
+        if not possible_ipg:
+            continue
+        new_ipg = rng.choice(possible_ipg)
+        current_ipg = str(records[idx].get(ipg_key) or "").strip()
+        if current_ipg == new_ipg:
+            continue
+        records[idx][ipg_key] = new_ipg
+        collisions_applied += 1
+
+    drop_indices = [idx for idx in group_by_index if str(records[idx].get(ipg_key) or "").strip()]
+    rng.shuffle(drop_indices)
+    drops_applied = 0
+    for idx in drop_indices:
+        if drops_applied >= target_drops:
+            break
+        records[idx][ipg_key] = None
+        drops_applied += 1
+
+    return {
+        "collision_rate": round(collision_rate, 4),
+        "drop_rate": round(drop_rate, 4),
+        "collisions_applied": collisions_applied,
+        "drops_applied": drops_applied,
+    }
+
+
 def apply_sparse(records: list[dict[str, Any]], rng: random.Random) -> None:
     optional_fields = [
         "LegalFirstName",
@@ -419,8 +606,8 @@ def ensure_array(payload: Any) -> list[dict[str, Any]]:
     return payload
 
 
-def load_existing_legacy_records(sample_dir: Path, expected_count: int) -> list[dict[str, Any]] | None:
-    legacy_path = sample_dir / "sample_01_legacy_baseline_500.json"
+def load_existing_legacy_records(sample_dir: Path, legacy_filename: str, expected_count: int) -> list[dict[str, Any]] | None:
+    legacy_path = sample_dir / legacy_filename
     if not legacy_path.exists():
         return None
     try:
@@ -451,8 +638,13 @@ def wrap_sample(filename: str, description: str, features: list[str], records: l
     }
 
 
-def write_catalog(sample_dir: Path, profiles: list[dict[str, Any]]) -> None:
-    lines = ["# Sample Input Catalog", "", "All files contain 500 records in JSON format with top-level metadata and `records` array.", ""]
+def write_catalog(sample_dir: Path, profiles: list[dict[str, Any]], records: int) -> None:
+    lines = [
+        "# Sample Input Catalog",
+        "",
+        f"All files contain {records} records in JSON format with top-level metadata and `records` array.",
+        "",
+    ]
     for idx, profile in enumerate(profiles, start=1):
         lines.append(f"{idx}. `{profile['filename']}`")
         lines.append(f"   - {profile['description']}")
@@ -465,13 +657,22 @@ def main() -> int:
     if args.records <= 0:
         print("ERROR: --records must be > 0", file=sys.stderr)
         return 2
+    if args.samples <= 0:
+        print("ERROR: --samples must be > 0", file=sys.stderr)
+        return 2
 
     mvp_root = Path(__file__).resolve().parent
     repo_root = mvp_root.parent
     sample_dir = (mvp_root / args.sample_dir).resolve()
     sample_dir.mkdir(parents=True, exist_ok=True)
 
-    legacy_records = load_existing_legacy_records(sample_dir, args.records)
+    profiles = build_profiles(samples=args.samples, records=args.records)
+    if not profiles:
+        print("ERROR: no profiles generated", file=sys.stderr)
+        return 2
+
+    legacy_filename = str(profiles[0]["filename"])
+    legacy_records = load_existing_legacy_records(sample_dir, legacy_filename, args.records)
 
     # Keep only current curated artifacts in sample_input.
     for path in sorted(sample_dir.glob("*.json")):
@@ -485,7 +686,7 @@ def main() -> int:
 
     generated_files: list[Path] = []
 
-    for profile in PROFILES:
+    for profile in profiles:
         filename = profile["filename"]
 
         if profile.get("source") == "legacy":
@@ -526,6 +727,25 @@ def main() -> int:
             mutator(array_data, rng)
 
         hidden_truth_stats = impose_hidden_truth_clusters(array_data, rng)
+        ipg_rate = float(profile.get("ipg_rate", 0.35))
+        collision_rate = float(
+            profile.get(
+                "ipg_collision_rate",
+                clamp(0.015 + (1.0 - ipg_rate) * 0.03, 0.01, 0.08),
+            )
+        )
+        drop_rate = float(
+            profile.get(
+                "ipg_drop_rate",
+                clamp(0.04 + (1.0 - ipg_rate) * 0.12, 0.03, 0.20),
+            )
+        )
+        ipg_noise_stats = apply_ipg_label_noise(
+            records=array_data,
+            rng=rng,
+            collision_rate=collision_rate,
+            drop_rate=drop_rate,
+        )
 
         wrapped = wrap_sample(
             filename=filename,
@@ -535,12 +755,13 @@ def main() -> int:
         )
         wrapped["_hidden_truth_groups"] = hidden_truth_stats["hidden_groups"]
         wrapped["_hidden_truth_records"] = hidden_truth_stats["hidden_records"]
+        wrapped["_ipg_label_noise"] = ipg_noise_stats
 
         target = sample_dir / filename
         target.write_text(json.dumps(wrapped, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         generated_files.append(target)
 
-    write_catalog(sample_dir, PROFILES)
+    write_catalog(sample_dir, profiles, args.records)
 
     # Remove raw temporary generator outputs.
     for raw_path in sorted(sample_dir.glob("partner_input_realistic_*.json")):

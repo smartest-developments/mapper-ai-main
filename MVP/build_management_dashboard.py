@@ -108,6 +108,40 @@ def count_unique_resolved_entities(path: Path) -> int | None:
     return len(entities)
 
 
+def build_entity_distributions(path: Path) -> dict[str, dict[str, int]]:
+    if not path.exists():
+        return {
+            "entity_size_distribution": {},
+            "entity_pairings_distribution": {},
+            "record_pairing_degree_distribution": {},
+        }
+
+    per_entity_records: dict[str, int] = {}
+    with path.open("r", encoding="utf-8", newline="") as infile:
+        for row in csv.DictReader(infile):
+            entity_id = str(row.get("resolved_entity_id") or "").strip()
+            if not entity_id:
+                continue
+            per_entity_records[entity_id] = per_entity_records.get(entity_id, 0) + 1
+
+    size_distribution: dict[int, int] = {}
+    pairings_distribution: dict[int, int] = {}
+    degree_distribution: dict[int, int] = {}
+
+    for size in per_entity_records.values():
+        size_distribution[size] = size_distribution.get(size, 0) + 1
+        pairings = size * (size - 1) // 2 if size > 1 else 0
+        pairings_distribution[pairings] = pairings_distribution.get(pairings, 0) + 1
+        degree = max(0, size - 1)
+        degree_distribution[degree] = degree_distribution.get(degree, 0) + size
+
+    return {
+        "entity_size_distribution": {str(k): v for k, v in sorted(size_distribution.items())},
+        "entity_pairings_distribution": {str(k): v for k, v in sorted(pairings_distribution.items())},
+        "record_pairing_degree_distribution": {str(k): v for k, v in sorted(degree_distribution.items())},
+    }
+
+
 def load_input_source_records(path: Path) -> list[dict]:
     if not path.exists():
         return []
@@ -275,6 +309,7 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     distribution_metrics = (
         ground_truth.get("distribution_metrics") if isinstance(ground_truth.get("distribution_metrics"), dict) else {}
     )
+    entity_distributions = build_entity_distributions(technical_dir / "entity_records.csv")
     baseline_match_coverage_raw = discovery_metrics.get("baseline_match_coverage")
     if not isinstance(baseline_match_coverage_raw, (int, float)):
         known_pairs = discovery_metrics.get("known_pairs_ipg")
@@ -312,9 +347,13 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     )
 
     our_true_positive = (
-        discovery_metrics.get("known_pairs_ipg")
-        if isinstance(discovery_metrics.get("known_pairs_ipg"), int)
-        else ground_truth_pairs_labeled
+        discovery_metrics.get("baseline_true_positive")
+        if isinstance(discovery_metrics.get("baseline_true_positive"), int)
+        else (
+            discovery_metrics.get("known_pairs_ipg")
+            if isinstance(discovery_metrics.get("known_pairs_ipg"), int)
+            else ground_truth_pairs_labeled
+        )
     )
     if not isinstance(our_true_positive, int):
         our_true_positive = 0
@@ -327,8 +366,16 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     if not isinstance(our_true_pairs_total, int):
         our_true_pairs_total = our_true_positive
 
-    our_false_positive = 0
-    our_false_negative = max(0, our_true_pairs_total - our_true_positive)
+    our_false_positive = (
+        discovery_metrics.get("baseline_false_positive")
+        if isinstance(discovery_metrics.get("baseline_false_positive"), int)
+        else 0
+    )
+    our_false_negative = (
+        discovery_metrics.get("baseline_false_negative")
+        if isinstance(discovery_metrics.get("baseline_false_negative"), int)
+        else max(0, our_true_pairs_total - our_true_positive)
+    )
     our_match_coverage_raw = safe_ratio(our_true_positive, our_true_pairs_total)
     if our_match_coverage_raw is None:
         our_match_coverage_raw = 0.0
@@ -431,9 +478,12 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
             key=lambda item: item[1],
             reverse=True,
         )[:10],
-        "entity_size_distribution": distribution_metrics.get("entity_size_distribution", {}),
-        "entity_pairings_distribution": distribution_metrics.get("entity_pairings_distribution", {}),
-        "record_pairing_degree_distribution": distribution_metrics.get("record_pairing_degree_distribution", {}),
+        "entity_size_distribution": entity_distributions.get("entity_size_distribution")
+        or distribution_metrics.get("entity_size_distribution", {}),
+        "entity_pairings_distribution": entity_distributions.get("entity_pairings_distribution")
+        or distribution_metrics.get("entity_pairings_distribution", {}),
+        "record_pairing_degree_distribution": entity_distributions.get("record_pairing_degree_distribution")
+        or distribution_metrics.get("record_pairing_degree_distribution", {}),
         "explain_coverage": management_summary.get("explain_coverage", {}),
         "runtime_warnings": run_summary.get("runtime_warnings", []),
         "input_source_path": f"{run_id}/input_source.json",

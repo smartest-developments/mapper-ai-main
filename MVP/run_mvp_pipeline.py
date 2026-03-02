@@ -193,7 +193,7 @@ def compute_extra_match_metrics(source_records: list[dict[str, object]], matched
 
     record_truth: dict[str, dict[str, str]] = {}
     true_group_counts: Counter[str] = Counter()
-    true_group_ipg_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    ipg_true_group_counts: dict[str, Counter[str]] = defaultdict(Counter)
     records_with_true_group = 0
     records_with_ipg = 0
 
@@ -205,7 +205,7 @@ def compute_extra_match_metrics(source_records: list[dict[str, object]], matched
             records_with_true_group += 1
             true_group_counts[true_group] += 1
             if ipg_id:
-                true_group_ipg_counts[true_group][ipg_id] += 1
+                ipg_true_group_counts[ipg_id][true_group] += 1
         if ipg_id:
             records_with_ipg += 1
 
@@ -213,12 +213,14 @@ def compute_extra_match_metrics(source_records: list[dict[str, object]], matched
         return None
 
     true_pairs_total = sum(comb2(count) for count in true_group_counts.values())
-    known_pairs_ipg = sum(
-        comb2(ipg_count)
-        for ipg_counter in true_group_ipg_counts.values()
-        for ipg_count in ipg_counter.values()
+    baseline_predicted_pairs = sum(comb2(sum(counter.values())) for counter in ipg_true_group_counts.values())
+    baseline_true_positive = sum(
+        comb2(group_count) for counter in ipg_true_group_counts.values() for group_count in counter.values()
     )
-    discoverable_true_pairs = max(0, true_pairs_total - known_pairs_ipg)
+    baseline_false_positive = max(0, baseline_predicted_pairs - baseline_true_positive)
+    baseline_false_negative = max(0, true_pairs_total - baseline_true_positive)
+    known_pairs_ipg = baseline_true_positive
+    discoverable_true_pairs = max(0, true_pairs_total - baseline_true_positive)
 
     predicted_pairs_beyond_known = 0
     extra_true_matches_found = 0
@@ -263,8 +265,13 @@ def compute_extra_match_metrics(source_records: list[dict[str, object]], matched
         "records_with_true_group": records_with_true_group,
         "records_with_ipg": records_with_ipg,
         "true_pairs_total": true_pairs_total,
+        "baseline_predicted_pairs": baseline_predicted_pairs,
+        "baseline_true_positive": baseline_true_positive,
+        "baseline_false_positive": baseline_false_positive,
+        "baseline_false_negative": baseline_false_negative,
+        "baseline_match_precision": safe_ratio(baseline_true_positive, baseline_predicted_pairs),
         "known_pairs_ipg": known_pairs_ipg,
-        "baseline_match_coverage": safe_ratio(known_pairs_ipg, true_pairs_total),
+        "baseline_match_coverage": safe_ratio(baseline_true_positive, true_pairs_total),
         "discoverable_true_pairs": discoverable_true_pairs,
         "predicted_pairs_beyond_known": predicted_pairs_beyond_known,
         "extra_true_matches_found": extra_true_matches_found,
@@ -310,6 +317,14 @@ def enrich_management_summary_with_extra_metrics(
     lines += (
         f"- Our match coverage (without Senzing): {discovery_metrics['baseline_match_coverage'] * 100:.2f}% "
         "(Portion of true pairs that were already known from SOURCE_IPG_ID labels before Senzing.)\n"
+    )
+    lines += (
+        f"- Our false positives (without Senzing): {discovery_metrics.get('baseline_false_positive', 0)} "
+        "(Pairs implied by SOURCE_IPG_ID that are not true matches by SOURCE_TRUE_GROUP_ID.)\n"
+    )
+    lines += (
+        f"- Our false negatives (without Senzing): {discovery_metrics.get('baseline_false_negative', 0)} "
+        "(True pairs that SOURCE_IPG_ID labels do not capture.)\n"
     )
     lines += (
         f"- Extra true matches found: {discovery_metrics['extra_true_matches_found']} "
