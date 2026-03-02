@@ -7,15 +7,30 @@ import argparse
 import datetime as dt
 import json
 import re
+import shutil
+import csv
 from pathlib import Path
 
 RUN_DIR_RE = re.compile(r"^(?P<ts>\d{8}_\d{6})(?:__(?P<label>[A-Za-z0-9._-]+))?$")
+STATIC_DASHBOARD_FILES = (
+    "management_dashboard.html",
+    "management_dashboard.css",
+    "management_dashboard.js",
+    "metrics_validation_guide.html",
+    "tabler.min.css",
+    "tabler.min.js",
+    "chart.umd.js",
+)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build management dashboard data from MVP outputs")
     parser.add_argument("--output-root", default="output", help="Output root containing timestamped run folders")
-    parser.add_argument("--dashboard-dir", default="dashboard", help="Dashboard directory under MVP root")
+    parser.add_argument(
+        "--dashboard-dir",
+        default="dashboard",
+        help="Dashboard directory under MVP root (self-contained, ready to open)",
+    )
     return parser.parse_args()
 
 
@@ -51,6 +66,196 @@ def pct(value: object) -> float | None:
     return round(float(number) * 100.0, 2)
 
 
+def safe_ratio(num: int | float | None, den: int | float | None) -> float | None:
+    if not isinstance(num, (int, float)) or not isinstance(den, (int, float)) or den <= 0:
+        return None
+    return float(num) / float(den)
+
+
+def is_close(a: float | int | None, b: float | int | None, tol: float = 0.01) -> bool:
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        return False
+    return abs(float(a) - float(b)) <= tol
+
+
+def count_jsonl_rows(path: Path) -> int | None:
+    if not path.exists():
+        return None
+    rows = 0
+    with path.open("r", encoding="utf-8") as infile:
+        for line in infile:
+            if line.strip():
+                rows += 1
+    return rows
+
+
+def count_csv_rows(path: Path) -> int | None:
+    if not path.exists():
+        return None
+    with path.open("r", encoding="utf-8", newline="") as infile:
+        return sum(1 for _ in csv.DictReader(infile))
+
+
+def count_unique_resolved_entities(path: Path) -> int | None:
+    if not path.exists():
+        return None
+    entities: set[str] = set()
+    with path.open("r", encoding="utf-8", newline="") as infile:
+        for row in csv.DictReader(infile):
+            entity_id = str(row.get("resolved_entity_id") or "").strip()
+            if entity_id:
+                entities.add(entity_id)
+    return len(entities)
+
+
+def load_input_source_records(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return []
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if isinstance(payload, dict):
+        for key in ("records", "data", "items"):
+            records = payload.get(key)
+            if isinstance(records, list):
+                return [item for item in records if isinstance(item, dict)]
+    return []
+
+
+def count_unique_source_ipg_groups(input_source_json: Path) -> int | None:
+    records = load_input_source_records(input_source_json)
+    if not records:
+        return None
+    candidates = ("IPG ID", "IPG_ID", "ipg_id", "SOURCE_IPG_ID", "source_ipg_id")
+    groups: set[str] = set()
+    for record in records:
+        for key in candidates:
+            value = record.get(key)
+            if value is None:
+                continue
+            text = str(value).strip()
+            if text:
+                groups.add(text)
+                break
+    return len(groups)
+
+
+def build_validation_summary(
+    run_dir: Path,
+    technical_dir: Path,
+    records_input: int | None,
+    resolved_entities: int | None,
+    matched_pairs: int | None,
+    pair_precision_pct: float | None,
+    pair_recall_pct: float | None,
+    our_match_coverage_pct: float | None,
+    our_true_positive: int | None,
+    our_true_pairs_total: int | None,
+    false_positive_pct: float | None,
+    true_positive: int | None,
+    false_positive: int | None,
+    false_negative: int | None,
+    predicted_pairs_labeled: int | None,
+) -> dict[str, object]:
+    checks: list[dict[str, object]] = []
+
+    def add_check(name: str, expected: object, actual: object, source: str) -> None:
+        if expected is None or actual is None:
+            status = "SKIP"
+            passed = None
+        elif isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
+            passed = is_close(expected, actual)
+            status = "PASS" if passed else "FAIL"
+        else:
+            passed = expected == actual
+            status = "PASS" if passed else "FAIL"
+        checks.append(
+            {
+                "name": name,
+                "expected": expected,
+                "actual": actual,
+                "status": status,
+                "source": source,
+            }
+        )
+
+    input_jsonl_rows = count_jsonl_rows(technical_dir / "input_normalized.jsonl")
+    add_check(
+        "Selected Input Records",
+        records_input,
+        input_jsonl_rows,
+        "technical output/input_normalized.jsonl",
+    )
+
+    matched_pairs_rows = count_csv_rows(technical_dir / "matched_pairs.csv")
+    add_check(
+        "Matched Pairs",
+        matched_pairs,
+        matched_pairs_rows,
+        "technical output/matched_pairs.csv",
+    )
+
+    resolved_entities_rows = count_unique_resolved_entities(technical_dir / "entity_records.csv")
+    add_check(
+        "Selected Resolved Entities",
+        resolved_entities,
+        resolved_entities_rows,
+        "technical output/entity_records.csv",
+    )
+
+    precision_from_counts = pct(safe_ratio(true_positive, (true_positive or 0) + (false_positive or 0)))
+    add_check(
+        "Match Correctness (%)",
+        pair_precision_pct,
+        precision_from_counts,
+        "technical output/ground_truth_match_quality.json (pair_metrics)",
+    )
+
+    coverage_from_recall = pct(safe_ratio(our_true_positive, our_true_pairs_total))
+    add_check(
+        "Our Match Coverage (%)",
+        our_match_coverage_pct,
+        coverage_from_recall,
+        "technical output/management_summary.json (discovery baseline)",
+    )
+
+    false_positive_rate_from_counts = pct(safe_ratio(false_positive, predicted_pairs_labeled))
+    add_check(
+        "False Positive (%)",
+        false_positive_pct,
+        false_positive_rate_from_counts,
+        "technical output/ground_truth_match_quality.json (pair_metrics)",
+    )
+
+    missed_from_recall = None if pair_recall_pct is None else round(100.0 - pair_recall_pct, 2)
+    missed_from_counts = pct(safe_ratio(false_negative, (true_positive or 0) + (false_negative or 0)))
+    add_check(
+        "Match Missed (%)",
+        missed_from_recall,
+        missed_from_counts,
+        "technical output/ground_truth_match_quality.json (pair_metrics)",
+    )
+
+    has_failure = any(item.get("status") == "FAIL" for item in checks)
+    all_skipped = all(item.get("status") == "SKIP" for item in checks)
+    overall_status = "SKIP" if all_skipped else ("FAIL" if has_failure else "PASS")
+
+    return {
+        "status": overall_status,
+        "checks": checks,
+        "run_path": str(run_dir),
+        "input_source_path": str(run_dir / "input_source.json"),
+        "management_summary_path": str(technical_dir / "management_summary.json"),
+        "ground_truth_path": str(technical_dir / "ground_truth_match_quality.json"),
+        "matched_pairs_path": str(technical_dir / "matched_pairs.csv"),
+        "entity_records_path": str(technical_dir / "entity_records.csv"),
+        "input_jsonl_path": str(technical_dir / "input_normalized.jsonl"),
+    }
+
+
 def collect_run_record(output_root: Path, run_dir: Path) -> dict:
     run_id = run_dir.name
     match = RUN_DIR_RE.match(run_id)
@@ -84,9 +289,55 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
         if isinstance(true_found, int) and isinstance(true_pairs, int) and true_pairs > 0:
             senzing_true_coverage_raw = true_found / true_pairs
 
+    pair_precision_raw = to_num(pair_metrics.get("pair_precision"))
+    pair_recall_raw = to_num(pair_metrics.get("pair_recall"))
+    true_positive = pair_metrics.get("true_positive") if isinstance(pair_metrics.get("true_positive"), int) else None
+    false_positive = pair_metrics.get("false_positive") if isinstance(pair_metrics.get("false_positive"), int) else None
+    false_negative = pair_metrics.get("false_negative") if isinstance(pair_metrics.get("false_negative"), int) else None
+    predicted_pairs_labeled = (
+        pair_metrics.get("predicted_pairs_labeled")
+        if isinstance(pair_metrics.get("predicted_pairs_labeled"), int)
+        else None
+    )
+    ground_truth_pairs_labeled = (
+        pair_metrics.get("ground_truth_pairs_labeled")
+        if isinstance(pair_metrics.get("ground_truth_pairs_labeled"), int)
+        else None
+    )
+
+    false_positive_rate_raw = to_num(discovery_metrics.get("overall_false_positive_rate"))
+    false_positive_rate_ground_truth = safe_ratio(
+        false_positive,
+        predicted_pairs_labeled if isinstance(predicted_pairs_labeled, int) and predicted_pairs_labeled > 0 else None,
+    )
+
+    our_true_positive = (
+        discovery_metrics.get("known_pairs_ipg")
+        if isinstance(discovery_metrics.get("known_pairs_ipg"), int)
+        else ground_truth_pairs_labeled
+    )
+    if not isinstance(our_true_positive, int):
+        our_true_positive = 0
+
+    our_true_pairs_total = (
+        discovery_metrics.get("true_pairs_total")
+        if isinstance(discovery_metrics.get("true_pairs_total"), int)
+        else our_true_positive
+    )
+    if not isinstance(our_true_pairs_total, int):
+        our_true_pairs_total = our_true_positive
+
+    our_false_positive = 0
+    our_false_negative = max(0, our_true_pairs_total - our_true_positive)
+    our_match_coverage_raw = safe_ratio(our_true_positive, our_true_pairs_total)
+    if our_match_coverage_raw is None:
+        our_match_coverage_raw = 0.0
+
     mapping_input = str(mapping_summary.get("input_json") or "").strip()
     source_input_name = Path(mapping_input).name if mapping_input else None
     output_label = str(mapping_summary.get("output_label") or "").strip() or run_folder_label
+    input_source_json = run_dir / "input_source.json"
+    our_resolved_entities = count_unique_source_ipg_groups(input_source_json)
 
     artifact_entries: list[dict[str, object]] = []
     for file_path in sorted(path for path in run_dir.rglob("*") if path.is_file()):
@@ -136,29 +387,37 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
         or run_summary.get("generated_at"),
         "records_input": management_summary.get("records_input"),
         "records_exported": management_summary.get("records_exported"),
+        "our_resolved_entities": our_resolved_entities,
         "resolved_entities": management_summary.get("resolved_entities"),
         "matched_records": management_summary.get("matched_records"),
         "matched_pairs": management_summary.get("matched_pairs"),
-        "pair_precision_pct": pct(pair_metrics.get("pair_precision")),
-        "pair_recall_pct": pct(pair_metrics.get("pair_recall")),
-        "true_positive": pair_metrics.get("true_positive"),
-        "false_positive": pair_metrics.get("false_positive"),
-        "false_negative": pair_metrics.get("false_negative"),
+        "pair_precision_pct": pct(pair_precision_raw),
+        "pair_recall_pct": pct(pair_recall_raw),
+        "true_positive": true_positive,
+        "false_positive": false_positive,
+        "false_negative": false_negative,
         "discovery_available": bool(discovery_metrics.get("available")),
         "extra_true_matches_found": discovery_metrics.get("extra_true_matches_found"),
         "extra_false_matches_found": discovery_metrics.get("extra_false_matches_found"),
         "extra_match_precision_pct": pct(discovery_metrics.get("extra_match_precision")),
         "extra_match_recall_pct": pct(discovery_metrics.get("extra_match_recall")),
         "extra_gain_vs_known_pct": pct(discovery_metrics.get("extra_gain_vs_known")),
+        "known_pairs_ipg": our_true_positive,
         "discoverable_true_pairs": discovery_metrics.get("discoverable_true_pairs"),
         "predicted_pairs_beyond_known": discovery_metrics.get("predicted_pairs_beyond_known"),
         "net_extra_matches": discovery_metrics.get("net_extra_matches"),
-        "overall_false_positive_pct": pct(discovery_metrics.get("overall_false_positive_rate")),
+        "overall_false_positive_pct": pct(false_positive_rate_ground_truth),
+        "overall_false_positive_discovery_pct": pct(false_positive_rate_raw),
         "overall_match_correctness_pct": pct(discovery_metrics.get("overall_match_correctness")),
-        "our_match_coverage_pct": pct(baseline_match_coverage_raw),
+        "our_true_positive": our_true_positive,
+        "our_true_pairs_total": our_true_pairs_total,
+        "our_false_positive": our_false_positive,
+        "our_false_negative": our_false_negative,
+        "our_match_coverage_pct": pct(our_match_coverage_raw),
+        "baseline_match_coverage_pct": pct(baseline_match_coverage_raw),
         "senzing_true_coverage_pct": pct(senzing_true_coverage_raw),
-        "predicted_pairs_labeled": pair_metrics.get("predicted_pairs_labeled"),
-        "ground_truth_pairs_labeled": pair_metrics.get("ground_truth_pairs_labeled"),
+        "predicted_pairs_labeled": predicted_pairs_labeled,
+        "ground_truth_pairs_labeled": ground_truth_pairs_labeled,
         "match_level_distribution": management_summary.get("match_level_distribution", {}),
         "top_match_keys": sorted(
             (
@@ -187,6 +446,29 @@ def collect_run_record(output_root: Path, run_dir: Path) -> dict:
             "execution_mode": mapping_summary.get("execution_mode"),
         },
         "artifacts": artifact_entries,
+        "validation": build_validation_summary(
+            run_dir=run_dir,
+            technical_dir=technical_dir,
+            records_input=management_summary.get("records_input")
+            if isinstance(management_summary.get("records_input"), int)
+            else None,
+            resolved_entities=management_summary.get("resolved_entities")
+            if isinstance(management_summary.get("resolved_entities"), int)
+            else None,
+            matched_pairs=management_summary.get("matched_pairs")
+            if isinstance(management_summary.get("matched_pairs"), int)
+            else None,
+            pair_precision_pct=pct(pair_precision_raw),
+            pair_recall_pct=pct(pair_recall_raw),
+            our_match_coverage_pct=pct(our_match_coverage_raw),
+            our_true_positive=our_true_positive,
+            our_true_pairs_total=our_true_pairs_total,
+            false_positive_pct=pct(false_positive_rate_ground_truth),
+            true_positive=true_positive,
+            false_positive=false_positive,
+            false_negative=false_negative,
+            predicted_pairs_labeled=predicted_pairs_labeled,
+        ),
     }
 
 
@@ -231,16 +513,45 @@ def write_data_js(path: Path, payload: dict) -> None:
     path.write_text(js, encoding="utf-8")
 
 
+def sync_dashboard_assets(template_dir: Path, target_dir: Path) -> None:
+    if template_dir.resolve() == target_dir.resolve():
+        return
+    for filename in STATIC_DASHBOARD_FILES:
+        source = template_dir / filename
+        if not source.exists():
+            raise FileNotFoundError(f"Missing dashboard template asset: {source}")
+        shutil.copy2(source, target_dir / filename)
+
+
+def write_index_html(target_dir: Path) -> None:
+    index_html = """<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url=./management_dashboard.html">
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <p>Open <a href="./management_dashboard.html">management_dashboard.html</a>.</p>
+  </body>
+</html>
+"""
+    (target_dir / "index.html").write_text(index_html, encoding="utf-8")
+
+
 def main() -> int:
     args = parse_args()
     mvp_root = Path(__file__).resolve().parent
     output_root = (mvp_root / args.output_root).resolve()
+    dashboard_template_dir = (mvp_root / "dashboard").resolve()
     dashboard_dir = (mvp_root / args.dashboard_dir).resolve()
     data_js_path = dashboard_dir / "management_dashboard_data.js"
 
     if not output_root.exists():
         output_root.mkdir(parents=True, exist_ok=True)
     dashboard_dir.mkdir(parents=True, exist_ok=True)
+    sync_dashboard_assets(dashboard_template_dir, dashboard_dir)
+    write_index_html(dashboard_dir)
 
     runs = collect_runs(output_root)
     payload = {

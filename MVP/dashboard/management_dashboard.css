@@ -30,26 +30,6 @@ body {
   min-height: 100vh;
 }
 
-.background-title {
-  position: relative;
-  top: 0;
-  left: auto;
-  transform: none;
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin: 0.5rem auto 0;
-  z-index: 1;
-  pointer-events: none;
-  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
-  font-weight: 900;
-  color: #cbd5e1;
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 10px rgba(15, 23, 42, 0.18);
-  text-align: center;
-  white-space: nowrap;
-}
-
 .page-wrapper {
   position: relative;
   z-index: 1;
@@ -84,8 +64,30 @@ body {
   color: #e2e8f0;
 }
 
+.comparison-card {
+  height: 100%;
+}
+
 .metric-card {
-  min-height: 118px;
+  min-height: 86px;
+}
+
+.metric-card-our {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card-soft) 100%);
+  border-color: var(--line);
+}
+
+.controls-card {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card-soft) 100%);
+  border-color: var(--line);
+}
+
+.metric-card-our .metric-label {
+  color: #d8e4f8;
+}
+
+.metric-card-our .metric-value {
+  color: #ffffff;
 }
 
 .metric-card .card-body {
@@ -94,12 +96,12 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 150px;
+  min-height: 104px;
 }
 
 .metric-label {
   color: #d8e4f8;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 800;
@@ -107,7 +109,7 @@ body {
 
 .metric-value {
   margin-top: 0.45rem;
-  font-size: 3.1rem;
+  font-size: 1.75rem;
   line-height: 1.08;
   font-weight: 900;
   color: #ffffff;
@@ -158,12 +160,12 @@ body {
 }
 
 .chart-md {
-  height: 280px;
+  height: 220px;
 }
 
 .match-keys-body {
-  height: 280px;
-  max-height: 280px;
+  height: 220px;
+  max-height: 220px;
   overflow-y: auto;
 }
 
@@ -335,10 +337,44 @@ body {
   }
 
   .chart-md {
-    height: 240px;
+    height: 200px;
   }
 
   .metric-value {
     font-size: 1.36rem;
   }
+}
+.controls-card-body {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.controls-card-body .form-label {
+  margin-bottom: 0.35rem;
+  font-size: 0.86rem;
+  display: block;
+  text-align: center;
+}
+
+.controls-card-body .form-select {
+  min-height: 2.25rem;
+  font-size: 0.92rem;
+  text-align: center;
+  text-align-last: center;
+  max-width: 860px;
+  margin: 0 auto;
+  background: #4b5563;
+  border-color: var(--line);
+  color: var(--text-main);
+}
+
+#runSelector option {
+  background: #4b5563;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.controls-card .form-select:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 0.2rem rgba(92, 141, 255, 0.22);
 }

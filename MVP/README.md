@@ -12,11 +12,8 @@ Gli output finali vengono scritti in `output/<timestamp>__<input_label>/`.
   e hidden true groups (`SOURCE_TRUE_GROUP_ID`) per misurare match reali non etichettati con IPG
 - `partner_json_to_senzing.py`: mapper JSON -> JSONL Senzing
 - `run_senzing_end_to_end.py`: runner E2E Senzing
-- `build_management_dashboard.py`: builds dashboard data from all `output/<timestamp>/` runs
-- `dashboard/management_dashboard.html`: local dashboard UI for management
-- `dashboard/management_dashboard.js`: dashboard logic
-- `dashboard/management_dashboard.css`: dashboard styling
-- `dashboard/tabler.min.css`, `dashboard/tabler.min.js`, `dashboard/chart.umd.js`: local dashboard assets (no CDN)
+- `build_management_dashboard.py`: costruisce dashboard self-contained da tutti i run in `output/<timestamp>/`
+- `dashboard/`: dashboard pronta all'uso (UI + dati locali, apribile direttamente)
 - `sample_input/sample_01_legacy_baseline_500.json`: sample pronto (500 record)
 
 ## Prerequisiti
@@ -144,31 +141,30 @@ python3 run_mvp_pipeline.py --input-json /path/to/real_input.json --keep-runtime
 
 Nota: `--execution-mode auto` (default) usa Docker se disponibile, altrimenti passa automaticamente a `local`.
 
-## Management dashboard (local, offline)
+## Management dashboard (local, offline, senza server)
 
-The dashboard is fully local (no CDN).
+La dashboard e' completamente locale (no CDN, no hosting, no `http.server` obbligatorio).
 
-- It reads only local artifacts generated in `output/<timestamp>/`.
-- UI files are in `dashboard/`.
-- It is refreshed automatically after each `run_mvp_pipeline.py` execution.
+- Legge solo artifact locali generati in `output/<timestamp>/`.
+- Viene rigenerata automaticamente dopo ogni `run_mvp_pipeline.py` in:
+  - `dashboard/`
+- Puoi aprirla direttamente con doppio click su:
+  - `dashboard/management_dashboard.html`
+  - oppure `dashboard/index.html`
+- Nel menu `Select output` puoi scegliere anche `All outputs (aggregate)` per una vista globale di tutti i run `success`
+  (volumi sommati e percentuali calcolate sui totali).
 
-You can also rebuild it manually:
+Rigenerazione manuale:
 
 ```bash
 python3 build_management_dashboard.py
 ```
 
-Open dashboard:
+Output della rigenerazione:
 
-```bash
-python3 -m http.server 8080
-```
-
-Then browse:
-
-- `http://localhost:8080/dashboard/management_dashboard.html`
-
-Third-party assets included locally:
-
-- `tabler.min.css`, `tabler.min.js` from `@tabler/core@1.4.0`
-- `chart.umd.js` from `chart.js@4.4.1`
+- `dashboard/management_dashboard.html`
+- `dashboard/management_dashboard.css`
+- `dashboard/management_dashboard.js`
+- `dashboard/management_dashboard_data.js`
+- `dashboard/metrics_validation_guide.html` (manual cross-check page for KPI validation)
+- `dashboard/tabler.min.css`, `dashboard/tabler.min.js`, `dashboard/chart.umd.js`

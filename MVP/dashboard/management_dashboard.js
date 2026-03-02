@@ -1,5 +1,6 @@
 (function () {
   const data = window.MVP_DASHBOARD_DATA || { runs: [], summary: {} };
+  const ALL_RUNS_ID = '__all__';
 
   const state = {
     selectedRunId: null,
@@ -16,6 +17,57 @@
 
   function fmtPct(value) {
     return typeof value === 'number' ? `${value.toFixed(2)}%` : 'n/a';
+  }
+
+  function asNumber(value) {
+    return typeof value === 'number' && Number.isFinite(value) ? value : null;
+  }
+
+  function ratioPct(num, den) {
+    if (typeof num !== 'number' || typeof den !== 'number' || den <= 0) {
+      return null;
+    }
+    return (num / den) * 100;
+  }
+
+  function sumField(runs, field) {
+    return runs.reduce((acc, run) => acc + (asNumber(run?.[field]) ?? 0), 0);
+  }
+
+  function mergeDistribution(runs, field) {
+    const merged = {};
+    for (const run of runs) {
+      const source = run?.[field];
+      if (!source || typeof source !== 'object') {
+        continue;
+      }
+      for (const [key, value] of Object.entries(source)) {
+        const number = Number(value);
+        if (!Number.isFinite(number)) {
+          continue;
+        }
+        merged[key] = (merged[key] || 0) + number;
+      }
+    }
+    return merged;
+  }
+
+  function mergeTopMatchKeys(runs, limit = 10) {
+    const counts = {};
+    for (const run of runs) {
+      const topKeys = Array.isArray(run?.top_match_keys) ? run.top_match_keys : [];
+      for (const item of topKeys) {
+        const key = typeof item?.[0] === 'string' ? item[0] : '';
+        const count = Number(item?.[1]);
+        if (!key || !Number.isFinite(count)) {
+          continue;
+        }
+        counts[key] = (counts[key] || 0) + count;
+      }
+    }
+    return Object.entries(counts)
+      .sort((a, b) => (b[1] - a[1]) || a[0].localeCompare(b[0]))
+      .slice(0, limit);
   }
 
   function toMissedPct(recallPct) {
@@ -48,11 +100,68 @@
   }
 
   function getRun(runId) {
+    if (runId === ALL_RUNS_ID) {
+      return buildAggregateRun(getSuccessfulRuns());
+    }
     return getAllRuns().find((run) => run.run_id === runId) || null;
   }
 
   function getQualityRuns(runs) {
     return runs.filter((run) => Boolean(run.quality_available));
+  }
+
+  function buildAggregateRun(runs) {
+    const selectedRuns = Array.isArray(runs) ? runs : [];
+    if (!selectedRuns.length) {
+      return null;
+    }
+
+    const totalInput = sumField(selectedRuns, 'records_input');
+    const totalOurResolved = sumField(selectedRuns, 'our_resolved_entities');
+    const totalPairs = sumField(selectedRuns, 'matched_pairs');
+    const totalResolved = sumField(selectedRuns, 'resolved_entities');
+    const tp = sumField(selectedRuns, 'true_positive');
+    const fp = sumField(selectedRuns, 'false_positive');
+    const fn = sumField(selectedRuns, 'false_negative');
+    const predictedPairs = sumField(selectedRuns, 'predicted_pairs_labeled');
+    const ourTruePairs = sumField(selectedRuns, 'our_true_positive');
+    const ourTotalTruePairs = sumField(selectedRuns, 'our_true_pairs_total');
+    const ourFalsePositive = sumField(selectedRuns, 'our_false_positive');
+    const ourFalseNegative = sumField(selectedRuns, 'our_false_negative');
+    const extraPairs = sumField(selectedRuns, 'extra_true_matches_found');
+    const knownPairs = sumField(selectedRuns, 'known_pairs_ipg');
+    const precisionPct = ratioPct(tp, tp + fp);
+    const coveragePct = ratioPct(ourTruePairs, ourTotalTruePairs);
+    const falsePositivePct = ratioPct(fp, predictedPairs);
+    const gainPct = ratioPct(extraPairs, knownPairs);
+
+    return {
+      run_id: ALL_RUNS_ID,
+      run_status: 'success',
+      source_input_name: `All successful runs (${selectedRuns.length})`,
+      run_label: 'All outputs (aggregate)',
+      records_input: totalInput,
+      our_resolved_entities: totalOurResolved,
+      matched_pairs: totalPairs,
+      resolved_entities: totalResolved,
+      true_positive: tp,
+      false_positive: fp,
+      false_negative: fn,
+      predicted_pairs_labeled: predictedPairs,
+      our_true_positive: ourTruePairs,
+      our_true_pairs_total: ourTotalTruePairs,
+      our_false_positive: ourFalsePositive,
+      our_false_negative: ourFalseNegative,
+      extra_true_matches_found: extraPairs,
+      known_pairs_ipg: knownPairs,
+      extra_gain_vs_known_pct: gainPct,
+      pair_precision_pct: precisionPct,
+      pair_recall_pct: coveragePct,
+      our_match_coverage_pct: coveragePct,
+      overall_false_positive_pct: falsePositivePct,
+      entity_size_distribution: mergeDistribution(selectedRuns, 'entity_size_distribution'),
+      top_match_keys: mergeTopMatchKeys(selectedRuns, 10),
+    };
   }
 
   function parseRunDate(run) {
@@ -97,32 +206,69 @@
       state.selectedRunId = null;
       return;
     }
+    if (state.selectedRunId === ALL_RUNS_ID) {
+      return;
+    }
     if (filtered.some((run) => run.run_id === state.selectedRunId)) {
       return;
     }
-    state.selectedRunId = filtered[0].run_id;
+    state.selectedRunId = ALL_RUNS_ID;
   }
 
   function renderSelectedRunCards(run) {
-    const matchMissed = toMissedPct(run.pair_recall_pct);
-    const extraGain = typeof run.extra_gain_vs_known_pct === 'number' ? run.extra_gain_vs_known_pct : null;
-    const fpPct = typeof run.overall_false_positive_pct === 'number' ? run.overall_false_positive_pct : null;
-    const ourCoverage = typeof run.our_match_coverage_pct === 'number' ? run.our_match_coverage_pct : null;
-    const cards = [
-      { label: 'Selected Input Records', value: fmtInt(run.records_input) },
-      { label: 'Matched Pairs', value: fmtInt(run.matched_pairs) },
-      { label: 'Our Match Coverage', value: fmtPct(ourCoverage) },
-      { label: 'Match Correctness', value: fmtPct(run.pair_precision_pct) },
-      { label: 'Match Missed', value: fmtPct(matchMissed) },
-      { label: 'False Positive %', value: fmtPct(fpPct) },
-      { label: 'Extra Pairs', value: fmtInt(run.extra_true_matches_found) },
-      { label: 'Senzing Gain', value: fmtPct(extraGain) },
+    const recallPct = asNumber(run.pair_recall_pct);
+    const precisionPct = asNumber(run.pair_precision_pct);
+    const matchMissed = toMissedPct(recallPct);
+    const predictedPairs = asNumber(run.predicted_pairs_labeled);
+    const falsePositive = asNumber(run.false_positive);
+    const fallbackFalsePositivePct = ratioPct(falsePositive, predictedPairs);
+    const fpPct = asNumber(run.overall_false_positive_pct) ?? fallbackFalsePositivePct;
+    const ourCoverage = asNumber(run.our_match_coverage_pct) ?? recallPct;
+    const ourMatchMissed = toMissedPct(ourCoverage);
+    const extraPairs = asNumber(run.extra_true_matches_found) ?? 0;
+    const knownPairs = asNumber(run.known_pairs_ipg);
+    const gainPct = asNumber(run.extra_gain_vs_known_pct) ?? ratioPct(extraPairs, knownPairs) ?? 0;
+    const ourCards = [
+      { label: 'Input Records', value: fmtInt(run.records_input) },
+      { label: 'Resolved Entities', value: fmtInt(run.our_resolved_entities) },
+      { label: 'Match Found', value: fmtPct(ourCoverage) },
+      { label: 'Match Missed', value: fmtPct(ourMatchMissed) },
+      { label: 'Matched Pairs', value: fmtInt(run.our_true_positive) },
+      { label: 'False Positive', value: fmtInt(run.our_false_positive) },
+      { label: 'False Negative', value: fmtInt(run.our_false_negative) },
     ];
 
-    byId('selectedRunCards').innerHTML = cards
+    const theirCards = [
+      { label: 'Matched Pairs', value: fmtInt(run.matched_pairs) },
+      { label: 'Match Found', value: fmtPct(precisionPct) },
+      { label: 'Match Missed', value: fmtPct(matchMissed) },
+      { label: 'False Positive %', value: fmtPct(fpPct) },
+      { label: 'Extra Pairs', value: fmtInt(extraPairs) },
+      { label: 'Match Gain', value: fmtPct(gainPct) },
+      { label: 'False Positive', value: fmtInt(run.false_positive) },
+      { label: 'False Negative', value: fmtInt(run.false_negative) },
+      { label: 'Resolved Entities', value: fmtInt(run.resolved_entities) },
+    ];
+
+    byId('ourMetricCards').innerHTML = ourCards
       .map(
         (card) => `
-          <div class="col-sm-6 col-lg-4 col-xl-3 fade-up">
+          <div class="col-12 col-sm-6 col-xl-4 fade-up">
+            <div class="card metric-card metric-card-our">
+              <div class="card-body">
+                <div class="metric-label">${escapeHtml(card.label)}</div>
+                <div class="metric-value">${escapeHtml(card.value)}</div>
+              </div>
+            </div>
+          </div>
+        `
+      )
+      .join('');
+
+    byId('theirMetricCards').innerHTML = theirCards
+      .map(
+        (card) => `
+          <div class="col-12 col-sm-6 col-xl-4 fade-up">
             <div class="card metric-card">
               <div class="card-body">
                 <div class="metric-label">${escapeHtml(card.label)}</div>
@@ -135,23 +281,14 @@
       .join('');
   }
 
-  function renderSecondaryCards(run) {
-    const falseNegativeEl = byId('selectedFalseNegativeValue');
-    const resolvedEntitiesEl = byId('selectedResolvedEntitiesValue');
-    if (falseNegativeEl) {
-      falseNegativeEl.textContent = fmtInt(run.false_negative);
-    }
-    if (resolvedEntitiesEl) {
-      resolvedEntitiesEl.textContent = fmtInt(run.resolved_entities);
-    }
-  }
-
   function renderSelector() {
     const runs = getSuccessfulRuns();
     const selector = byId('runSelector');
-    selector.innerHTML = runs
-      .map((run) => `<option value="${escapeHtml(run.run_id)}">${escapeHtml(formatRunLabel(run))}</option>`)
-      .join('');
+    const options = [
+      `<option value="${ALL_RUNS_ID}">Select all output (aggregate)</option>`,
+      ...runs.map((run) => `<option value="${escapeHtml(run.run_id)}">${escapeHtml(formatRunLabel(run))}</option>`),
+    ];
+    selector.innerHTML = options.join('');
     if (state.selectedRunId) {
       selector.value = state.selectedRunId;
     }
@@ -264,13 +401,13 @@
   function renderCurrent() {
     const run = getRun(state.selectedRunId);
     if (!run) {
-      byId('selectedRunCards').innerHTML =
+      byId('ourMetricCards').innerHTML =
         '<div class="col-12"><div class="alert alert-warning">No data available for selected run.</div></div>';
-      renderSecondaryCards({});
+      byId('theirMetricCards').innerHTML =
+        '<div class="col-12"><div class="alert alert-warning">No data available for selected run.</div></div>';
       return;
     }
     renderSelectedRunCards(run);
-    renderSecondaryCards(run);
     renderSelectedCharts(run);
   }
 
@@ -282,7 +419,9 @@
   }
 
   function renderEmptyState() {
-    byId('selectedRunCards').innerHTML =
+    byId('ourMetricCards').innerHTML =
+      '<div class="col-12"><div class="alert alert-warning">Selected run details will appear here after the first successful run.</div></div>';
+    byId('theirMetricCards').innerHTML =
       '<div class="col-12"><div class="alert alert-warning">Selected run details will appear here after the first successful run.</div></div>';
     byId('runSelector').innerHTML = '';
   }
@@ -292,7 +431,7 @@
       renderEmptyState();
       return;
     }
-    state.selectedRunId = getSuccessfulRuns()[0].run_id;
+    state.selectedRunId = ALL_RUNS_ID;
 
     ensureSelectedRun();
     renderSelector();
